@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/check-claims",
+      "schedule": "*/2 * * * *"
+    },
+    {
+      "path": "/api/cron/expire-listings",
+      "schedule": "*/5 * * * *"
+    }
+  ]
+}
