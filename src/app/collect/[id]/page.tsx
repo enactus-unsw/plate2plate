@@ -1,7 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, MapPin, ShieldCheck, Clock, Mail, Phone } from "lucide-react";
+import {
+  ArrowLeft,
+  MapPin,
+  ShieldCheck,
+  Clock,
+  Mail,
+  Phone,
+} from "lucide-react";
 import { CountdownTimer } from "@/components/shared/CountdownTimer";
 import { AllergenTag } from "@/components/shared/AllergenTag";
 import { DietaryTag } from "@/components/shared/DietaryTag";
@@ -11,7 +18,20 @@ import { createClient } from "@/lib/supabase/server";
 import type { Listing, FoodCondition } from "@/types";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] as const;
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+] as const;
 
 function formatExpiryDate(iso: string): string {
   const d = new Date(iso);
@@ -85,7 +105,10 @@ export default async function ListingDetailPage({
 
           {/* Donor */}
           <p className="mb-4 text-sm text-p2p-text-secondary">
-            Posted by <span className="font-medium text-p2p-text">{getDonorName(listing.contact_email)}</span>
+            Posted by{" "}
+            <span className="font-medium text-p2p-text">
+              {getDonorName(listing.contact_email)}
+            </span>
           </p>
 
           {/* Badges */}
@@ -105,8 +128,9 @@ export default async function ListingDetailPage({
 
           {/* Quantity */}
           <p className="mb-5 text-base text-p2p-text">
-            <span className="font-semibold">{listing.quantity_remaining}</span> of{" "}
-            <span className="font-semibold">{listing.quantity}</span> servings still available
+            <span className="font-semibold">{listing.quantity_remaining}</span>{" "}
+            of <span className="font-semibold">{listing.quantity}</span>{" "}
+            servings still available
           </p>
 
           {/* Pickup location */}
@@ -151,7 +175,8 @@ export default async function ListingDetailPage({
           <div className="rounded-lg bg-p2p-primary-light p-4">
             <p className="flex items-start gap-2 text-sm text-p2p-primary">
               <ShieldCheck size={18} className="mt-0.5 shrink-0" />
-              This food has been confirmed untouched and safely handled by the posting society.
+              This food has been confirmed untouched and safely handled by the
+              posting society.
             </p>
           </div>
         </div>
@@ -161,21 +186,35 @@ export default async function ListingDetailPage({
           <div className="sticky top-24 space-y-4">
             {/* Pickup details card */}
             <div className="rounded-xl border border-p2p-border bg-p2p-surface p-6 shadow-card">
-              <h3 className="mb-4 text-lg font-semibold text-p2p-text">Pickup Details</h3>
+              <h3 className="mb-4 text-lg font-semibold text-p2p-text">
+                Pickup Details
+              </h3>
 
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
-                  <MapPin size={16} className="mt-0.5 shrink-0 text-p2p-primary" />
+                  <MapPin
+                    size={16}
+                    className="mt-0.5 shrink-0 text-p2p-primary"
+                  />
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-p2p-text-secondary">Where</p>
-                    <p className="text-sm font-medium text-p2p-text">{listing.pickup_location}</p>
+                    <p className="text-xs font-medium uppercase tracking-wide text-p2p-text-secondary">
+                      Where
+                    </p>
+                    <p className="text-sm font-medium text-p2p-text">
+                      {listing.pickup_location}
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Clock size={16} className="mt-0.5 shrink-0 text-p2p-primary" />
+                  <Clock
+                    size={16}
+                    className="mt-0.5 shrink-0 text-p2p-primary"
+                  />
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-p2p-text-secondary">Available until</p>
+                    <p className="text-xs font-medium uppercase tracking-wide text-p2p-text-secondary">
+                      Available until
+                    </p>
                     <p className="text-sm font-medium text-p2p-text">
                       {formatExpiryDate(listing.expires_at)}
                     </p>
@@ -183,7 +222,9 @@ export default async function ListingDetailPage({
                 </div>
 
                 <div className="border-t border-p2p-border-subtle pt-3">
-                  <p className="mb-2 text-xs font-medium uppercase tracking-wide text-p2p-text-secondary">Contact the donor</p>
+                  <p className="mb-2 text-xs font-medium uppercase tracking-wide text-p2p-text-secondary">
+                    Contact the donor
+                  </p>
                   <div className="space-y-1.5">
                     <a
                       href={`mailto:${listing.contact_email}`}

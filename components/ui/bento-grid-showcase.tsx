@@ -52,24 +52,16 @@ export const BentoGridShowcase = ({
       className={cn(
         "grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-5",
         "auto-rows-auto",
-        className
+        className,
       )}
     >
-      <motion.div variants={itemVariants}>
-        {topLeft}
-      </motion.div>
+      <motion.div variants={itemVariants}>{topLeft}</motion.div>
 
-      <motion.div variants={itemVariants}>
-        {topRight}
-      </motion.div>
+      <motion.div variants={itemVariants}>{topRight}</motion.div>
 
-      <motion.div variants={itemVariants}>
-        {bottomLeft}
-      </motion.div>
+      <motion.div variants={itemVariants}>{bottomLeft}</motion.div>
 
-      <motion.div variants={itemVariants}>
-        {bottomRight}
-      </motion.div>
+      <motion.div variants={itemVariants}>{bottomRight}</motion.div>
     </motion.section>
   );
 };

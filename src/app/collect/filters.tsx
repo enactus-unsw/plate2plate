@@ -28,7 +28,7 @@ export function CollectFilters() {
       const qs = params.toString();
       router.push(qs ? `/collect?${qs}` : "/collect", { scroll: false });
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   const toggleDietary = (key: string) => {
@@ -74,7 +74,9 @@ export function CollectFilters() {
       </select>
 
       <button
-        onClick={() => updateParams("available_now", availableNow ? null : "true")}
+        onClick={() =>
+          updateParams("available_now", availableNow ? null : "true")
+        }
         className={`rounded-full border px-3.5 py-2.5 text-sm font-medium transition-shadow transition-transform focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98] min-h-[44px] ${
           availableNow
             ? "border-p2p-primary bg-p2p-primary text-white"

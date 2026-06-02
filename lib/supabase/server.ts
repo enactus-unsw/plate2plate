@@ -15,7 +15,7 @@ export async function createClient() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
+              cookieStore.set(name, value, options),
             );
           } catch {
             // setAll can be called from Server Components where
@@ -23,7 +23,7 @@ export async function createClient() {
           }
         },
       },
-    }
+    },
   );
 }
 
@@ -41,13 +41,13 @@ export async function createServiceClient() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
+              cookieStore.set(name, value, options),
             );
           } catch {
             // Safe to ignore in Server Components
           }
         },
       },
-    }
+    },
   );
 }

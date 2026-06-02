@@ -71,8 +71,10 @@ export function ListingCard({ listing }: ListingCardProps) {
               </span>
             ) : (
               <span className="text-sm text-p2p-text-secondary">
-                <span className="font-semibold text-p2p-text">{listing.quantity_remaining}</span>
-                {" "}of {listing.quantity} left
+                <span className="font-semibold text-p2p-text">
+                  {listing.quantity_remaining}
+                </span>{" "}
+                of {listing.quantity} left
               </span>
             )}
             <CountdownTimer expiresAt={listing.expires_at} />

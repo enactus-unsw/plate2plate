@@ -1,47 +1,48 @@
 interface StudentEmailListing {
-  id: string
-  title: string
-  food_category: string
-  pickup_location: string
-  expires_at: string
-  contact_email: string
-  contact_phone?: string | null
+  id: string;
+  title: string;
+  food_category: string;
+  pickup_location: string;
+  expires_at: string;
+  contact_email: string;
+  contact_phone?: string | null;
 }
 
 interface StudentEmailClaim {
-  student_name: string
-  student_eta: string
+  student_name: string;
+  student_eta: string;
 }
 
 function formatDateTime(isoString: string): string {
-  const date = new Date(isoString)
-  const now = new Date()
-  const isToday = date.toDateString() === now.toDateString()
+  const date = new Date(isoString);
+  const now = new Date();
+  const isToday = date.toDateString() === now.toDateString();
 
-  const timeStr = date.toLocaleTimeString('en-AU', {
-    hour: 'numeric',
-    minute: '2-digit',
+  const timeStr = date.toLocaleTimeString("en-AU", {
+    hour: "numeric",
+    minute: "2-digit",
     hour12: true,
-  })
+  });
 
   if (isToday) {
-    return `Today at ${timeStr}`
+    return `Today at ${timeStr}`;
   }
 
-  const dateStr = date.toLocaleDateString('en-AU', {
-    weekday: 'short',
-    day: 'numeric',
-    month: 'short',
-  })
+  const dateStr = date.toLocaleDateString("en-AU", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
 
-  return `${dateStr} at ${timeStr}`
+  return `${dateStr} at ${timeStr}`;
 }
 
 export function buildStudentConfirmationEmail(
   listing: StudentEmailListing,
-  claim: StudentEmailClaim
+  claim: StudentEmailClaim,
 ): string {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://plate2plate.vercel.app'
+  const appUrl =
+    process.env.NEXT_PUBLIC_APP_URL || "https://plate2plate.vercel.app";
 
   const contactSection = listing.contact_phone
     ? `<tr>
@@ -55,7 +56,7 @@ export function buildStudentConfirmationEmail(
     : `<tr>
                         <td style="padding:4px 0;font-size:14px;color:#6B6254;vertical-align:top;">Email</td>
                         <td style="padding:4px 0;font-size:14px;"><a href="mailto:${listing.contact_email}" style="color:#2E5D3E;text-decoration:none;">${listing.contact_email}</a></td>
-                      </tr>`
+                      </tr>`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -171,5 +172,5 @@ export function buildStudentConfirmationEmail(
     </tr>
   </table>
 </body>
-</html>`
+</html>`;
 }

@@ -18,13 +18,15 @@ export async function GET(request: Request) {
 
   const { data: activeClaims, error: fetchError } = await supabase
     .from("claims")
-    .select("id, listing_id, student_eta, listings!inner(id, expires_at, status)")
+    .select(
+      "id, listing_id, student_eta, listings!inner(id, expires_at, status)",
+    )
     .eq("claim_status", "active");
 
   if (fetchError) {
     return NextResponse.json(
       { error: "Failed to fetch active claims", details: fetchError.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 

@@ -8,7 +8,10 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { createListing } from "@/lib/actions/listings";
-import { listingSchema, type ListingFormValues } from "@/lib/validations/listing.schema";
+import {
+  listingSchema,
+  type ListingFormValues,
+} from "@/lib/validations/listing.schema";
 import {
   FOOD_CATEGORIES,
   FOOD_CONDITIONS,
@@ -32,11 +35,19 @@ import {
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
-  return <p className="text-sm text-p2p-red mt-1.5" role="alert">{message}</p>;
+  return (
+    <p className="text-sm text-p2p-red mt-1.5" role="alert">
+      {message}
+    </p>
+  );
 }
 
 function RequiredMark() {
-  return <span className="text-p2p-red ml-0.5" aria-hidden="true">*</span>;
+  return (
+    <span className="text-p2p-red ml-0.5" aria-hidden="true">
+      *
+    </span>
+  );
 }
 
 function SectionCard({
@@ -76,7 +87,10 @@ function SuccessScreen({
 
   return (
     <div className="animate-fade-up flex flex-col items-center text-center py-16 md:py-24">
-      <CheckCircle2 className="size-16 text-p2p-primary mb-6" strokeWidth={1.5} />
+      <CheckCircle2
+        className="size-16 text-p2p-primary mb-6"
+        strokeWidth={1.5}
+      />
       <h2 className="text-3xl heading-tight text-p2p-text mb-3">
         Your listing is live!
       </h2>
@@ -123,7 +137,7 @@ function SuccessScreen({
             "inline-flex items-center justify-center rounded-lg px-6 h-11 text-sm font-semibold",
             "bg-p2p-primary text-white hover:bg-p2p-primary-hover",
             "focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2",
-            "active:scale-[0.98] transition-transform transition-colors"
+            "active:scale-[0.98] transition-transform transition-colors",
           )}
         >
           View on collect feed
@@ -227,11 +241,17 @@ export function DonorForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit, scrollToFirstError)} className="space-y-6">
+    <form
+      onSubmit={handleSubmit(onSubmit, scrollToFirstError)}
+      className="space-y-6"
+    >
       {/* Section 1 — About the food */}
       <SectionCard title="About the food">
         <div>
-          <Label htmlFor="title">Title<RequiredMark /></Label>
+          <Label htmlFor="title">
+            Title
+            <RequiredMark />
+          </Label>
           <Input
             id="title"
             placeholder='e.g. "Leftover pizza from CSESoc BBQ"'
@@ -244,7 +264,10 @@ export function DonorForm() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Label>Food category<RequiredMark /></Label>
+            <Label>
+              Food category
+              <RequiredMark />
+            </Label>
             <Controller
               control={control}
               name="food_category"
@@ -273,7 +296,10 @@ export function DonorForm() {
           </div>
 
           <div>
-            <Label>Food condition<RequiredMark /></Label>
+            <Label>
+              Food condition
+              <RequiredMark />
+            </Label>
             <Controller
               control={control}
               name="food_condition"
@@ -304,7 +330,10 @@ export function DonorForm() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="quantity">Quantity (servings)<RequiredMark /></Label>
+            <Label htmlFor="quantity">
+              Quantity (servings)
+              <RequiredMark />
+            </Label>
             <Input
               id="quantity"
               type="number"
@@ -334,7 +363,10 @@ export function DonorForm() {
       {/* Section 2 — Pickup details */}
       <SectionCard title="Pickup details">
         <div>
-          <Label htmlFor="pickup_location">Pickup location<RequiredMark /></Label>
+          <Label htmlFor="pickup_location">
+            Pickup location
+            <RequiredMark />
+          </Label>
           <Input
             id="pickup_location"
             placeholder='e.g. "Quadrangle Building, Level 2 foyer"'
@@ -346,7 +378,10 @@ export function DonorForm() {
         </div>
 
         <div>
-          <Label>Perishability<RequiredMark /></Label>
+          <Label>
+            Perishability
+            <RequiredMark />
+          </Label>
           <Controller
             control={control}
             name="perishability"
@@ -360,7 +395,7 @@ export function DonorForm() {
                     "hover:shadow-card-hover focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98] transition-transform",
                     field.value === "<30 mins"
                       ? "border-p2p-primary bg-p2p-primary-light"
-                      : "border-p2p-border bg-p2p-surface"
+                      : "border-p2p-border bg-p2p-surface",
                   )}
                 >
                   <span className="block text-sm font-semibold text-p2p-text">
@@ -378,7 +413,7 @@ export function DonorForm() {
                     "hover:shadow-card-hover focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98] transition-transform",
                     field.value === ">=30 mins"
                       ? "border-p2p-primary bg-p2p-primary-light"
-                      : "border-p2p-border bg-p2p-surface"
+                      : "border-p2p-border bg-p2p-surface",
                   )}
                 >
                   <span className="block text-sm font-semibold text-p2p-text">
@@ -396,7 +431,10 @@ export function DonorForm() {
 
         {perishability === ">=30 mins" && (
           <div>
-            <Label htmlFor="expires_at">Food available until<RequiredMark /></Label>
+            <Label htmlFor="expires_at">
+              Food available until
+              <RequiredMark />
+            </Label>
             <Input
               id="expires_at"
               type="datetime-local"
@@ -409,9 +447,7 @@ export function DonorForm() {
         )}
 
         <div>
-          <Label htmlFor="served_at">
-            Time food was served (optional)
-          </Label>
+          <Label htmlFor="served_at">Time food was served (optional)</Label>
           <Input
             id="served_at"
             type="datetime-local"
@@ -438,7 +474,7 @@ export function DonorForm() {
                       type="button"
                       onClick={() => {
                         const next = selected
-                          ? field.value?.filter((a) => a !== allergen) ?? []
+                          ? (field.value?.filter((a) => a !== allergen) ?? [])
                           : [...(field.value ?? []), allergen];
                         field.onChange(next);
                       }}
@@ -447,7 +483,7 @@ export function DonorForm() {
                         "hover:shadow-card focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98]",
                         selected
                           ? "border-p2p-amber bg-p2p-amber-light text-p2p-amber"
-                          : "border-p2p-border bg-p2p-surface text-p2p-text-secondary hover:border-p2p-amber/40"
+                          : "border-p2p-border bg-p2p-surface text-p2p-text-secondary hover:border-p2p-amber/40",
                       )}
                     >
                       {allergen}
@@ -474,7 +510,7 @@ export function DonorForm() {
                       type="button"
                       onClick={() => {
                         const next = selected
-                          ? field.value?.filter((t) => t !== tag) ?? []
+                          ? (field.value?.filter((t) => t !== tag) ?? [])
                           : [...(field.value ?? []), tag];
                         field.onChange(next);
                       }}
@@ -483,7 +519,7 @@ export function DonorForm() {
                         "hover:shadow-card focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98]",
                         selected
                           ? "border-p2p-primary bg-p2p-primary-light text-p2p-primary"
-                          : "border-p2p-border bg-p2p-surface text-p2p-text-secondary hover:border-p2p-primary/40"
+                          : "border-p2p-border bg-p2p-surface text-p2p-text-secondary hover:border-p2p-primary/40",
                       )}
                     >
                       {tag}
@@ -500,7 +536,10 @@ export function DonorForm() {
       <SectionCard title="Your contact details">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="contact_email">Email<RequiredMark /></Label>
+            <Label htmlFor="contact_email">
+              Email
+              <RequiredMark />
+            </Label>
             <Input
               id="contact_email"
               type="email"
@@ -548,7 +587,7 @@ export function DonorForm() {
               "hover:shadow-card-hover active:scale-[0.998] transition-transform",
               field.value
                 ? "border-p2p-primary bg-p2p-primary-light"
-                : "border-p2p-border"
+                : "border-p2p-border",
             )}
             onClick={() => field.onChange(!field.value)}
             onKeyDown={(e) => {
@@ -592,7 +631,7 @@ export function DonorForm() {
           "bg-p2p-primary text-white hover:bg-p2p-primary-hover",
           "focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2",
           "active:scale-[0.98] transition-transform transition-colors",
-          "disabled:opacity-60"
+          "disabled:opacity-60",
         )}
       >
         {isSubmitting ? (

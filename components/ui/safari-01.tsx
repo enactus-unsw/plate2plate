@@ -11,7 +11,12 @@ interface Safari01Props {
   className?: string;
 }
 
-const Safari01: React.FC<Safari01Props> = ({ image, videoSrc, url, className }) => {
+const Safari01: React.FC<Safari01Props> = ({
+  image,
+  videoSrc,
+  url,
+  className,
+}) => {
   return (
     <div
       className={cn(
@@ -58,7 +63,9 @@ const Safari01: React.FC<Safari01Props> = ({ image, videoSrc, url, className }) 
             className="max-h-full max-w-full object-contain"
           />
         ) : (
-          <div className="text-sm text-[--color-text-secondary]">No preview</div>
+          <div className="text-sm text-[--color-text-secondary]">
+            No preview
+          </div>
         )}
       </div>
     </div>

@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@config "../tailwind.config.ts";
+@config "../../tailwind.config.ts";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -11,7 +11,8 @@
   --color-foreground: var(--foreground);
 
   /* Font families — use Next.js font CSS variables with fallbacks */
-  --font-sans: var(--font-dm-sans), "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-dm-sans), "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-fraunces), "Fraunces", ui-serif, Georgia, serif;
   --font-mono: var(--font-dm-mono), "DM Mono", ui-monospace, monospace;
 
@@ -65,58 +66,64 @@
 
 :root {
   /* Plate2Plate design tokens */
-  --p2p-bg: #F9F8F5;
-  --p2p-surface: #FFFFFF;
-  --p2p-surface-warm: #F4F0E8;
-  --p2p-border: #E5DDD0;
-  --p2p-border-subtle: #EDE8E0;
-  --p2p-text: #18160F;
-  --p2p-text-secondary: #6B6254;
-  --p2p-text-disabled: #ADA396;
-  --p2p-primary: #2E5D3E;
+  --p2p-bg: #f9f8f5;
+  --p2p-surface: #ffffff;
+  --p2p-surface-warm: #f4f0e8;
+  --p2p-border: #e5ddd0;
+  --p2p-border-subtle: #ede8e0;
+  --p2p-text: #18160f;
+  --p2p-text-secondary: #6b6254;
+  --p2p-text-disabled: #ada396;
+  --p2p-primary: #2e5d3e;
   --p2p-primary-hover: #245031;
-  --p2p-primary-light: #EBF2EC;
-  --p2p-primary-mid: #4A7C5C;
-  --p2p-amber: #B87333;
-  --p2p-amber-light: #FBF0E0;
-  --p2p-red: #B83232;
-  --p2p-red-light: #FBEAEA;
-  --p2p-success: #2E5D3E;
+  --p2p-primary-light: #ebf2ec;
+  --p2p-primary-mid: #4a7c5c;
+  --p2p-amber: #b87333;
+  --p2p-amber-light: #fbf0e0;
+  --p2p-red: #b83232;
+  --p2p-red-light: #fbeaea;
+  --p2p-success: #2e5d3e;
   --p2p-overlay: rgba(24, 22, 15, 0.4);
 
   /* shadcn mapped to Plate2Plate palette */
-  --background: #F9F8F5;
-  --foreground: #18160F;
-  --card: #FFFFFF;
-  --card-foreground: #18160F;
-  --popover: #FFFFFF;
-  --popover-foreground: #18160F;
-  --primary: #2E5D3E;
-  --primary-foreground: #FFFFFF;
-  --secondary: #F4F0E8;
-  --secondary-foreground: #18160F;
-  --muted: #F4F0E8;
-  --muted-foreground: #6B6254;
-  --accent: #EBF2EC;
-  --accent-foreground: #2E5D3E;
-  --destructive: #B83232;
-  --border: #E5DDD0;
-  --input: #E5DDD0;
-  --ring: #2E5D3E;
+  --background: #f9f8f5;
+  --foreground: #18160f;
+  --card: #ffffff;
+  --card-foreground: #18160f;
+  --popover: #ffffff;
+  --popover-foreground: #18160f;
+  --primary: #2e5d3e;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f0e8;
+  --secondary-foreground: #18160f;
+  --muted: #f4f0e8;
+  --muted-foreground: #6b6254;
+  --accent: #ebf2ec;
+  --accent-foreground: #2e5d3e;
+  --destructive: #b83232;
+  --border: #e5ddd0;
+  --input: #e5ddd0;
+  --ring: #2e5d3e;
   --radius: 0.75rem;
 }
 
 /* Surface depth shadow utilities */
 .shadow-card {
-  box-shadow: 0 1px 3px rgba(46, 93, 62, 0.06), 0 4px 12px rgba(46, 93, 62, 0.08);
+  box-shadow:
+    0 1px 3px rgba(46, 93, 62, 0.06),
+    0 4px 12px rgba(46, 93, 62, 0.08);
 }
 
 .shadow-card-hover {
-  box-shadow: 0 4px 8px rgba(46, 93, 62, 0.08), 0 12px 28px rgba(46, 93, 62, 0.12);
+  box-shadow:
+    0 4px 8px rgba(46, 93, 62, 0.08),
+    0 12px 28px rgba(46, 93, 62, 0.12);
 }
 
 .shadow-float {
-  box-shadow: 0 8px 24px rgba(24, 22, 15, 0.12), 0 32px 64px rgba(24, 22, 15, 0.10);
+  box-shadow:
+    0 8px 24px rgba(24, 22, 15, 0.12),
+    0 32px 64px rgba(24, 22, 15, 0.1);
 }
 
 /* Typography utilities */

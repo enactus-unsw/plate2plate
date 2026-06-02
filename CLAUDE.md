@@ -9,8 +9,6 @@ Before writing any frontend code, component, or page:
 3. **Apply the design token CSS variables** from `globals.css` — do not hardcode hex values in components
 4. **Confirm the surface plane** of whatever you're building (base / elevated / floating) before writing any background or shadow style
 
-
-
 **Plate2Plate** is a real-time UNSW campus food rescue platform built by Enactus UNSW.
 It redistributes untouched surplus food from university events to students before it becomes waste.
 
@@ -23,16 +21,16 @@ It redistributes untouched surplus food from university events to students befor
 
 ## Tech Stack
 
-| Layer | Choice |
-|---|---|
-| Framework | Next.js 14+ (App Router, TypeScript) |
-| Styling | Tailwind CSS + shadcn/ui |
-| Database | Supabase (PostgreSQL) |
-| Background jobs | Supabase pg_cron or Vercel Cron Jobs |
-| Email | Brevo (transactional email via REST API) |
-| Deployment | Vercel |
-| Validation | Zod |
-| Forms | React Hook Form + Zod resolver |
+| Layer           | Choice                                   |
+| --------------- | ---------------------------------------- |
+| Framework       | Next.js 14+ (App Router, TypeScript)     |
+| Styling         | Tailwind CSS + shadcn/ui                 |
+| Database        | Supabase (PostgreSQL)                    |
+| Background jobs | Supabase pg_cron or Vercel Cron Jobs     |
+| Email           | Brevo (transactional email via REST API) |
+| Deployment      | Vercel                                   |
+| Validation      | Zod                                      |
+| Forms           | React Hook Form + Zod resolver           |
 
 ---
 
@@ -89,25 +87,30 @@ plate2plate/
 ## Architecture Principles
 
 ### No Authentication
+
 - **Never** use Supabase Auth or any login system
 - All DB mutations go through **Next.js Server Actions** using the `SUPABASE_SERVICE_ROLE_KEY`
 - Public reads (listing feed) use the anon key with RLS set to SELECT only
 - Donor identity = their UUID management token (generated on listing creation)
 
 ### Server Actions Over API Routes
+
 - Prefer `'use server'` Server Actions for all mutations (create listing, claim, close listing)
 - Reserve `/api/` routes only for cron job webhooks and external triggers (e.g. Brevo webhook)
 
 ### Data Immutability — Soft Deletes Only
+
 - **Never hard delete** a listing or claim
 - Expired/removed listings: `status = 'unavailable'`
 - Revoked claims: `claim_status = 'revoked'`
 - This preserves data for analytics and the feedback loop
 
 ### Real-Time
+
 - Use Supabase Realtime subscriptions on the collect page to push listing updates (new listings, quantity changes, expirations) to connected clients without requiring a page refresh
 
 ### Local Storage for Student State
+
 - Students have no account; use `localStorage` to track `listing_id`s they've claimed on the current device
 - Key: `p2p_claimed_listings` → JSON array of listing IDs
 - This drives UI state only ("You have claimed this" badge) — never used for security decisions
@@ -176,11 +179,13 @@ CREATE TABLE feedback (
 ## Business Logic
 
 ### Perishability & ETA Constraints
+
 - `<30 mins` → listing expires 30 min after `created_at`; student ETA max is 30 min from now
 - `>=30 mins` → listing expires when donor sets `expires_at`; student ETA can go up to that time
 - ETA dropdown must be dynamically generated from these constraints on the client
 
 ### Claim State Machine (run via cron every 2 min)
+
 ```
 HELD item evaluation:
   IF now() > student_eta + 10min AND listing.expires_at NOT reached
@@ -194,6 +199,7 @@ UNCLAIMED available listing:
 ```
 
 ### Feedback Loop (run via cron every hour)
+
 ```
   Find all claims WHERE:
     claim_status = 'completed'
@@ -208,59 +214,63 @@ UNCLAIMED available listing:
 ## Design System
 
 ### Design Direction
+
 **Warm earthy base + clean modern structure.** The visual language sits at the intersection of climate-tech SaaS and organic sustainability — not rustic or hand-crafted, not cold and corporate. Think: generous negative space, sharp typographic hierarchy, a warm neutral foundation, and deliberate use of green as the single dominant brand colour. Amber is reserved strictly for urgency signals (timers, warnings). The overall feel should be premium and intentional, like a well-funded startup that cares about the environment.
 
 ### Colour Palette
+
 ```css
 /* Base */
---color-bg:           #F9F8F5;   /* warm off-white — main background */
---color-surface:      #FFFFFF;   /* pure white — cards, modals */
---color-surface-warm: #F4F0E8;   /* cream — secondary surfaces, section backgrounds */
---color-border:       #E5DDD0;   /* warm greige border */
---color-border-subtle:#EDE8E0;   /* lighter border for card dividers */
+--color-bg: #f9f8f5; /* warm off-white — main background */
+--color-surface: #ffffff; /* pure white — cards, modals */
+--color-surface-warm: #f4f0e8; /* cream — secondary surfaces, section backgrounds */
+--color-border: #e5ddd0; /* warm greige border */
+--color-border-subtle: #ede8e0; /* lighter border for card dividers */
 
 /* Text */
---color-text:         #18160F;   /* near-black warm — primary text */
---color-text-secondary: #6B6254; /* warm muted — supporting text, labels */
---color-text-disabled: #ADA396;  /* disabled state text */
+--color-text: #18160f; /* near-black warm — primary text */
+--color-text-secondary: #6b6254; /* warm muted — supporting text, labels */
+--color-text-disabled: #ada396; /* disabled state text */
 
 /* Brand */
---color-primary:      #2E5D3E;   /* deep forest green — primary actions, brand */
---color-primary-hover:#245031;   /* darker green for hover */
---color-primary-light:#EBF2EC;   /* green tint — hover backgrounds, badges */
---color-primary-mid:  #4A7C5C;   /* mid green — illustrations, accents */
+--color-primary: #2e5d3e; /* deep forest green — primary actions, brand */
+--color-primary-hover: #245031; /* darker green for hover */
+--color-primary-light: #ebf2ec; /* green tint — hover backgrounds, badges */
+--color-primary-mid: #4a7c5c; /* mid green — illustrations, accents */
 
 /* Urgency / Accent */
---color-amber:        #B87333;   /* warm amber — timers under 10 min, warnings */
---color-amber-light:  #FBF0E0;   /* amber tint — warning badge backgrounds */
---color-red:          #B83232;   /* red — expired, danger states */
---color-red-light:    #FBEAEA;   /* red tint — error badge backgrounds */
+--color-amber: #b87333; /* warm amber — timers under 10 min, warnings */
+--color-amber-light: #fbf0e0; /* amber tint — warning badge backgrounds */
+--color-red: #b83232; /* red — expired, danger states */
+--color-red-light: #fbeaea; /* red tint — error badge backgrounds */
 
 /* Utility */
---color-success:      #2E5D3E;   /* same as primary */
---color-overlay:      rgba(24,22,15,0.4); /* modal/drawer backdrop */
+--color-success: #2e5d3e; /* same as primary */
+--color-overlay: rgba(24, 22, 15, 0.4); /* modal/drawer backdrop */
 ```
 
 ### Typography
+
 - **Display / Hero headings:** `Fraunces` (Google Fonts, variable) — organic serif with warmth and character; used for H1, H2, and hero copy only
 - **UI / Body / Everything else:** `DM Sans` (Google Fonts) — clean, modern, highly legible; used for all UI labels, body text, buttons, inputs
 - **Monospace (timers, tokens):** `DM Mono` — for countdown timers and management token URLs
 
 ```css
 /* Type scale — follow this, no ad-hoc sizes */
---text-xs:   0.75rem;   /* 12px — labels, tags */
---text-sm:   0.875rem;  /* 14px — supporting text, captions */
---text-base: 1rem;      /* 16px — body, form fields */
---text-lg:   1.125rem;  /* 18px — card titles, subheadings */
---text-xl:   1.25rem;   /* 20px — section intros */
---text-2xl:  1.5rem;    /* 24px — page headings */
---text-3xl:  1.875rem;  /* 30px — section headings */
---text-4xl:  2.25rem;   /* 36px — hero subheading */
---text-5xl:  3rem;      /* 48px — hero headline (Fraunces) */
---text-6xl:  3.75rem;   /* 60px — hero headline large breakpoint */
+--text-xs: 0.75rem; /* 12px — labels, tags */
+--text-sm: 0.875rem; /* 14px — supporting text, captions */
+--text-base: 1rem; /* 16px — body, form fields */
+--text-lg: 1.125rem; /* 18px — card titles, subheadings */
+--text-xl: 1.25rem; /* 20px — section intros */
+--text-2xl: 1.5rem; /* 24px — page headings */
+--text-3xl: 1.875rem; /* 30px — section headings */
+--text-4xl: 2.25rem; /* 36px — hero subheading */
+--text-5xl: 3rem; /* 48px — hero headline (Fraunces) */
+--text-6xl: 3.75rem; /* 60px — hero headline large breakpoint */
 ```
 
 ### Component Conventions
+
 - All shadcn/ui components installed via CLI, kept in `components/ui/` — **never edit directly**
 - Extend shadcn components via `className` or wrapper composition — do not fork them
 - Animations: subtle fade-up on mount (16px translate, 200ms ease-out); use `tailwind-animate` classes
@@ -272,6 +282,7 @@ UNCLAIMED available listing:
 - Loading states: skeleton loaders that match the shape of the content (not spinners)
 
 ### Spacing System
+
 ```
 /* Follow Tailwind scale strictly — no arbitrary values */
 Section vertical padding:   py-16 md:py-24 lg:py-32
@@ -283,6 +294,7 @@ Stack of sections:          space-y-24 md:space-y-32
 ```
 
 ### Layout
+
 - Max content width: `max-w-6xl mx-auto` (1152px) for most pages
 - Collect feed grid: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`
 - Donor form: single column, `max-w-2xl mx-auto`
@@ -292,6 +304,7 @@ Stack of sections:          space-y-24 md:space-y-32
 ---
 
 ### Surface Depth System
+
 Every UI surface sits on one of three z-planes. Never put two adjacent elements on the same plane — contrast creates hierarchy.
 
 ```
@@ -301,22 +314,42 @@ Floating  →  bg: #FFFFFF   (modals, dropdowns, tooltips — add shadow + backd
 ```
 
 Shadow scale (colour-tinted, never flat grey):
+
 ```css
 /* Elevated — cards at rest */
-box-shadow: 0 1px 3px rgba(46,93,62,0.06), 0 4px 12px rgba(46,93,62,0.08);
+box-shadow:
+  0 1px 3px rgba(46, 93, 62, 0.06),
+  0 4px 12px rgba(46, 93, 62, 0.08);
 
 /* Elevated hover — card hover state */
-box-shadow: 0 4px 8px rgba(46,93,62,0.08), 0 12px 28px rgba(46,93,62,0.12);
+box-shadow:
+  0 4px 8px rgba(46, 93, 62, 0.08),
+  0 12px 28px rgba(46, 93, 62, 0.12);
 
 /* Floating — modals, dropdowns */
-box-shadow: 0 8px 24px rgba(24,22,15,0.12), 0 32px 64px rgba(24,22,15,0.10);
+box-shadow:
+  0 8px 24px rgba(24, 22, 15, 0.12),
+  0 32px 64px rgba(24, 22, 15, 0.1);
 ```
 
 Apply these via a utility class in `globals.css` — never use raw Tailwind `shadow-md`:
+
 ```css
-.shadow-card       { box-shadow: 0 1px 3px rgba(46,93,62,0.06), 0 4px 12px rgba(46,93,62,0.08); }
-.shadow-card-hover { box-shadow: 0 4px 8px rgba(46,93,62,0.08), 0 12px 28px rgba(46,93,62,0.12); }
-.shadow-float      { box-shadow: 0 8px 24px rgba(24,22,15,0.12), 0 32px 64px rgba(24,22,15,0.10); }
+.shadow-card {
+  box-shadow:
+    0 1px 3px rgba(46, 93, 62, 0.06),
+    0 4px 12px rgba(46, 93, 62, 0.08);
+}
+.shadow-card-hover {
+  box-shadow:
+    0 4px 8px rgba(46, 93, 62, 0.08),
+    0 12px 28px rgba(46, 93, 62, 0.12);
+}
+.shadow-float {
+  box-shadow:
+    0 8px 24px rgba(24, 22, 15, 0.12),
+    0 32px 64px rgba(24, 22, 15, 0.1);
+}
 ```
 
 ---
@@ -324,27 +357,32 @@ Apply these via a utility class in `globals.css` — never use raw Tailwind `sha
 ### Anti-Generic Guardrails
 
 **Colours**
-- Never use default Tailwind palette colours (indigo-500, blue-600, purple-*, etc.)
+
+- Never use default Tailwind palette colours (indigo-500, blue-600, purple-\*, etc.)
 - All colours come from the CSS custom properties defined above
 - Derive tints/shades from `--color-primary` — do not invent new colours mid-build
 
 **Typography**
+
 - Large headings (≥ 3xl): `letter-spacing: -0.03em` (tight tracking — add to `globals.css` heading class)
 - Body text: `line-height: 1.7` (generous, readable)
 - Never use the same font for headings and body — Fraunces for display, DM Sans for UI
 - Never set font sizes with arbitrary values like `text-[17px]` — use the defined type scale
 
 **Shadows**
+
 - Never use flat `shadow-md` or `shadow-lg` directly
 - Use `.shadow-card`, `.shadow-card-hover`, `.shadow-float` defined in `globals.css`
 - Shadows use green-tinted rgba on elevated surfaces, neutral dark on floating surfaces
 
 **Gradients & Texture**
+
 - Hero sections: subtle layered radial gradient (soft green glow, low opacity) behind content
 - Add grain/texture overlay via SVG noise filter at ~3% opacity on hero for depth
 - Never use purple, indigo, or blue gradients anywhere
 
 **Animations**
+
 - Only animate `transform` and `opacity` — never `transition-all`
 - Use spring-style easing for interactive elements: `cubic-bezier(0.34, 1.56, 0.64, 1)`
 - Standard ease for page/section transitions: `cubic-bezier(0.16, 1, 0.3, 1)` (ease-out-expo)
@@ -353,16 +391,19 @@ Apply these via a utility class in `globals.css` — never use raw Tailwind `sha
 
 **Interactive States — No Exceptions**
 Every clickable/interactive element must define all three:
+
 - `hover:` — visual feedback (colour shift, shadow lift, scale)
 - `focus-visible:` — `ring-2 ring-[--color-primary] ring-offset-2`
 - `active:` — `active:scale-[0.98]` on buttons and cards
 
 **Images**
+
 - Food listing photos: always wrap in a fixed aspect ratio container with `overflow-hidden rounded-lg`
 - Apply bottom gradient overlay: `absolute inset-0 bg-gradient-to-t from-black/30 to-transparent`
 - Never render a bare `<img>` without a defined aspect ratio container
 
 **Depth & Layering**
+
 - Surfaces must sit on distinct planes (base → elevated → floating)
 - Use `backdrop-blur-md` on navbar and modals to reinforce the floating plane visually
 - Cards must feel elevated — use `.shadow-card` and white background against the warm base
@@ -370,6 +411,7 @@ Every clickable/interactive element must define all three:
 ---
 
 ### Hard Rules — Non-Negotiable
+
 - **Never** `transition-all` — always specify the property (`transition-shadow`, `transition-transform`, etc.)
 - **Never** use default Tailwind blue/indigo/purple as any brand colour
 - **Never** use flat unstyled `shadow-md` without colour tinting
@@ -383,12 +425,14 @@ Every clickable/interactive element must define all three:
 ## Code Quality Rules
 
 ### General
+
 - TypeScript strict mode — no `any`, no type assertions without justification
 - All user input validated with Zod before hitting the DB
 - Error boundaries around real-time components
 - Loading skeletons for all async data (no raw spinners)
 
 ### Naming
+
 - Components: `PascalCase` — `ListingCard`, `ClaimModal`, `ExpiryTimer`
 - Server Actions: `camelCase` verb-noun — `createListing`, `claimListing`
 - Hooks: `useXxx` — `useClaimedListings`, `useCountdown`
@@ -396,6 +440,7 @@ Every clickable/interactive element must define all three:
 - Zod schemas: `xxxSchema` — `listingSchema`, `claimSchema`
 
 ### Component Rules
+
 - One component per file
 - No file exceeds ~200 lines — split if growing beyond that
 - Shared display components go in `components/shared/`
@@ -403,6 +448,7 @@ Every clickable/interactive element must define all three:
 - Server Components by default; add `'use client'` only when needed (interactivity, hooks, localStorage)
 
 ### What to Avoid
+
 - No `console.log` left in production code
 - No inline styles (use Tailwind classes only)
 - No hardcoded strings for UI copy — keep in a `constants.ts` or co-located `copy.ts` if a page has a lot
@@ -426,19 +472,19 @@ NEXT_PUBLIC_APP_URL=             # e.g. https://plate2plate.vercel.app
 
 ## Key Decisions & Rationale
 
-| Decision | Rationale |
-|---|---|
-| No auth | Maximize adoption; UNSW trust environment |
-| UUID management token | Gives donors edit access without an account |
-| Soft deletes only | Preserves data for analytics + feedback loop |
-| Server Actions for mutations | Keeps service role key off the client |
-| LocalStorage for claim tracking | Avoids cookie consent complexity; UI-only state |
-| Supabase Realtime | Push updates without polling; better UX on the collect feed |
-| shadcn/ui | Accessible, unstyled Radix primitives — full design control, no bloat, consistent patterns |
-| Fraunces + DM Sans + DM Mono | Warm/organic (Fraunces) + clean/modern (DM Sans) — matches the hybrid design direction |
-| Warm earthy + clean modern | Approachable and sustainability-forward without feeling rustic; premium without being cold |
-| White cards on warm off-white bg | Creates visual depth and hierarchy without dark/light mode complexity |
-| Green as sole brand colour | Single dominant accent → more memorable and cohesive than multi-colour; amber reserved for urgency only |
+| Decision                         | Rationale                                                                                               |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| No auth                          | Maximize adoption; UNSW trust environment                                                               |
+| UUID management token            | Gives donors edit access without an account                                                             |
+| Soft deletes only                | Preserves data for analytics + feedback loop                                                            |
+| Server Actions for mutations     | Keeps service role key off the client                                                                   |
+| LocalStorage for claim tracking  | Avoids cookie consent complexity; UI-only state                                                         |
+| Supabase Realtime                | Push updates without polling; better UX on the collect feed                                             |
+| shadcn/ui                        | Accessible, unstyled Radix primitives — full design control, no bloat, consistent patterns              |
+| Fraunces + DM Sans + DM Mono     | Warm/organic (Fraunces) + clean/modern (DM Sans) — matches the hybrid design direction                  |
+| Warm earthy + clean modern       | Approachable and sustainability-forward without feeling rustic; premium without being cold              |
+| White cards on warm off-white bg | Creates visual depth and hierarchy without dark/light mode complexity                                   |
+| Green as sole brand colour       | Single dominant accent → more memorable and cohesive than multi-colour; amber reserved for urgency only |
 
 ---
 

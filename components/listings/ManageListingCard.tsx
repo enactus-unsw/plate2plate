@@ -120,7 +120,9 @@ export function ManageListingCard({
       }
 
       setCardState("collected");
-      toast.success("Marked as collected. Feedback email will be sent in 12 hours.");
+      toast.success(
+        "Marked as collected. Feedback email will be sent in 12 hours.",
+      );
     } catch {
       setError("An unexpected error occurred. Please try again.");
     } finally {
@@ -216,8 +218,8 @@ export function ManageListingCard({
       <div className="mb-4 flex items-center gap-2 text-base text-p2p-text">
         <Package size={16} className="shrink-0 text-p2p-primary" />
         <span>
-          <span className="font-semibold">{listing.quantity_remaining}</span>{" "}
-          of <span className="font-semibold">{listing.quantity}</span> servings
+          <span className="font-semibold">{listing.quantity_remaining}</span> of{" "}
+          <span className="font-semibold">{listing.quantity}</span> servings
           remaining
         </span>
       </div>
@@ -298,9 +300,7 @@ export function ManageListingCard({
               />
             }
           >
-            {collectLoading && (
-              <Loader2 size={16} className="animate-spin" />
-            )}
+            {collectLoading && <Loader2 size={16} className="animate-spin" />}
             {collectLoading ? "Marking…" : "Mark as Collected"}
           </AlertDialogTrigger>
           <AlertDialogContent>

@@ -45,7 +45,11 @@ function getServerSnapshot(): string[] {
 }
 
 export function useClaimedListings(): UseClaimedListingsReturn {
-  const claimedIds = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const claimedIds = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
 
   const addClaim = useCallback((id: string) => {
     const current = getSnapshot();
@@ -57,7 +61,7 @@ export function useClaimedListings(): UseClaimedListingsReturn {
 
   const hasClaimed = useCallback(
     (id: string) => claimedIds.includes(id),
-    [claimedIds]
+    [claimedIds],
   );
 
   return { claimedIds, addClaim, hasClaimed };

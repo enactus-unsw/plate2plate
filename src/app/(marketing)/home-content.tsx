@@ -134,9 +134,7 @@ function StepRail({
           className="group relative grid grid-cols-[44px_1fr] gap-4"
         >
           <div className="relative flex items-start justify-center">
-            <div
-              className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[--color-border] bg-[--color-surface] shadow-card transition-transform duration-200 ease-out-expo group-hover:-translate-y-0.5"
-            >
+            <div className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[--color-border] bg-[--color-surface] shadow-card transition-transform duration-200 ease-out-expo group-hover:-translate-y-0.5">
               <span className="text-sm font-semibold text-[--color-primary]">
                 {step.num}
               </span>
@@ -222,7 +220,8 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
   const router = useRouter();
   const [howMode, setHowMode] = useState<"donors" | "students">("donors");
 
-  const howTitle = howMode === "donors" ? "For societies & clubs" : "For students";
+  const howTitle =
+    howMode === "donors" ? "For societies & clubs" : "For students";
   const howLead =
     howMode === "donors"
       ? "Post surplus food — students do the rest."
@@ -256,7 +255,11 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+              transition={{
+                duration: 0.24,
+                ease: [0.16, 1, 0.3, 1],
+                delay: 0.1,
+              }}
               className="absolute inset-x-0 top-[28%] z-10 flex flex-col items-center px-6"
             >
               <div className="mb-4 inline-flex items-center gap-2">
@@ -311,7 +314,10 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
         <FlowSection
           aria-label="Who are we"
           className="min-h-0!"
-          style={{ backgroundColor: "var(--p2p-surface-warm)", color: "var(--p2p-text)" }}
+          style={{
+            backgroundColor: "var(--p2p-surface-warm)",
+            color: "var(--p2p-text)",
+          }}
         >
           <div className="w-full">
             <AboutBento />
@@ -321,7 +327,10 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
         <FlowSection
           aria-label="How it works"
           className="min-h-0!"
-          style={{ backgroundColor: "var(--p2p-surface)", color: "var(--p2p-text)" }}
+          style={{
+            backgroundColor: "var(--p2p-surface)",
+            color: "var(--p2p-text)",
+          }}
         >
           <section
             className="relative w-full overflow-hidden py-16 md:py-24 lg:py-32"
@@ -382,7 +391,9 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
 
                     <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                       <HoverButton
-                        variant={howMode === "students" ? "primary" : "secondary"}
+                        variant={
+                          howMode === "students" ? "primary" : "secondary"
+                        }
                         className="px-5 py-2.5 text-sm"
                         onClick={() => router.push("/collect")}
                       >
@@ -405,12 +416,18 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
       </FlowArt>
 
       {/* ── 4. Impact Stats ── */}
-      <section id="impact" className="bg-p2p-surface-warm py-16 md:py-24 lg:py-32">
+      <section
+        id="impact"
+        className="bg-p2p-surface-warm py-16 md:py-24 lg:py-32"
+      >
         <PageWrapper>
           <FadeIn>
             <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
               {impactStats.map((stat) => (
-                <div key={stat.label} className="border-t-2 border-p2p-primary pt-6">
+                <div
+                  key={stat.label}
+                  className="border-t-2 border-p2p-primary pt-6"
+                >
                   <p className="heading-tight font-heading text-4xl font-semibold text-p2p-text md:text-5xl">
                     {stat.value}
                   </p>

@@ -19,10 +19,10 @@ function filterExpired(items: Listing[]): Listing[] {
 }
 
 export function useRealtimeListings(
-  initialListings: Listing[]
+  initialListings: Listing[],
 ): UseRealtimeListingsReturn {
   const [listings, setListings] = useState<Listing[]>(() =>
-    filterExpired(initialListings)
+    filterExpired(initialListings),
   );
   const [lastEventAt, setLastEventAt] = useState<number | null>(null);
   const channelRef = useRef<RealtimeChannel | null>(null);
@@ -63,7 +63,7 @@ export function useRealtimeListings(
             setListings((prev) => [newListing, ...prev]);
             markEvent();
           }
-        }
+        },
       )
       .on(
         "postgres_changes",
@@ -77,7 +77,7 @@ export function useRealtimeListings(
             return prev.map((l) => (l.id === updated.id ? updated : l));
           });
           markEvent();
-        }
+        },
       )
       .on(
         "postgres_changes",
@@ -86,7 +86,7 @@ export function useRealtimeListings(
           const deleted = payload.old as { id: string };
           setListings((prev) => prev.filter((l) => l.id !== deleted.id));
           markEvent();
-        }
+        },
       )
       .subscribe();
 

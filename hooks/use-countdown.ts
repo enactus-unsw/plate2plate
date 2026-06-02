@@ -15,7 +15,14 @@ export function useCountdown(expiresAt: string): CountdownResult | null {
   const calculateTimeLeft = useCallback((): CountdownResult => {
     const diff = new Date(expiresAt).getTime() - Date.now();
     if (diff <= 0) {
-      return { days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true, colorClass: "text-p2p-red" };
+      return {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        isExpired: true,
+        colorClass: "text-p2p-red",
+      };
     }
 
     const totalMinutes = Math.floor(diff / 60000);

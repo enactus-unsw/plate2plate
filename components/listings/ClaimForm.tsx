@@ -6,7 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Mail } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { claimFormSchema, type ClaimFormValues } from "@/lib/validations/claim.schema";
+import {
+  claimFormSchema,
+  type ClaimFormValues,
+} from "@/lib/validations/claim.schema";
 import { claimListing } from "@/lib/actions/claims";
 import { useClaimedListings } from "@/hooks/use-claimed-listings";
 import type { Listing } from "@/types";
@@ -50,7 +53,11 @@ function generateEtaOptions(listing: Listing): EtaOption[] {
 }
 
 function RequiredMark() {
-  return <span className="text-p2p-red ml-0.5" aria-hidden="true">*</span>;
+  return (
+    <span className="text-p2p-red ml-0.5" aria-hidden="true">
+      *
+    </span>
+  );
 }
 
 export function ClaimForm({ listing }: ClaimFormProps) {
@@ -59,8 +66,13 @@ export function ClaimForm({ listing }: ClaimFormProps) {
   const [chosenEta, setChosenEta] = useState<string>("");
 
   const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
-  const etaOptions = useMemo(() => (mounted ? generateEtaOptions(listing) : []), [listing, mounted]);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  const etaOptions = useMemo(
+    () => (mounted ? generateEtaOptions(listing) : []),
+    [listing, mounted],
+  );
   const fullyReserved = listing.quantity_remaining <= 0;
 
   const {
@@ -94,12 +106,17 @@ export function ClaimForm({ listing }: ClaimFormProps) {
       hour: "numeric",
       minute: "2-digit",
     });
-    toast.success(`Food claimed! Head to ${listing.pickup_location} by ${etaLabel}.`);
+    toast.success(
+      `Food claimed! Head to ${listing.pickup_location} by ${etaLabel}.`,
+    );
   };
 
   if (submitted) {
     const etaTime = chosenEta
-      ? new Date(chosenEta).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })
+      ? new Date(chosenEta).toLocaleTimeString([], {
+          hour: "numeric",
+          minute: "2-digit",
+        })
       : null;
 
     return (
@@ -113,13 +130,19 @@ export function ClaimForm({ listing }: ClaimFormProps) {
           </h3>
           {etaTime && (
             <p className="mb-4 text-sm text-p2p-text-secondary">
-              Head to <span className="font-medium text-p2p-text">{listing.pickup_location}</span>{" "}
+              Head to{" "}
+              <span className="font-medium text-p2p-text">
+                {listing.pickup_location}
+              </span>{" "}
               by <span className="font-medium text-p2p-text">{etaTime}</span>.
             </p>
           )}
           {!etaTime && (
             <p className="mb-4 text-sm text-p2p-text-secondary">
-              Head to <span className="font-medium text-p2p-text">{listing.pickup_location}</span>{" "}
+              Head to{" "}
+              <span className="font-medium text-p2p-text">
+                {listing.pickup_location}
+              </span>{" "}
               as soon as possible.
             </p>
           )}
@@ -127,7 +150,9 @@ export function ClaimForm({ listing }: ClaimFormProps) {
             <p className="flex items-center justify-center gap-2 text-sm text-p2p-text-secondary">
               <Mail size={14} />
               Need to reach them?{" "}
-              <span className="font-medium text-p2p-text">{listing.contact_email}</span>
+              <span className="font-medium text-p2p-text">
+                {listing.contact_email}
+              </span>
             </p>
           </div>
           <Link
@@ -152,7 +177,8 @@ export function ClaimForm({ listing }: ClaimFormProps) {
             Fully Reserved
           </h3>
           <p className="mb-4 text-sm text-p2p-text-secondary">
-            All servings have been claimed. Check back — servings may open up if someone doesn&apos;t collect.
+            All servings have been claimed. Check back — servings may open up if
+            someone doesn&apos;t collect.
           </p>
           <Link
             href="/collect"
@@ -167,16 +193,25 @@ export function ClaimForm({ listing }: ClaimFormProps) {
 
   return (
     <div className="rounded-xl border border-p2p-border bg-p2p-surface p-6 shadow-card">
-      <h3 className="mb-1 text-xl font-semibold text-p2p-text">Claim this food</h3>
+      <h3 className="mb-1 text-xl font-semibold text-p2p-text">
+        Claim this food
+      </h3>
       <p className="mb-5 text-sm text-p2p-text-secondary">
         Enter your details and we&apos;ll hold this for you.
       </p>
 
-      <form onSubmit={handleSubmit(onSubmit, scrollToFirstError)} className="space-y-4">
+      <form
+        onSubmit={handleSubmit(onSubmit, scrollToFirstError)}
+        className="space-y-4"
+      >
         {/* Name */}
         <div>
-          <label htmlFor="student_name" className="mb-1.5 block text-sm font-medium text-p2p-text">
-            Full name<RequiredMark />
+          <label
+            htmlFor="student_name"
+            className="mb-1.5 block text-sm font-medium text-p2p-text"
+          >
+            Full name
+            <RequiredMark />
           </label>
           <input
             id="student_name"
@@ -187,14 +222,20 @@ export function ClaimForm({ listing }: ClaimFormProps) {
             {...register("student_name")}
           />
           {errors.student_name && (
-            <p className="mt-1 text-xs text-p2p-red" role="alert">{errors.student_name.message}</p>
+            <p className="mt-1 text-xs text-p2p-red" role="alert">
+              {errors.student_name.message}
+            </p>
           )}
         </div>
 
         {/* Email */}
         <div>
-          <label htmlFor="student_email" className="mb-1.5 block text-sm font-medium text-p2p-text">
-            Email address<RequiredMark />
+          <label
+            htmlFor="student_email"
+            className="mb-1.5 block text-sm font-medium text-p2p-text"
+          >
+            Email address
+            <RequiredMark />
           </label>
           <input
             id="student_email"
@@ -205,14 +246,20 @@ export function ClaimForm({ listing }: ClaimFormProps) {
             {...register("student_email")}
           />
           {errors.student_email && (
-            <p className="mt-1 text-xs text-p2p-red" role="alert">{errors.student_email.message}</p>
+            <p className="mt-1 text-xs text-p2p-red" role="alert">
+              {errors.student_email.message}
+            </p>
           )}
         </div>
 
         {/* ETA */}
         <div>
-          <label htmlFor="student_eta" className="mb-1.5 block text-sm font-medium text-p2p-text">
-            Estimated arrival time<RequiredMark />
+          <label
+            htmlFor="student_eta"
+            className="mb-1.5 block text-sm font-medium text-p2p-text"
+          >
+            Estimated arrival time
+            <RequiredMark />
           </label>
           <select
             id="student_eta"
@@ -228,7 +275,9 @@ export function ClaimForm({ listing }: ClaimFormProps) {
             ))}
           </select>
           {errors.student_eta && (
-            <p className="mt-1 text-xs text-p2p-red" role="alert">{errors.student_eta.message}</p>
+            <p className="mt-1 text-xs text-p2p-red" role="alert">
+              {errors.student_eta.message}
+            </p>
           )}
         </div>
 

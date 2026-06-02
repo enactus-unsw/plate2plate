@@ -22,8 +22,11 @@ export async function GET(request: Request) {
 
   if (fetchError) {
     return NextResponse.json(
-      { error: "Failed to fetch expired listings", details: fetchError.message },
-      { status: 500 }
+      {
+        error: "Failed to fetch expired listings",
+        details: fetchError.message,
+      },
+      { status: 500 },
     );
   }
 
@@ -41,7 +44,7 @@ export async function GET(request: Request) {
   if (updateError) {
     return NextResponse.json(
       { error: "Failed to expire listings", details: updateError.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 

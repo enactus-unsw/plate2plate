@@ -3,12 +3,18 @@
 "use server";
 
 import { createServiceClient } from "@/lib/supabase/server";
-import { claimFormSchema, type ClaimFormValues } from "@/lib/validations/claim.schema";
+import {
+  claimFormSchema,
+  type ClaimFormValues,
+} from "@/lib/validations/claim.schema";
 import { sendEmail } from "@/lib/email/send";
 import { buildStudentConfirmationEmail } from "@/lib/email/templates/student-confirmation";
 import { buildDonorClaimNotificationEmail } from "@/lib/email/templates/donor-claim-notification";
 
-export async function claimListing(listingId: string, claimData: ClaimFormValues) {
+export async function claimListing(
+  listingId: string,
+  claimData: ClaimFormValues,
+) {
   const parsed = claimFormSchema.safeParse(claimData);
 
   if (!parsed.success) {
@@ -52,7 +58,10 @@ export async function claimListing(listingId: string, claimData: ClaimFormValues
 
     if (claimError) {
       console.error("claimListing insert error:", claimError);
-      return { data: null, error: "Failed to claim listing. Please try again." };
+      return {
+        data: null,
+        error: "Failed to claim listing. Please try again.",
+      };
     }
 
     const newQuantity = listing.quantity_remaining - 1;
@@ -67,12 +76,18 @@ export async function claimListing(listingId: string, claimData: ClaimFormValues
 
     if (updateError) {
       console.error("claimListing update error:", updateError);
-      return { data: null, error: "Claim created but failed to update listing. Please contact support." };
+      return {
+        data: null,
+        error:
+          "Claim created but failed to update listing. Please contact support.",
+      };
     }
 
     const { data: fullListing } = await supabase
       .from("listings")
-      .select("id, title, food_category, pickup_location, expires_at, contact_email, contact_phone")
+      .select(
+        "id, title, food_category, pickup_location, expires_at, contact_email, contact_phone",
+      )
       .eq("id", listingId)
       .single();
 
@@ -90,13 +105,13 @@ export async function claimListing(listingId: string, claimData: ClaimFormValues
         {
           student_name: values.student_name,
           student_eta: values.student_eta,
-        }
-      )
+        },
+      );
       sendEmail({
         to: values.student_email,
         subject: "You've claimed food on Plate2Plate 🍽️",
         html: studentHtml,
-      })
+      });
 
       const donorHtml = buildDonorClaimNotificationEmail(
         {
@@ -107,19 +122,22 @@ export async function claimListing(listingId: string, claimData: ClaimFormValues
           student_name: values.student_name,
           student_email: values.student_email,
           student_eta: values.student_eta,
-        }
-      )
+        },
+      );
       sendEmail({
         to: fullListing.contact_email,
         subject: `Someone claimed your food — "${fullListing.title}" 🙌`,
         html: donorHtml,
-      })
+      });
     }
 
     return { data: { claim_id: claim.id as string }, error: null };
   } catch (err) {
     console.error("claimListing unexpected error:", err);
-    return { data: null, error: "An unexpected error occurred. Please try again." };
+    return {
+      data: null,
+      error: "An unexpected error occurred. Please try again.",
+    };
   }
 }
 

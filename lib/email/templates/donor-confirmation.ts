@@ -1,39 +1,39 @@
 interface DonorEmailListing {
-  title: string
-  food_category: string
-  quantity: number
-  pickup_location: string
-  expires_at: string
-  perishability: string
+  title: string;
+  food_category: string;
+  quantity: number;
+  pickup_location: string;
+  expires_at: string;
+  perishability: string;
 }
 
 function formatDateTime(isoString: string): string {
-  const date = new Date(isoString)
-  const now = new Date()
-  const isToday = date.toDateString() === now.toDateString()
+  const date = new Date(isoString);
+  const now = new Date();
+  const isToday = date.toDateString() === now.toDateString();
 
-  const timeStr = date.toLocaleTimeString('en-AU', {
-    hour: 'numeric',
-    minute: '2-digit',
+  const timeStr = date.toLocaleTimeString("en-AU", {
+    hour: "numeric",
+    minute: "2-digit",
     hour12: true,
-  })
+  });
 
   if (isToday) {
-    return `Today at ${timeStr}`
+    return `Today at ${timeStr}`;
   }
 
-  const dateStr = date.toLocaleDateString('en-AU', {
-    weekday: 'short',
-    day: 'numeric',
-    month: 'short',
-  })
+  const dateStr = date.toLocaleDateString("en-AU", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
 
-  return `${dateStr} at ${timeStr}`
+  return `${dateStr} at ${timeStr}`;
 }
 
 export function buildDonorConfirmationEmail(
   listing: DonorEmailListing,
-  managementUrl: string
+  managementUrl: string,
 ): string {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -150,5 +150,5 @@ export function buildDonorConfirmationEmail(
     </tr>
   </table>
 </body>
-</html>`
+</html>`;
 }

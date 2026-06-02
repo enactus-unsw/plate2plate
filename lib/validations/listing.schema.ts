@@ -56,11 +56,12 @@ export const listingSchema = z
   })
   .refine(
     (data) =>
-      data.perishability !== ">=30 mins" || (data.expires_at && data.expires_at.length > 0),
+      data.perishability !== ">=30 mins" ||
+      (data.expires_at && data.expires_at.length > 0),
     {
       message: "Expiry time is required for items lasting 30+ minutes",
       path: ["expires_at"],
-    }
+    },
   );
 
 export type ListingFormValues = z.infer<typeof listingSchema>;

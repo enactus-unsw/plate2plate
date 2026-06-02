@@ -52,7 +52,8 @@ function StatisticCard() {
           20–30%
         </span>
         <p className="mt-3 text-sm text-p2p-text-secondary">
-          of campus event food is over-catered and goes uneaten every year at UNSW
+          of campus event food is over-catered and goes uneaten every year at
+          UNSW
         </p>
       </div>
     </div>

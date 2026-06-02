@@ -3,7 +3,10 @@
 "use server";
 
 import { createServiceClient } from "@/lib/supabase/server";
-import { listingSchema, type ListingFormValues } from "@/lib/validations/listing.schema";
+import {
+  listingSchema,
+  type ListingFormValues,
+} from "@/lib/validations/listing.schema";
 import { sendEmail } from "@/lib/email/send";
 import { buildDonorConfirmationEmail } from "@/lib/email/templates/donor-confirmation";
 import type { Listing } from "@/types";
@@ -50,10 +53,13 @@ export async function createListing(formData: ListingFormValues) {
 
     if (error) {
       console.error("createListing DB error:", error);
-      return { data: null, error: "Failed to create listing. Please try again." };
+      return {
+        data: null,
+        error: "Failed to create listing. Please try again.",
+      };
     }
 
-    const managementUrl = `${process.env.NEXT_PUBLIC_APP_URL}/manage/${data.management_token}`
+    const managementUrl = `${process.env.NEXT_PUBLIC_APP_URL}/manage/${data.management_token}`;
     const html = buildDonorConfirmationEmail(
       {
         title: values.title,
@@ -63,25 +69,34 @@ export async function createListing(formData: ListingFormValues) {
         expires_at: expiresAt,
         perishability: values.perishability,
       },
-      managementUrl
-    )
+      managementUrl,
+    );
     sendEmail({
       to: values.contact_email,
       subject: "Your listing is live on Plate2Plate 🍽️",
       html,
-    })
+    });
 
     return {
-      data: { id: data.id as string, management_token: data.management_token as string },
+      data: {
+        id: data.id as string,
+        management_token: data.management_token as string,
+      },
       error: null,
     };
   } catch (err) {
     console.error("createListing unexpected error:", err);
-    return { data: null, error: "An unexpected error occurred. Please try again." };
+    return {
+      data: null,
+      error: "An unexpected error occurred. Please try again.",
+    };
   }
 }
 
-export async function updateQuantity(listingId: string, quantityRemaining: number) {
+export async function updateQuantity(
+  listingId: string,
+  quantityRemaining: number,
+) {
   try {
     const supabase = await createServiceClient();
 
@@ -151,6 +166,9 @@ export async function getListingByToken(managementToken: string) {
     return { data: data as Listing, error: null };
   } catch (err) {
     console.error("getListingByToken unexpected error:", err);
-    return { data: null, error: "An unexpected error occurred. Please try again." };
+    return {
+      data: null,
+      error: "An unexpected error occurred. Please try again.",
+    };
   }
 }

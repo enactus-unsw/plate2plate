@@ -25,7 +25,11 @@ function hasFilters(sp: SearchParams): boolean {
   );
 }
 
-async function ListingsLoader({ searchParams }: { searchParams: SearchParams }) {
+async function ListingsLoader({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
   const supabase = await createClient();
 
   let query = supabase
@@ -66,7 +70,12 @@ async function ListingsLoader({ searchParams }: { searchParams: SearchParams }) 
   }
 
   const listings = (data ?? []) as Listing[];
-  return <ListingFeedRealtime initialListings={listings} hasActiveFilters={hasFilters(searchParams)} />;
+  return (
+    <ListingFeedRealtime
+      initialListings={listings}
+      hasActiveFilters={hasFilters(searchParams)}
+    />
+  );
 }
 
 function LoadingSkeleton() {
