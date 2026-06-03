@@ -55,6 +55,13 @@ export function Navbar() {
             About
           </Link>
 
+          <Link
+            href="/events"
+            className={`rounded-full px-3 py-1.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
+          >
+            Events
+          </Link>
+
           <div className="mx-2 h-5 w-px bg-p2p-border-subtle" />
 
           <HoverButton
@@ -100,6 +107,14 @@ export function Navbar() {
                   className={`rounded-lg px-3 py-2.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
                 >
                   About
+                </Link>
+
+                <Link
+                  href="/events"
+                  onClick={() => setMobileOpen(false)}
+                  className={`rounded-lg px-3 py-2.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
+                >
+                  Events
                 </Link>
 
                 <Link
