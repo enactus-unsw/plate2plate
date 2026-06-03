@@ -3,6 +3,7 @@ import Link from "next/link";
 const FOOTER_LINKS = [
   { label: "Find Food", href: "/collect" },
   { label: "Post Surplus Food", href: "/redistribute" },
+  { label: "Arc Events", href: "/arc-events" },
 ] as const;
 
 export function Footer() {
