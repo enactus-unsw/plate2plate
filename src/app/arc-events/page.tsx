@@ -3,16 +3,6 @@ import { ArcEventCard, type ArcEvent } from "@/components/listings/ArcEventCard"
 
 const WEEK_2_EVENTS: ArcEvent[] = [
   {
-    id: "brekkie-tue",
-    title: "Breakfast Club",
-    description: "Start your morning right with free breakfast and wellness tips from the Arc team.",
-    date: "Tue 9 June 2026",
-    time: "9:30 AM – 11:30 AM",
-    location: "The Quad, Kensington Campus",
-    category: "Free Food",
-    isRecurring: true,
-  },
-  {
     id: "foodhub-paddy",
     title: "Food Hub (Paddington)",
     description: "Free pantry staples, fresh produce, and hygiene products for Paddington students.",
@@ -33,22 +23,14 @@ const WEEK_2_EVENTS: ArcEvent[] = [
     link: "https://www.arc.unsw.edu.au/foodhub",
   },
   {
-    id: "clubs-takeover",
-    title: "Clubs Takeover",
-    description: "A huge celebration of student life with free food and activities from various UNSW clubs.",
+    id: "arc-picnic",
+    title: "Arc Picnic | Arc Savers",
+    description: "Take a break between classes at the Arc Savers Picnic to unwind with free food, new friends, and a relaxing campus vibe.",
     date: "Wed 10 June 2026",
-    time: "11:00 AM – 4:00 PM",
-    location: "Alumni East, Kensington Campus",
+    time: "12:00 PM – 3:00 PM",
+    location: "Helen Maguire Lawn, Quadrangle Building (E15)",
     category: "Social Event",
-  },
-  {
-    id: "culture-cafe",
-    title: "Culture Café: China",
-    description: "Experience the vibrant culture and delicious traditional food of China at the Roundhouse.",
-    date: "Thu 11 June 2026",
-    time: "12:00 PM – 2:00 PM",
-    location: "The Roundhouse",
-    category: "Culture",
+    link: "https://events.humanitix.com/arc-picnic-savers-26t2"
   },
   {
     id: "foodhub-kenso-fri",
