@@ -28,7 +28,6 @@ const itemVariants: Variants = {
   },
 };
 
-
 interface BentoGridShowcaseProps {
   topLeft: React.ReactNode;
   topRight: React.ReactNode;
