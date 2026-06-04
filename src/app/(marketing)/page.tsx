@@ -20,7 +20,7 @@ async function getImpactStats() {
       supabase
         .from("listings")
         .select("quantity_remaining")
-        .eq("status", "unavailable"),
+        .in("status", ["unavailable", "collected"]),
       supabase.from("listings").select("contact_email"),
     ]);
 
