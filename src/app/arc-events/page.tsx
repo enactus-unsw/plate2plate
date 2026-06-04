@@ -11,6 +11,7 @@ const WEEK_2_EVENTS: ArcEvent[] = [
     location: "D Block Entrance, Paddington Campus",
     category: "Pantry",
     link: "https://events.humanitix.com/food-hub-paddington-or-unsw",
+    image: "/foodhub.png"
   },
   {
     id: "foodhub-kenso-wed",
@@ -21,6 +22,7 @@ const WEEK_2_EVENTS: ArcEvent[] = [
     location: "Gate 2, Kensington Campus",
     category: "Pantry",
     link: "https://events.humanitix.com/food-hub-unsw",
+    image: "/foodhub.png"
   },
   {
     id: "arc-picnic",
@@ -30,7 +32,8 @@ const WEEK_2_EVENTS: ArcEvent[] = [
     time: "12:00 PM – 3:00 PM",
     location: "Helen Maguire Lawn, Quadrangle Building (E15)",
     category: "Social Event",
-    link: "https://events.humanitix.com/arc-picnic-savers-26t2"
+    link: "https://events.humanitix.com/arc-picnic-savers-26t2",
+    image: "/arcsavers.png"
   },
   {
     id: "foodhub-kenso-fri",
@@ -41,6 +44,7 @@ const WEEK_2_EVENTS: ArcEvent[] = [
     location: "Gate 2, Kensington Campus",
     category: "Pantry",
     link: "https://events.humanitix.com/food-hub-unsw",
+    image: "/foodhub.png"
   },
 ];
 
