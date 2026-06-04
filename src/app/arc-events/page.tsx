@@ -10,7 +10,7 @@ const WEEK_2_EVENTS: ArcEvent[] = [
     time: "12:00 PM – 2:00 PM",
     location: "D Block Entrance, Paddington Campus",
     category: "Pantry",
-    link: "https://www.arc.unsw.edu.au/foodhub",
+    link: "https://events.humanitix.com/food-hub-paddington-or-unsw",
   },
   {
     id: "foodhub-kenso-wed",
@@ -20,7 +20,7 @@ const WEEK_2_EVENTS: ArcEvent[] = [
     time: "2:00 PM – 4:00 PM",
     location: "Gate 2, Kensington Campus",
     category: "Pantry",
-    link: "https://www.arc.unsw.edu.au/foodhub",
+    link: "https://events.humanitix.com/food-hub-unsw",
   },
   {
     id: "arc-picnic",
@@ -40,7 +40,7 @@ const WEEK_2_EVENTS: ArcEvent[] = [
     time: "12:00 PM – 2:00 PM",
     location: "Gate 2, Kensington Campus",
     category: "Pantry",
-    link: "https://www.arc.unsw.edu.au/foodhub",
+    link: "https://events.humanitix.com/food-hub-unsw",
   },
 ];
 
