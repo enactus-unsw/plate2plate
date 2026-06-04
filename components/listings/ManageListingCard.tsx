@@ -29,9 +29,8 @@ import { CountdownTimer } from "@/components/shared/CountdownTimer";
 import { AllergenTag } from "@/components/shared/AllergenTag";
 import { DietaryTag } from "@/components/shared/DietaryTag";
 import { FOOD_CONDITION_LABELS } from "@/lib/constants";
-import { completeClaim } from "@/lib/actions/claims";
-import { closeListing } from "@/lib/actions/listings";
-import type { Listing, Claim, FoodCondition } from "@/types";
+import { closeListing, markCollected } from "@/lib/actions/listings";
+import type { Listing, FoodCondition } from "@/types";
 
 type CardState = "default" | "collected" | "closed";
 
@@ -43,6 +42,10 @@ const STATUS_CONFIG = {
   held: {
     label: "Held — being collected",
     className: "bg-p2p-amber-light text-p2p-amber",
+  },
+  collected: {
+    label: "Collected",
+    className: "bg-p2p-primary-light text-p2p-primary",
   },
   unavailable: {
     label: "Closed",
@@ -66,13 +69,9 @@ const STATE_BADGE_OVERRIDES: Record<
 
 interface ManageListingCardProps {
   listing: Listing;
-  activeClaim: Claim | null;
 }
 
-export function ManageListingCard({
-  listing,
-  activeClaim,
-}: ManageListingCardProps) {
+export function ManageListingCard({ listing }: ManageListingCardProps) {
   const [cardState, setCardState] = useState<CardState>("default");
   const [collectDialogOpen, setCollectDialogOpen] = useState(false);
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
@@ -88,7 +87,8 @@ export function ManageListingCard({
       ? STATE_BADGE_OVERRIDES[cardState]
       : STATUS_CONFIG[listing.status];
 
-  const isTerminal = listing.status === "unavailable";
+  const isTerminal =
+    listing.status === "unavailable" || listing.status === "collected";
   const isDisabled =
     cardState !== "default" || collectLoading || closeLoading || isTerminal;
 
@@ -105,17 +105,9 @@ export function ManageListingCard({
     setError(null);
 
     try {
-      if (activeClaim) {
-        const claimResult = await completeClaim(activeClaim.id);
-        if (claimResult.error) {
-          setError(claimResult.error);
-          return;
-        }
-      }
-
-      const closeResult = await closeListing(listing.management_token);
-      if (closeResult.error) {
-        setError(closeResult.error);
+      const result = await markCollected(listing.management_token);
+      if (result.error) {
+        setError(result.error);
         return;
       }
 

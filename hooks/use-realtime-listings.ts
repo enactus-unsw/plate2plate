@@ -71,7 +71,7 @@ export function useRealtimeListings(
         (payload) => {
           const updated = payload.new as Listing;
           setListings((prev) => {
-            if (updated.status === "unavailable") {
+            if (updated.status !== "available" && updated.status !== "held") {
               return prev.filter((l) => l.id !== updated.id);
             }
             return prev.map((l) => (l.id === updated.id ? updated : l));
