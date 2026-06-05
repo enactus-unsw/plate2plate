@@ -1,6 +1,6 @@
 export type PerishabilityType = "<30 mins" | ">=30 mins";
 
-export type ListingStatus = "available" | "held" | "unavailable";
+export type ListingStatus = "available" | "held" | "collected" | "unavailable";
 
 export type ClaimStatus = "active" | "completed" | "revoked";
 

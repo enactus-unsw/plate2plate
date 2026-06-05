@@ -37,7 +37,7 @@ export async function claimListing(
       return { data: null, error: "This listing is no longer available." };
     }
 
-    if (listing.status === "unavailable") {
+    if (listing.status !== "available" && listing.status !== "held") {
       return { data: null, error: "This listing is no longer available." };
     }
 
@@ -87,7 +87,7 @@ export async function claimListing(
     const { data: fullListing } = await supabase
       .from("listings")
       .select(
-        "id, title, food_category, pickup_location, expires_at, contact_email, contact_phone",
+        "id, title, food_category, pickup_location, expires_at, contact_email, contact_phone, management_token",
       )
       .eq("id", listingId)
       .single();
@@ -114,6 +114,7 @@ export async function claimListing(
         html: studentHtml,
       });
 
+      const manageUrl = `${process.env.NEXT_PUBLIC_APP_URL}/manage/${fullListing.management_token}`;
       const donorHtml = buildDonorClaimNotificationEmail(
         {
           title: fullListing.title,
@@ -124,6 +125,7 @@ export async function claimListing(
           student_email: values.student_email,
           student_eta: values.student_eta,
         },
+        manageUrl,
       );
       sendEmail({
         to: fullListing.contact_email,

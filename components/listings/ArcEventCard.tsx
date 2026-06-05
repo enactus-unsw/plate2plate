@@ -33,7 +33,7 @@ export function ArcEventCard({ event }: ArcEventCardProps) {
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-        
+
         <div className="absolute right-3 top-3 inline-flex items-center rounded-full bg-p2p-primary-light px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-p2p-primary shadow-sm">
           {event.category}
         </div>

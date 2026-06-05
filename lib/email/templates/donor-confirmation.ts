@@ -115,20 +115,20 @@ export function buildDonorConfirmationEmail(
                 </tr>
               </table>
 
-              <!-- Management Link Box -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F9F8F5;border:1px solid #E5DDD0;border-radius:8px;margin:16px 0;">
-                <tr>
-                  <td style="padding:16px;">
-                    <a href="${managementUrl}" style="font-family:monospace;font-size:13px;color:#2E5D3E;word-break:break-all;text-decoration:none;">${managementUrl}</a>
-                  </td>
-                </tr>
-              </table>
-
               <!-- CTA Button -->
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0 0;">
                 <tr>
                   <td align="center">
                     <a href="${managementUrl}" style="background-color:#2E5D3E;color:#FFFFFF;padding:14px 28px;border-radius:8px;font-weight:600;text-decoration:none;display:inline-block;font-size:15px;">Manage Your Listing &rarr;</a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Management Link Box -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F9F8F5;border:1px solid #E5DDD0;border-radius:8px;margin:16px 0;">
+                <tr>
+                  <td style="padding:16px;">
+                    <a href="${managementUrl}" style="font-family:monospace;font-size:13px;color:#2E5D3E;word-break:break-all;text-decoration:none;">${managementUrl}</a>
                   </td>
                 </tr>
               </table>
@@ -141,6 +141,7 @@ export function buildDonorConfirmationEmail(
                   </td>
                 </tr>
               </table>
+              
 
             </td>
           </tr>

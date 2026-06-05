@@ -149,6 +149,61 @@ export async function closeListing(managementToken: string) {
   }
 }
 
+export async function markCollected(managementToken: string) {
+  try {
+    const supabase = await createServiceClient();
+
+    const { data: listing, error: lookupError } = await supabase
+      .from("listings")
+      .select("id, status")
+      .eq("management_token", managementToken)
+      .single();
+
+    if (lookupError || !listing) {
+      console.error("markCollected lookup error:", lookupError);
+      return { error: "Listing not found." };
+    }
+
+    if (listing.status === "collected") {
+      return { error: "This listing is already marked as collected." };
+    }
+
+    if (listing.status !== "available" && listing.status !== "held") {
+      return { error: "This listing is closed and can no longer be updated." };
+    }
+
+    // Mark any active claim on this listing as completed so the feedback loop runs.
+    const { error: claimError } = await supabase
+      .from("claims")
+      .update({
+        claim_status: "completed",
+        completed_at: new Date().toISOString(),
+      })
+      .eq("listing_id", listing.id)
+      .eq("claim_status", "active");
+
+    if (claimError) {
+      console.error("markCollected claim update error:", claimError);
+      return { error: "Failed to update the claim. Please try again." };
+    }
+
+    const { error: updateError } = await supabase
+      .from("listings")
+      .update({ status: "collected", served_at: new Date().toISOString() })
+      .eq("management_token", managementToken);
+
+    if (updateError) {
+      console.error("markCollected listing update error:", updateError);
+      return { error: "Failed to mark as collected. Please try again." };
+    }
+
+    return { error: null };
+  } catch (err) {
+    console.error("markCollected unexpected error:", err);
+    return { error: "An unexpected error occurred. Please try again." };
+  }
+}
+
 export async function getListingByToken(managementToken: string) {
   try {
     const supabase = await createServiceClient();
