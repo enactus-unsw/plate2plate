@@ -27,6 +27,7 @@ export interface Listing {
   notes: string | null;
   contact_email: string;
   contact_phone: string | null;
+  zid: string;
   perishability: PerishabilityType;
   status: ListingStatus;
   expires_at: string;
@@ -39,6 +40,7 @@ export interface Claim {
   listing_id: string;
   student_name: string;
   student_email: string;
+  zid: string;
   student_eta: string;
   claim_status: ClaimStatus;
   claimed_at: string;

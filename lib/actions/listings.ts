@@ -44,6 +44,7 @@ export async function createListing(formData: ListingFormValues) {
         dietary_tags: values.dietary_tags,
         contact_email: values.contact_email,
         contact_phone: values.contact_phone || null,
+        zid: values.zid,
         notes: values.notes || null,
         served_at: values.served_at || null,
         expires_at: expiresAt,

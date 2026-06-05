@@ -187,6 +187,7 @@ export function DonorForm() {
       dietary_tags: [],
       contact_email: "",
       contact_phone: "",
+      zid: "",
       notes: "",
       safety_confirmed: false,
     },
@@ -549,6 +550,21 @@ export function DonorForm() {
               {...register("contact_email")}
             />
             <FieldError message={errors.contact_email?.message} />
+          </div>
+
+          <div>
+            <Label htmlFor="zid">
+              Your zID
+              <RequiredMark />
+            </Label>
+            <Input
+              id="zid"
+              placeholder="z1234567"
+              className="mt-1.5 bg-p2p-surface"
+              aria-invalid={!!errors.zid}
+              {...register("zid")}
+            />
+            <FieldError message={errors.zid?.message} />
           </div>
 
           <div>

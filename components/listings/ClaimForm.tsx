@@ -81,6 +81,12 @@ export function ClaimForm({ listing }: ClaimFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<ClaimFormValues>({
     resolver: zodResolver(claimFormSchema),
+    defaultValues: {
+      student_name: "",
+      student_email: "",
+      zid: "",
+      student_eta: "",
+    },
   });
 
   function scrollToFirstError() {
@@ -248,6 +254,30 @@ export function ClaimForm({ listing }: ClaimFormProps) {
           {errors.student_email && (
             <p className="mt-1 text-xs text-p2p-red" role="alert">
               {errors.student_email.message}
+            </p>
+          )}
+        </div>
+
+        {/* zID */}
+        <div>
+          <label
+            htmlFor="student_zid"
+            className="mb-1.5 block text-sm font-medium text-p2p-text"
+          >
+            zID
+            <RequiredMark />
+          </label>
+          <input
+            id="student_zid"
+            type="text"
+            placeholder="z1234567"
+            className="w-full rounded-lg border border-p2p-border bg-white px-3.5 py-2.5 text-base text-p2p-text placeholder:text-p2p-text-disabled transition-shadow focus:outline-none focus:ring-2 focus:ring-p2p-primary focus:ring-offset-1 min-h-[44px]"
+            aria-invalid={!!errors.zid}
+            {...register("zid")}
+          />
+          {errors.zid && (
+            <p className="mt-1 text-xs text-p2p-red" role="alert">
+              {errors.zid.message}
             </p>
           )}
         </div>
