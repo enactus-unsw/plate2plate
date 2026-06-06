@@ -9,6 +9,10 @@ export const claimFormSchema = z.object({
     .string()
     .min(1, "Email is required")
     .email("Please enter a valid email address"),
+  zid: z
+    .string()
+    .min(1, "zID is required")
+    .regex(/^z\d{7}$/, "zID must be 'z' followed by 7 digits (e.g., z1234567)"),
   student_eta: z
     .string()
     .min(1, "Please select an arrival time")

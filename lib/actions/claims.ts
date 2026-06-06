@@ -51,6 +51,7 @@ export async function claimListing(
         listing_id: listingId,
         student_name: values.student_name,
         student_email: values.student_email,
+        zid: values.zid,
         student_eta: values.student_eta,
       })
       .select("id")
