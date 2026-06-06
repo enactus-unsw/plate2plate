@@ -60,6 +60,9 @@ export function Navbar() {
             className={`rounded-full px-3 py-1.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
           >
             Rubric Events
+          </Link>
+
+          <Link
             href="/arc-events"
             className={`rounded-full px-3 py-1.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
           >
@@ -119,6 +122,9 @@ export function Navbar() {
                   className={`rounded-lg px-3 py-2.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
                 >
                   Rubric Events
+                </Link>
+                
+                <Link
                   href="/arc-events"
                   onClick={() => setMobileOpen(false)}
                   className={`rounded-lg px-3 py-2.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
