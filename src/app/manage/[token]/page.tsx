@@ -3,8 +3,6 @@ import { ArrowLeft, ShieldX } from "lucide-react";
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { ManageListingCard } from "@/components/listings/ManageListingCard";
 import { getListingByToken } from "@/lib/actions/listings";
-import { createServiceClient } from "@/lib/supabase/server";
-import type { Claim } from "@/types";
 
 export default async function ManagePage({
   params,
@@ -41,20 +39,6 @@ export default async function ManagePage({
 
   const listing = result.data;
 
-  let activeClaim: Claim | null = null;
-  const supabase = await createServiceClient();
-  const { data: claimData } = await supabase
-    .from("claims")
-    .select("*")
-    .eq("listing_id", listing.id)
-    .eq("claim_status", "active")
-    .limit(1)
-    .maybeSingle();
-
-  if (claimData) {
-    activeClaim = claimData as Claim;
-  }
-
   return (
     <PageWrapper className="py-16 md:py-24">
       <Link
@@ -74,7 +58,7 @@ export default async function ManagePage({
       </p>
 
       <div className="max-w-2xl">
-        <ManageListingCard listing={listing} activeClaim={activeClaim} />
+        <ManageListingCard listing={listing} />
       </div>
     </PageWrapper>
   );

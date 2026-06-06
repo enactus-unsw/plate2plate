@@ -36,6 +36,7 @@ function formatDateTime(isoString: string): string {
 export function buildDonorClaimNotificationEmail(
   listing: NotificationListing,
   claim: NotificationClaim,
+  manageUrl: string,
 ): string {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -99,6 +100,17 @@ export function buildDonorClaimNotificationEmail(
                         <td style="padding:4px 0;font-size:14px;color:#18160F;">${listing.pickup_location}</td>
                       </tr>
                     </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Collected Prompt -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4F0E8;border-radius:8px;margin:24px 0;">
+                <tr>
+                  <td style="padding:20px;text-align:center;">
+                    <div style="font-size:15px;font-weight:600;color:#18160F;margin-bottom:6px;">Once they've picked it up</div>
+                    <div style="font-size:13px;color:#6B6254;line-height:1.5;margin-bottom:18px;">Tap the button below to mark this food as collected. It'll close the listing and remove it from the feed.</div>
+                    <a href="${manageUrl}" style="background-color:#2E5D3E;color:#FFFFFF;padding:14px 28px;border-radius:8px;font-weight:600;text-decoration:none;display:inline-block;font-size:15px;">Mark as Collected &#10003;</a>
                   </td>
                 </tr>
               </table>
