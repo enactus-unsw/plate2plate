@@ -1,4 +1,4 @@
-import { Calendar, Utensils } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { EventsCalendar } from "@/components/events/EventsCalendar";
 import { fetchRubricEvents } from "@/lib/rubric";
@@ -20,13 +20,31 @@ function offsetDate(days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
+const FOOD_EVENT_REGEX =
+  /\b(barbecue|barbeque|bbq|sizzle|free food|lunch|dinner|breakfast|brunch|bbq|barbecue|pizza|catering|catered|snack|meal|feast|roast|roost)\b/i;
+const SOCIAL_NOISE_REGEX = /\b(club|night|after party)\b/i;
+const PAID_EVENT_REGEX = /(\$|price|cost|ticket|entry fee|aud|AUD|pay|\$)/i;
+
+function isFoodRelatedEvent(event: {
+  title: string;
+  society: string;
+  category: string;
+}): boolean {
+  const searchableText = `${event.title} ${event.society} ${event.category}`;
+  return (
+    FOOD_EVENT_REGEX.test(searchableText) &&
+    !SOCIAL_NOISE_REGEX.test(searchableText) &&
+    !PAID_EVENT_REGEX.test(searchableText)
+  );
+}
+
 export default async function EventsPage() {
   const dateFrom = offsetDate(0); // today
   const dateTo = offsetDate(35); // 5 weeks ahead
 
-  let events = (
+  const events = (
     await fetchRubricEvents(dateFrom, dateTo).catch(() => [])
-  ).filter((ev) => ev.category === "Party/BBQ/Social");
+  ).filter(isFoodRelatedEvent);
 
   return (
     <PageWrapper className="py-12 md:py-16">
