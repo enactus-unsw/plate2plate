@@ -123,7 +123,7 @@ export function Navbar() {
                 >
                   Rubric Events
                 </Link>
-                
+
                 <Link
                   href="/arc-events"
                   onClick={() => setMobileOpen(false)}

@@ -24,9 +24,9 @@ export default async function EventsPage() {
   const dateFrom = offsetDate(0); // today
   const dateTo = offsetDate(35); // 5 weeks ahead
 
-  let events = (await fetchRubricEvents(dateFrom, dateTo).catch(() => [])).filter(
-    (ev) => ev.category === "Party/BBQ/Social",
-  );
+  let events = (
+    await fetchRubricEvents(dateFrom, dateTo).catch(() => [])
+  ).filter((ev) => ev.category === "Party/BBQ/Social");
 
   return (
     <PageWrapper className="py-12 md:py-16">

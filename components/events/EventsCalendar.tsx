@@ -325,8 +325,7 @@ export function EventsCalendar({ events, maxDateStr }: EventsCalendarProps) {
 
   // Navigate to a specific week with slide direction detection
   function navigateTo(newStart: Date) {
-    const dir =
-      toDateStr(newStart) >= toDateStr(weekStart) ? "right" : "left";
+    const dir = toDateStr(newStart) >= toDateStr(weekStart) ? "right" : "left";
     setSlideDir(dir);
     setAnimKey((k) => k + 1);
     setWeekStart(newStart);
