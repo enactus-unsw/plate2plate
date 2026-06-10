@@ -173,32 +173,32 @@ function PillToggle({
   value: "donors" | "students";
   onChange: (v: "donors" | "students") => void;
 }) {
+  const tabs = [
+    { id: "donors", label: "For donors" },
+    { id: "students", label: "For students" },
+  ] as const;
+
   return (
-    <div className="inline-flex rounded-full border border-[--color-border] bg-[--color-surface] p-1 shadow-card">
-      <button
-        type="button"
-        onClick={() => onChange("donors")}
-        className={`relative rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,transform] duration-200 ease-out-expo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-primary]/25 ${
-          value === "donors"
-            ? "bg-[--color-primary] text-[--color-primary-foreground]"
-            : "text-[--color-text-secondary] hover:text-[--color-text]"
-        }`}
-        aria-pressed={value === "donors"}
-      >
-        For donors
-      </button>
-      <button
-        type="button"
-        onClick={() => onChange("students")}
-        className={`relative rounded-full px-4 py-2 text-sm font-medium transition-[background-color,color,transform] duration-200 ease-out-expo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-primary]/25 ${
-          value === "students"
-            ? "bg-[--color-primary] text-[--color-primary-foreground]"
-            : "text-[--color-text-secondary] hover:text-[--color-text]"
-        }`}
-        aria-pressed={value === "students"}
-      >
-        For students
-      </button>
+    <div
+      role="group"
+      aria-label="View how it works for"
+      className="inline-flex gap-1 rounded-full border border-p2p-border bg-p2p-surface p-1 shadow-card"
+    >
+      {tabs.map(({ id, label }) => (
+        <button
+          key={id}
+          type="button"
+          onClick={() => onChange(id)}
+          aria-pressed={value === id}
+          className={`rounded-full px-5 py-2 text-sm font-medium transition-[background-color,color] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98] ${
+            value === id
+              ? "bg-p2p-primary text-white"
+              : "text-p2p-text-secondary hover:text-p2p-text"
+          }`}
+        >
+          {label}
+        </button>
+      ))}
     </div>
   );
 }
