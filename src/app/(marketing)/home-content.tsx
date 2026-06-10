@@ -232,7 +232,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
   return (
     <>
       {/* ── 1. Hero ── */}
-      <section className="relative overflow-hidden bg-[--color-bg] py-24">
+      <section className="relative overflow-hidden bg-[--color-bg] py-16 md:py-24">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-primary)_0%,transparent_70%)] opacity-[0.04]" />
 
         <svg
@@ -260,7 +260,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
                 ease: [0.16, 1, 0.3, 1],
                 delay: 0.1,
               }}
-              className="absolute inset-x-0 top-[28%] z-10 flex flex-col items-center px-6"
+              className="z-10 mb-10 flex flex-col items-center px-2 lg:absolute lg:inset-x-0 lg:top-[28%] lg:mb-0 lg:px-6"
             >
               <div className="mb-4 inline-flex items-center gap-2">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-[--color-primary]" />
@@ -269,7 +269,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
                 </span>
               </div>
 
-              <h1 className="heading-tight mx-auto max-w-3xl font-heading text-5xl font-semibold leading-tight tracking-[-0.03em] text-[--color-text] drop-shadow-sm lg:text-6xl">
+              <h1 className="heading-tight mx-auto max-w-3xl font-heading text-4xl font-semibold leading-tight tracking-[-0.03em] text-[--color-text] drop-shadow-sm sm:text-5xl lg:text-6xl">
                 {HERO_HEADLINE}
               </h1>
 
@@ -279,7 +279,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
             </motion.div>
 
             <div
-              className="pointer-events-none absolute inset-0 z-5 bg-linear-to-b from-[--color-bg]/60 via-[--color-bg]/20 to-transparent"
+              className="pointer-events-none absolute inset-0 z-5 hidden bg-linear-to-b from-[--color-bg]/60 via-[--color-bg]/20 to-transparent lg:block"
               aria-hidden="true"
             />
 
@@ -293,14 +293,14 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
             <HoverButton
               variant="primary"
-              className="px-8 py-3 text-sm"
+              className="w-full px-8 py-3 text-sm sm:w-auto"
               onClick={() => router.push("/collect")}
             >
               Find Food
             </HoverButton>
             <HoverButton
               variant="secondary"
-              className="px-8 py-3 text-sm"
+              className="w-full px-8 py-3 text-sm sm:w-auto"
               onClick={() => router.push("/redistribute")}
             >
               Post Surplus Food
@@ -394,14 +394,14 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
                         variant={
                           howMode === "students" ? "primary" : "secondary"
                         }
-                        className="px-5 py-2.5 text-sm"
+                        className="w-full px-5 py-2.5 text-sm sm:w-auto"
                         onClick={() => router.push("/collect")}
                       >
                         Find Food
                       </HoverButton>
                       <HoverButton
                         variant={howMode === "donors" ? "primary" : "secondary"}
-                        className="px-5 py-2.5 text-sm"
+                        className="w-full px-5 py-2.5 text-sm sm:w-auto"
                         onClick={() => router.push("/redistribute")}
                       >
                         Post Surplus Food
@@ -422,13 +422,13 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
       >
         <PageWrapper>
           <FadeIn>
-            <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-8 lg:grid-cols-4">
               {impactStats.map((stat) => (
                 <div
                   key={stat.label}
                   className="border-t-2 border-p2p-primary pt-6"
                 >
-                  <p className="heading-tight font-heading text-4xl font-semibold text-p2p-text md:text-5xl">
+                  <p className="heading-tight font-heading text-3xl font-semibold text-p2p-text sm:text-4xl md:text-5xl">
                     {stat.value}
                   </p>
                   <p className="mt-1 text-sm text-p2p-text-secondary">

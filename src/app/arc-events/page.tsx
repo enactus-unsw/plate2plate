@@ -57,12 +57,12 @@ const WEEK_2_EVENTS: ArcEvent[] = [
 
 export default function ArcEventsPage() {
   return (
-    <PageWrapper className="py-16 md:py-24">
-      <header className="mx-auto max-w-3xl text-center mb-16">
-        <h1 className="text-4xl font-semibold text-p2p-text sm:text-5xl md:text-6xl">
+    <PageWrapper className="py-10 sm:py-16 md:py-24">
+      <header className="mx-auto max-w-3xl text-center mb-10 md:mb-16">
+        <h1 className="text-3xl font-semibold text-p2p-text sm:text-5xl md:text-6xl">
           Arc Food Events
         </h1>
-        <p className="mt-6 text-lg leading-relaxed text-p2p-text-secondary">
+        <p className="mt-4 text-base leading-relaxed text-p2p-text-secondary sm:mt-6 sm:text-lg">
           Beyond individual rescue listings, Arc and UNSW run regular food
           programs. Here&apos;s what&apos;s happening in{" "}
           <span className="font-semibold text-p2p-primary">Week 2</span>.
@@ -75,7 +75,7 @@ export default function ArcEventsPage() {
         ))}
       </div>
 
-      <section className="mt-24 rounded-2xl border border-p2p-border bg-p2p-surface-warm p-8 text-center md:p-12">
+      <section className="mt-16 rounded-2xl border border-p2p-border bg-p2p-surface-warm p-6 text-center sm:p-8 md:mt-24 md:p-12">
         <h2 className="text-2xl font-semibold text-p2p-text">
           Need more support?
         </h2>

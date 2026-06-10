@@ -47,7 +47,7 @@ export default async function EventsPage() {
   ).filter(isFoodRelatedEvent);
 
   return (
-    <PageWrapper className="py-12 md:py-16">
+    <PageWrapper className="py-8 sm:py-12 md:py-16">
       {/* ── Page header ───────────────────────────────────────────────── */}
       <div className="mb-8 flex items-start gap-4">
         <div className="hidden rounded-xl bg-p2p-primary-light p-3 sm:block">

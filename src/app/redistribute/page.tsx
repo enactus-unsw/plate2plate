@@ -3,9 +3,9 @@ import { DonorForm } from "@/components/forms/DonorForm";
 
 export default function RedistributePage() {
   return (
-    <PageWrapper className="py-16 md:py-24">
+    <PageWrapper className="py-10 sm:py-16 md:py-24">
       <div className="max-w-2xl mx-auto">
-        <div className="mb-10 md:mb-12">
+        <div className="mb-8 md:mb-12">
           <h1 className="text-3xl md:text-4xl heading-tight text-p2p-text">
             Post Surplus Food
           </h1>

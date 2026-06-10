@@ -90,10 +90,10 @@ export default async function CollectPage({
   const params = await searchParams;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16 md:py-24 lg:px-8">
       {/* Page heading */}
       <div className="mb-8">
-        <div className="mb-2 flex items-center gap-3">
+        <div className="mb-2 flex flex-wrap items-center gap-3">
           <h1 className="text-3xl font-semibold text-p2p-text heading-tight md:text-4xl">
             Available Food
           </h1>
