@@ -76,3 +76,5 @@ export const PERISHABILITY_OPTIONS = ["<30 mins", ">=30 mins"] as const;
 export type Perishability = (typeof PERISHABILITY_OPTIONS)[number];
 
 export const LOCAL_STORAGE_KEY = "p2p_claimed_listings";
+
+export const LISTING_PHOTO_BUCKET = "listing-photos";

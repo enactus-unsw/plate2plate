@@ -7,7 +7,11 @@ import { CheckCircle2, Copy, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { createListing, uploadListingPhotos } from "@/lib/actions/listings";
+import {
+  createListing,
+  createPhotoUploadTargets,
+} from "@/lib/actions/listings";
+import { createClient } from "@/lib/supabase/client";
 import {
   listingSchema,
   type ListingFormValues,
@@ -20,6 +24,7 @@ import {
   COMMON_ALLERGENS,
   DIETARY_TAGS,
   COMMON_DIETARY_TAGS,
+  LISTING_PHOTO_BUCKET,
   type FoodCondition,
 } from "@/lib/constants";
 import { TagMultiSelect } from "@/components/forms/TagMultiSelect";
@@ -215,16 +220,31 @@ export function DonorForm() {
     }
     setPhotoError(null);
 
-    const formData = new FormData();
-    photos.forEach((file) => formData.append("files", file));
-
-    const upload = await uploadListingPhotos(formData);
-    if (upload.error || !upload.urls) {
-      setPhotoError(upload.error ?? "Failed to upload photos.");
+    // Mint signed upload URLs server-side, then upload each file DIRECTLY to
+    // Supabase Storage from the browser (bytes never go through a Server Action).
+    const targetsRes = await createPhotoUploadTargets(
+      photos.map((f) => ({ type: f.type, size: f.size })),
+    );
+    if (targetsRes.error || !targetsRes.targets) {
+      setPhotoError(targetsRes.error ?? "Failed to upload photos.");
       return;
     }
 
-    const result = await createListing(data as ListingFormValues, upload.urls);
+    const supabase = createClient();
+    const photoUrls: string[] = [];
+    for (let i = 0; i < photos.length; i++) {
+      const target = targetsRes.targets[i];
+      const { error: uploadErr } = await supabase.storage
+        .from(LISTING_PHOTO_BUCKET)
+        .uploadToSignedUrl(target.path, target.token, photos[i]);
+      if (uploadErr) {
+        setPhotoError("Failed to upload photos. Please try again.");
+        return;
+      }
+      photoUrls.push(target.publicUrl);
+    }
+
+    const result = await createListing(data as ListingFormValues, photoUrls);
 
     if (result.error) {
       setServerError(result.error);

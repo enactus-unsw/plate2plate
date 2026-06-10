@@ -9,9 +9,9 @@ import {
 } from "@/lib/validations/listing.schema";
 import { sendEmail } from "@/lib/email/send";
 import { buildDonorConfirmationEmail } from "@/lib/email/templates/donor-confirmation";
+import { LISTING_PHOTO_BUCKET } from "@/lib/constants";
 import type { Listing } from "@/types";
 
-const LISTING_PHOTO_BUCKET = "listing-photos";
 const MAX_PHOTOS = 4;
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024; // 5 MB
 const ALLOWED_PHOTO_TYPES: Record<string, string> = {
@@ -22,20 +22,29 @@ const ALLOWED_PHOTO_TYPES: Record<string, string> = {
   "image/heif": "heif",
 };
 
-// Uploads the donor's food photos to Supabase Storage and returns their public
-// URLs. Runs with the service-role key (bypasses RLS) — consistent with the
-// app's no-auth model. Called from the donor form before createListing.
-export async function uploadListingPhotos(formData: FormData) {
-  const files = formData
-    .getAll("files")
-    .filter((f): f is File => f instanceof File);
+export interface PhotoUploadTarget {
+  path: string;
+  token: string;
+  publicUrl: string;
+}
 
-  if (files.length === 0) {
-    return { urls: null, error: "Please add at least one photo of the food." };
+// Mints signed upload URLs so the browser can upload photos DIRECTLY to Supabase
+// Storage. The file bytes never pass through this server action, which avoids
+// both the Next.js Server Action body limit and Vercel's function request-body
+// cap. The bucket itself enforces size/mime limits, so a client can't bypass
+// them. Returns one target (path + token + eventual public URL) per file.
+export async function createPhotoUploadTargets(
+  files: { type: string; size: number }[],
+) {
+  if (!files || files.length === 0) {
+    return {
+      targets: null,
+      error: "Please add at least one photo of the food.",
+    };
   }
   if (files.length > MAX_PHOTOS) {
     return {
-      urls: null,
+      targets: null,
       error: `You can upload at most ${MAX_PHOTOS} photos.`,
     };
   }
@@ -43,48 +52,47 @@ export async function uploadListingPhotos(formData: FormData) {
   for (const file of files) {
     if (!ALLOWED_PHOTO_TYPES[file.type]) {
       return {
-        urls: null,
+        targets: null,
         error: "Photos must be JPG, PNG, WebP, or HEIC images.",
       };
     }
     if (file.size > MAX_PHOTO_BYTES) {
-      return { urls: null, error: "Each photo must be 5 MB or smaller." };
+      return { targets: null, error: "Each photo must be 5 MB or smaller." };
     }
   }
 
   try {
     const supabase = await createServiceClient();
-    const urls: string[] = [];
+    const targets: PhotoUploadTarget[] = [];
 
     for (const file of files) {
       const ext = ALLOWED_PHOTO_TYPES[file.type];
       const path = `${crypto.randomUUID()}.${ext}`;
-      const bytes = await file.arrayBuffer();
 
-      const { error: uploadError } = await supabase.storage
+      const { data, error } = await supabase.storage
         .from(LISTING_PHOTO_BUCKET)
-        .upload(path, bytes, { contentType: file.type, upsert: false });
+        .createSignedUploadUrl(path);
 
-      if (uploadError) {
-        console.error("uploadListingPhotos error:", uploadError);
+      if (error || !data) {
+        console.error("createPhotoUploadTargets error:", error);
         return {
-          urls: null,
-          error: "Failed to upload photos. Please try again.",
+          targets: null,
+          error: "Failed to prepare photo upload. Please try again.",
         };
       }
 
       const {
         data: { publicUrl },
       } = supabase.storage.from(LISTING_PHOTO_BUCKET).getPublicUrl(path);
-      urls.push(publicUrl);
+      targets.push({ path, token: data.token, publicUrl });
     }
 
-    return { urls, error: null };
+    return { targets, error: null };
   } catch (err) {
-    console.error("uploadListingPhotos unexpected error:", err);
+    console.error("createPhotoUploadTargets unexpected error:", err);
     return {
-      urls: null,
-      error: "An unexpected error occurred while uploading.",
+      targets: null,
+      error: "An unexpected error occurred while preparing the upload.",
     };
   }
 }
