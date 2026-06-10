@@ -130,7 +130,7 @@ function SuccessScreen({
         </div>
       </div>
 
-      <div className="flex items-center gap-4 mt-8">
+      <div className="mt-8 flex w-full max-w-lg flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
         <Link
           href="/collect"
           className={cn(

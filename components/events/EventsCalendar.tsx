@@ -167,6 +167,97 @@ function EventPill({
   );
 }
 
+// ── Mobile Agenda ─────────────────────────────────────────────────────────────
+// Touch-friendly stacked list shown below the `sm` breakpoint instead of the
+// 7-column grid (which relies on hover popovers and horizontal scrolling).
+
+function MobileAgenda({
+  weekDays,
+  eventsByDate,
+  todayStr,
+}: {
+  weekDays: Date[];
+  eventsByDate: Map<string, RubricEvent[]>;
+  todayStr: string;
+}) {
+  const daysWithEvents = weekDays.filter(
+    (d) => (eventsByDate.get(toDateStr(d))?.length ?? 0) > 0,
+  );
+
+  if (daysWithEvents.length === 0) return null;
+
+  return (
+    <div className="flex flex-col gap-2.5">
+      {daysWithEvents.map((day) => {
+        const dateStr = toDateStr(day);
+        const isToday = dateStr === todayStr;
+        const isPast = dateStr < todayStr;
+        const dayEvents = eventsByDate.get(dateStr) ?? [];
+        const dayIndex = (day.getDay() + 6) % 7; // Mon-first index
+
+        return (
+          <div
+            key={dateStr}
+            className={[
+              "rounded-xl border border-p2p-border bg-p2p-surface p-3 shadow-card",
+              isPast ? "opacity-60" : "",
+            ].join(" ")}
+          >
+            <div className="mb-2.5 flex items-center gap-2.5">
+              <span
+                className={[
+                  "flex size-9 shrink-0 items-center justify-center rounded-lg text-sm font-bold",
+                  isToday
+                    ? "bg-p2p-primary text-white"
+                    : "bg-p2p-surface-warm text-p2p-text",
+                ].join(" ")}
+              >
+                {day.getDate()}
+              </span>
+              <div className="flex flex-col">
+                <span className="text-[11px] font-semibold uppercase tracking-widest text-p2p-text-secondary">
+                  {DAY_LABELS[dayIndex]}
+                </span>
+                <span className="text-[10px] text-p2p-text-disabled">
+                  {MONTH_LABELS[day.getMonth()]}
+                </span>
+              </div>
+              {isToday && (
+                <span className="ml-auto rounded-full bg-p2p-primary-light px-2 py-0.5 text-[10px] font-semibold text-p2p-primary">
+                  Today
+                </span>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              {dayEvents.map((ev) => (
+                <a
+                  key={ev.id + ev.isoDateTime}
+                  href={ev.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col gap-0.5 rounded-lg border border-p2p-primary/20 bg-p2p-primary-light p-2.5 transition-[background-color,transform] duration-150 hover:bg-p2p-primary-light/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-1 active:scale-[0.98]"
+                >
+                  <span className="font-mono text-[10px] font-medium text-p2p-primary-mid">
+                    {ev.timeStr}
+                  </span>
+                  <span className="text-xs font-semibold leading-snug text-p2p-text">
+                    {ev.title}
+                  </span>
+                  <span className="flex items-center gap-1.5 text-[10px] text-p2p-text-secondary">
+                    <span className="line-clamp-1">{ev.society}</span>
+                    <ExternalLink size={10} className="ml-auto shrink-0" />
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 // ── Week Strip ────────────────────────────────────────────────────────────────
 
 function WeekStrip({
@@ -429,8 +520,29 @@ export function EventsCalendar({ events, maxDateStr }: EventsCalendarProps) {
         onSelect={navigateTo}
       />
 
-      {/* ── Calendar grid ──────────────────────────────────────────────── */}
-      <div className="overflow-x-auto rounded-xl border border-p2p-border shadow-card">
+      {/* ── Mobile agenda (stacked, tap-friendly) ──────────────────────── */}
+      <div key={`agenda-${animKey}`} className={`sm:hidden ${animClass}`}>
+        <MobileAgenda
+          weekDays={weekDays}
+          eventsByDate={eventsByDate}
+          todayStr={todayStr}
+        />
+        {!weekHasEvents &&
+          !nextWeekWithEvents &&
+          toDateStr(weekStart) <= maxDateStr && (
+            <div className="flex flex-col items-center rounded-xl border border-p2p-border bg-p2p-surface-warm py-8 text-center">
+              <p className="text-sm font-semibold text-p2p-text">
+                No events this week
+              </p>
+              <p className="mt-1 text-xs text-p2p-text-secondary">
+                Check back soon — events refresh every 5 minutes.
+              </p>
+            </div>
+          )}
+      </div>
+
+      {/* ── Calendar grid (sm and up) ──────────────────────────────────── */}
+      <div className="hidden overflow-x-auto rounded-xl border border-p2p-border shadow-card sm:block">
         <div
           key={animKey}
           className={`grid min-w-[640px] grid-cols-7 divide-x divide-p2p-border ${animClass}`}
@@ -585,7 +697,11 @@ export function EventsCalendar({ events, maxDateStr }: EventsCalendarProps) {
         >
           campus.hellorubric.com
         </a>
-        . Hover any event to preview. Use ← → keys to navigate.
+        .<span className="hidden sm:inline">
+          {" "}
+          Hover any event to preview. Use ← → keys to navigate.
+        </span>
+        <span className="sm:hidden"> Tap any event to view it on Rubric.</span>
       </p>
 
       {/* ── Hover popover (portaled) ────────────────────────────────────── */}
