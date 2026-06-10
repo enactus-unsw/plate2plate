@@ -21,7 +21,7 @@ const DONOR_STEPS = [
     num: "1",
     kicker: "POST",
     title: "List your surplus food",
-    desc: "Describe what’s left, where it is, and how long it’ll stay fresh — under a minute.",
+    desc: "Describe what’s left, where it is, and how long it’ll stay fresh, under a minute.",
   },
   {
     num: "2",
@@ -48,7 +48,7 @@ const STUDENT_STEPS = [
     num: "2",
     kicker: "CLAIM",
     title: "Reserve in seconds",
-    desc: "Claim with your name + email — no account, no friction. Your pickup countdown starts immediately.",
+    desc: "Claim with your name + email, no account, no friction. Your pickup countdown starts immediately.",
   },
   {
     num: "3",
@@ -224,8 +224,8 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
     howMode === "donors" ? "For societies & clubs" : "For students";
   const howLead =
     howMode === "donors"
-      ? "Post surplus food — students do the rest."
-      : "Find free food fast — claim it before it’s gone.";
+      ? "Post surplus food, students do the rest."
+      : "Find free food fast, claim it before it’s gone.";
 
   const howSteps = howMode === "donors" ? DONOR_STEPS : STUDENT_STEPS;
 
