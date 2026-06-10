@@ -11,19 +11,107 @@ import { sendEmail } from "@/lib/email/send";
 import { buildDonorConfirmationEmail } from "@/lib/email/templates/donor-confirmation";
 import type { Listing } from "@/types";
 
-export async function createListing(formData: ListingFormValues) {
+const LISTING_PHOTO_BUCKET = "listing-photos";
+const MAX_PHOTOS = 4;
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024; // 5 MB
+const ALLOWED_PHOTO_TYPES: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/heic": "heic",
+  "image/heif": "heif",
+};
+
+// Uploads the donor's food photos to Supabase Storage and returns their public
+// URLs. Runs with the service-role key (bypasses RLS) — consistent with the
+// app's no-auth model. Called from the donor form before createListing.
+export async function uploadListingPhotos(formData: FormData) {
+  const files = formData
+    .getAll("files")
+    .filter((f): f is File => f instanceof File);
+
+  if (files.length === 0) {
+    return { urls: null, error: "Please add at least one photo of the food." };
+  }
+  if (files.length > MAX_PHOTOS) {
+    return {
+      urls: null,
+      error: `You can upload at most ${MAX_PHOTOS} photos.`,
+    };
+  }
+
+  for (const file of files) {
+    if (!ALLOWED_PHOTO_TYPES[file.type]) {
+      return {
+        urls: null,
+        error: "Photos must be JPG, PNG, WebP, or HEIC images.",
+      };
+    }
+    if (file.size > MAX_PHOTO_BYTES) {
+      return { urls: null, error: "Each photo must be 5 MB or smaller." };
+    }
+  }
+
+  try {
+    const supabase = await createServiceClient();
+    const urls: string[] = [];
+
+    for (const file of files) {
+      const ext = ALLOWED_PHOTO_TYPES[file.type];
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const bytes = await file.arrayBuffer();
+
+      const { error: uploadError } = await supabase.storage
+        .from(LISTING_PHOTO_BUCKET)
+        .upload(path, bytes, { contentType: file.type, upsert: false });
+
+      if (uploadError) {
+        console.error("uploadListingPhotos error:", uploadError);
+        return {
+          urls: null,
+          error: "Failed to upload photos. Please try again.",
+        };
+      }
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from(LISTING_PHOTO_BUCKET).getPublicUrl(path);
+      urls.push(publicUrl);
+    }
+
+    return { urls, error: null };
+  } catch (err) {
+    console.error("uploadListingPhotos unexpected error:", err);
+    return {
+      urls: null,
+      error: "An unexpected error occurred while uploading.",
+    };
+  }
+}
+
+export async function createListing(
+  formData: ListingFormValues,
+  photoUrls: string[],
+) {
   const parsed = listingSchema.safeParse(formData);
 
   if (!parsed.success) {
     return { data: null, error: parsed.error.issues[0].message };
   }
 
+  if (!photoUrls || photoUrls.length === 0) {
+    return { data: null, error: "Please add at least one photo of the food." };
+  }
+
   const values = parsed.data;
 
-  const expiresAt =
-    values.perishability === "<30 mins"
-      ? new Date(Date.now() + 30 * 60 * 1000).toISOString()
-      : values.expires_at!;
+  const expiresAt = new Date(values.expires_at).toISOString();
+  // Derive the perishability bucket from how soon the food expires. This keeps
+  // the claim-page ETA granularity working without asking the donor directly.
+  const perishability =
+    Date.parse(expiresAt) - Date.now() <= 30 * 60 * 1000
+      ? "<30 mins"
+      : ">=30 mins";
 
   try {
     const supabase = await createServiceClient();
@@ -37,9 +125,10 @@ export async function createListing(formData: ListingFormValues) {
         food_condition: values.food_condition,
         quantity: values.quantity,
         quantity_remaining: values.quantity,
-        photo_url: values.photo_url || null,
+        photo_url: photoUrls[0],
+        photo_urls: photoUrls,
         pickup_location: values.pickup_location,
-        perishability: values.perishability,
+        perishability,
         allergens: values.allergens,
         dietary_tags: values.dietary_tags,
         contact_email: values.contact_email,
@@ -68,7 +157,7 @@ export async function createListing(formData: ListingFormValues) {
         quantity: values.quantity,
         pickup_location: values.pickup_location,
         expires_at: expiresAt,
-        perishability: values.perishability,
+        perishability,
       },
       managementUrl,
     );
