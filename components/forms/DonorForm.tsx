@@ -7,7 +7,7 @@ import { CheckCircle2, Copy, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { createListing } from "@/lib/actions/listings";
+import { createListing, uploadListingPhotos } from "@/lib/actions/listings";
 import {
   listingSchema,
   type ListingFormValues,
@@ -17,9 +17,13 @@ import {
   FOOD_CONDITIONS,
   FOOD_CONDITION_LABELS,
   ALLERGENS,
+  COMMON_ALLERGENS,
   DIETARY_TAGS,
+  COMMON_DIETARY_TAGS,
   type FoodCondition,
 } from "@/lib/constants";
+import { TagMultiSelect } from "@/components/forms/TagMultiSelect";
+import { PhotoUpload } from "@/components/forms/PhotoUpload";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -163,13 +167,14 @@ export function DonorForm() {
     management_token: string;
   } | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [photoError, setPhotoError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     control,
     reset,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(listingSchema),
@@ -178,9 +183,7 @@ export function DonorForm() {
       food_category: undefined,
       food_condition: undefined,
       quantity: 1,
-      photo_url: "",
       pickup_location: "",
-      perishability: undefined,
       expires_at: "",
       served_at: "",
       allergens: [],
@@ -193,8 +196,6 @@ export function DonorForm() {
     },
   });
 
-  const perishability = watch("perishability");
-
   function scrollToFirstError() {
     requestAnimationFrame(() => {
       const el = document.querySelector('[aria-invalid="true"]');
@@ -205,13 +206,25 @@ export function DonorForm() {
   async function onSubmit(data: Record<string, unknown>) {
     setServerError(null);
 
-    const values = data as ListingFormValues;
-    const submitData = { ...values };
-    if (submitData.expires_at) {
-      submitData.expires_at = new Date(submitData.expires_at).toISOString();
+    if (photos.length === 0) {
+      setPhotoError("Please add at least one photo of the food.");
+      document
+        .getElementById("photos-field")
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    setPhotoError(null);
+
+    const formData = new FormData();
+    photos.forEach((file) => formData.append("files", file));
+
+    const upload = await uploadListingPhotos(formData);
+    if (upload.error || !upload.urls) {
+      setPhotoError(upload.error ?? "Failed to upload photos.");
+      return;
     }
 
-    const result = await createListing(submitData);
+    const result = await createListing(data as ListingFormValues, upload.urls);
 
     if (result.error) {
       setServerError(result.error);
@@ -229,6 +242,8 @@ export function DonorForm() {
     setSubmitted(false);
     setListingData(null);
     setServerError(null);
+    setPhotos([]);
+    setPhotoError(null);
   }
 
   if (submitted && listingData) {
@@ -329,35 +344,36 @@ export function DonorForm() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="quantity">
-              Quantity (servings)
-              <RequiredMark />
-            </Label>
-            <Input
-              id="quantity"
-              type="number"
-              min={1}
-              className="mt-1.5 bg-p2p-surface"
-              aria-invalid={!!errors.quantity}
-              {...register("quantity")}
-            />
-            <FieldError message={errors.quantity?.message} />
-          </div>
+        <div>
+          <Label htmlFor="quantity">
+            Quantity (servings)
+            <RequiredMark />
+          </Label>
+          <Input
+            id="quantity"
+            type="number"
+            min={1}
+            className="mt-1.5 bg-p2p-surface"
+            aria-invalid={!!errors.quantity}
+            {...register("quantity")}
+          />
+          <FieldError message={errors.quantity?.message} />
+        </div>
 
-          <div>
-            <Label htmlFor="photo_url">Photo URL (optional)</Label>
-            <Input
-              id="photo_url"
-              type="url"
-              placeholder="https://..."
-              className="mt-1.5 bg-p2p-surface"
-              aria-invalid={!!errors.photo_url}
-              {...register("photo_url")}
-            />
-            <FieldError message={errors.photo_url?.message} />
-          </div>
+        <div id="photos-field">
+          <Label>
+            Photos
+            <RequiredMark />
+          </Label>
+          <PhotoUpload
+            files={photos}
+            onChange={(next) => {
+              setPhotos(next);
+              if (next.length > 0) setPhotoError(null);
+            }}
+            invalid={!!photoError}
+          />
+          <FieldError message={photoError ?? undefined} />
         </div>
       </SectionCard>
 
@@ -379,73 +395,22 @@ export function DonorForm() {
         </div>
 
         <div>
-          <Label>
-            Perishability
+          <Label htmlFor="expires_at">
+            Food available until
             <RequiredMark />
           </Label>
-          <Controller
-            control={control}
-            name="perishability"
-            render={({ field }) => (
-              <div className="grid grid-cols-1 gap-3 mt-1.5 sm:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={() => field.onChange("<30 mins")}
-                  className={cn(
-                    "rounded-xl border-2 p-4 text-left transition-shadow transition-colors",
-                    "hover:shadow-card-hover focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98] transition-transform",
-                    field.value === "<30 mins"
-                      ? "border-p2p-primary bg-p2p-primary-light"
-                      : "border-p2p-border bg-p2p-surface",
-                  )}
-                >
-                  <span className="block text-sm font-semibold text-p2p-text">
-                    &lt; 30 minutes
-                  </span>
-                  <span className="block text-xs text-p2p-text-secondary mt-1">
-                    Hot food, open catering, highly perishable
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => field.onChange(">=30 mins")}
-                  className={cn(
-                    "rounded-xl border-2 p-4 text-left transition-shadow transition-colors",
-                    "hover:shadow-card-hover focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98] transition-transform",
-                    field.value === ">=30 mins"
-                      ? "border-p2p-primary bg-p2p-primary-light"
-                      : "border-p2p-border bg-p2p-surface",
-                  )}
-                >
-                  <span className="block text-sm font-semibold text-p2p-text">
-                    ≥ 30 minutes
-                  </span>
-                  <span className="block text-xs text-p2p-text-secondary mt-1">
-                    Packaged, sealed, or shelf-stable items
-                  </span>
-                </button>
-              </div>
-            )}
+          <Input
+            id="expires_at"
+            type="datetime-local"
+            className="mt-1.5 bg-p2p-surface"
+            aria-invalid={!!errors.expires_at}
+            {...register("expires_at")}
           />
-          <FieldError message={errors.perishability?.message} />
+          <p className="mt-1.5 text-xs text-p2p-text-secondary">
+            When does the food stop being safe or available to collect?
+          </p>
+          <FieldError message={errors.expires_at?.message} />
         </div>
-
-        {perishability === ">=30 mins" && (
-          <div>
-            <Label htmlFor="expires_at">
-              Food available until
-              <RequiredMark />
-            </Label>
-            <Input
-              id="expires_at"
-              type="datetime-local"
-              className="mt-1.5 bg-p2p-surface"
-              aria-invalid={!!errors.expires_at}
-              {...register("expires_at")}
-            />
-            <FieldError message={errors.expires_at?.message} />
-          </div>
-        )}
 
         <div>
           <Label htmlFor="served_at">Time food was served (optional)</Label>
@@ -466,32 +431,14 @@ export function DonorForm() {
             control={control}
             name="allergens"
             render={({ field }) => (
-              <div className="grid grid-cols-2 gap-2 mt-1.5 sm:grid-cols-3">
-                {ALLERGENS.map((allergen) => {
-                  const selected = field.value?.includes(allergen) ?? false;
-                  return (
-                    <button
-                      key={allergen}
-                      type="button"
-                      onClick={() => {
-                        const next = selected
-                          ? (field.value?.filter((a) => a !== allergen) ?? [])
-                          : [...(field.value ?? []), allergen];
-                        field.onChange(next);
-                      }}
-                      className={cn(
-                        "rounded-lg border px-3 py-2 text-sm font-medium transition-colors transition-transform",
-                        "hover:shadow-card focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98]",
-                        selected
-                          ? "border-p2p-amber bg-p2p-amber-light text-p2p-amber"
-                          : "border-p2p-border bg-p2p-surface text-p2p-text-secondary hover:border-p2p-amber/40",
-                      )}
-                    >
-                      {allergen}
-                    </button>
-                  );
-                })}
-              </div>
+              <TagMultiSelect
+                options={ALLERGENS}
+                commonOptions={COMMON_ALLERGENS}
+                value={field.value ?? []}
+                onChange={field.onChange}
+                accent="amber"
+                addPlaceholder="Add another allergen (comma-separated)"
+              />
             )}
           />
         </div>
@@ -502,32 +449,14 @@ export function DonorForm() {
             control={control}
             name="dietary_tags"
             render={({ field }) => (
-              <div className="grid grid-cols-2 gap-2 mt-1.5 sm:grid-cols-3">
-                {DIETARY_TAGS.map((tag) => {
-                  const selected = field.value?.includes(tag) ?? false;
-                  return (
-                    <button
-                      key={tag}
-                      type="button"
-                      onClick={() => {
-                        const next = selected
-                          ? (field.value?.filter((t) => t !== tag) ?? [])
-                          : [...(field.value ?? []), tag];
-                        field.onChange(next);
-                      }}
-                      className={cn(
-                        "rounded-lg border px-3 py-2 text-sm font-medium transition-colors transition-transform",
-                        "hover:shadow-card focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98]",
-                        selected
-                          ? "border-p2p-primary bg-p2p-primary-light text-p2p-primary"
-                          : "border-p2p-border bg-p2p-surface text-p2p-text-secondary hover:border-p2p-primary/40",
-                      )}
-                    >
-                      {tag}
-                    </button>
-                  );
-                })}
-              </div>
+              <TagMultiSelect
+                options={DIETARY_TAGS}
+                commonOptions={COMMON_DIETARY_TAGS}
+                value={field.value ?? []}
+                onChange={field.onChange}
+                accent="primary"
+                addPlaceholder="Add another dietary tag (comma-separated)"
+              />
             )}
           />
         </div>

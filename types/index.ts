@@ -21,6 +21,7 @@ export interface Listing {
   quantity: number;
   quantity_remaining: number;
   photo_url: string | null;
+  photo_urls: string[];
   pickup_location: string;
   allergens: string[];
   dietary_tags: string[];

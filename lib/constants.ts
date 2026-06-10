@@ -17,6 +17,9 @@ export const ALLERGENS = [
 
 export type Allergen = (typeof ALLERGENS)[number];
 
+// Shown by default in the donor form; the rest sit behind "Show all".
+export const COMMON_ALLERGENS = ["Gluten", "Dairy", "Tree Nuts"] as const;
+
 export const DIETARY_TAGS = [
   "Vegetarian",
   "Vegan",
@@ -28,6 +31,9 @@ export const DIETARY_TAGS = [
 ] as const;
 
 export type DietaryTag = (typeof DIETARY_TAGS)[number];
+
+// Shown by default in the donor form; the rest sit behind "Show all".
+export const COMMON_DIETARY_TAGS = ["Vegetarian", "Vegan", "Halal"] as const;
 
 export const FOOD_CATEGORIES = [
   "Hot Meals",
