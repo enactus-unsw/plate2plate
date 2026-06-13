@@ -8,7 +8,7 @@ import Link from "next/link";
 export const revalidate = 300;
 
 export const metadata = {
-  title: "Campus Events — Plate2Plate",
+  title: "Campus Events — FoodCompass",
   description:
     "Upcoming UNSW campus events on Rubric — potential sources of surplus food to rescue.",
 };

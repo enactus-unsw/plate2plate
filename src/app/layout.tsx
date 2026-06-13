@@ -26,15 +26,15 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Plate2Plate — UNSW Campus Food Rescue",
+  title: "FoodCompass — UNSW Campus Food Rescue",
   description:
     "Claim free surplus food from UNSW campus events before it goes to waste.",
   openGraph: {
-    title: "Plate2Plate — UNSW Campus Food Rescue",
+    title: "FoodCompass — UNSW Campus Food Rescue",
     description:
       "Claim free surplus food from UNSW campus events before it goes to waste.",
-    url: process.env.NEXT_PUBLIC_APP_URL ?? "https://plate2plate.vercel.app",
-    siteName: "Plate2Plate",
+    url: process.env.NEXT_PUBLIC_APP_URL ?? "https://FoodCompass.vercel.app",
+    siteName: "FoodCompass",
     type: "website",
   },
   icons: {

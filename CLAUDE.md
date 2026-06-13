@@ -1,4 +1,4 @@
-# CLAUDE.md — Plate2Plate
+# CLAUDE.md — FoodCompass
 
 ## Session Start — Read This First
 
@@ -9,7 +9,7 @@ Before writing any frontend code, component, or page:
 3. **Apply the design token CSS variables** from `globals.css` — do not hardcode hex values in components
 4. **Confirm the surface plane** of whatever you're building (base / elevated / floating) before writing any background or shadow style
 
-**Plate2Plate** is a real-time UNSW campus food rescue platform built by Enactus UNSW.
+**FoodCompass** is a real-time UNSW campus food rescue platform built by Enactus UNSW.
 It redistributes untouched surplus food from university events to students before it becomes waste.
 
 - **No user authentication** — zero-friction, high-trust model
@@ -37,7 +37,7 @@ It redistributes untouched surplus food from university events to students befor
 ## Folder Structure
 
 ```
-plate2plate/
+FoodCompass/
 ├── app/
 │   ├── (marketing)/          # Landing/homepage group
 │   │   └── page.tsx
@@ -467,7 +467,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=       # server-only, never exposed to client
 BREVO_API_KEY=                   # server-only
 CRON_SECRET=                     # secret header for cron job routes
-NEXT_PUBLIC_APP_URL=             # e.g. https://plate2plate.vercel.app
+NEXT_PUBLIC_APP_URL=             # e.g. https://FoodCompass.vercel.app
 ```
 
 ---

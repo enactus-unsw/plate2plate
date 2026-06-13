@@ -42,7 +42,7 @@ export function buildStudentConfirmationEmail(
   claim: StudentEmailClaim,
 ): string {
   const appUrl =
-    process.env.NEXT_PUBLIC_APP_URL || "https://plate2plate.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL || "https://FoodCompass.vercel.app";
 
   const contactSection = listing.contact_phone
     ? `<tr>
@@ -63,7 +63,7 @@ export function buildStudentConfirmationEmail(
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>You've claimed food on Plate2Plate</title>
+  <title>You've claimed food on FoodCompass</title>
 </head>
 <body style="margin:0;padding:0;background-color:#F9F8F5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F9F8F5;">
@@ -74,7 +74,7 @@ export function buildStudentConfirmationEmail(
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#2E5D3E;">
           <tr>
             <td align="center" style="padding:24px;">
-              <div style="font-size:20px;font-weight:700;color:#FFFFFF;margin:0;">Plate2Plate</div>
+              <div style="font-size:20px;font-weight:700;color:#FFFFFF;margin:0;">FoodCompass</div>
               <div style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:4px;">Enactus UNSW</div>
             </td>
           </tr>
@@ -159,7 +159,7 @@ export function buildStudentConfirmationEmail(
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #E5DDD0;margin-top:32px;">
                 <tr>
                   <td style="padding-top:24px;text-align:center;">
-                    <p style="font-size:12px;color:#ADA396;margin:0;">Plate2Plate &middot; Enactus UNSW &middot; Reducing food waste on campus</p>
+                    <p style="font-size:12px;color:#ADA396;margin:0;">FoodCompass &middot; Enactus UNSW &middot; Reducing food waste on campus</p>
                   </td>
                 </tr>
               </table>

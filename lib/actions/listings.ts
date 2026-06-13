@@ -163,7 +163,7 @@ export async function createListing(
     );
     sendEmail({
       to: values.contact_email,
-      subject: "Your listing is live on Plate2Plate 🍽️",
+      subject: "Your listing is live on FoodCompass 🍽️",
       html,
     });
 

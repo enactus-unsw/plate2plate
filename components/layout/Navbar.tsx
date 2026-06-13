@@ -40,7 +40,7 @@ export function Navbar() {
           }}
           className={`flex items-center gap-2 font-sans text-base font-semibold text-p2p-primary transition-opacity duration-150 hover:opacity-80 active:scale-[0.98] ${linkFocusClasses}`}
         >
-          Plate2Plate
+          FoodCompass
         </Link>
 
         {/* Desktop spacer */}
@@ -104,7 +104,7 @@ export function Navbar() {
 
             <SheetContent side="right" className="w-72 p-0">
               <SheetTitle className="px-6 pt-6 font-sans text-lg font-semibold text-p2p-primary">
-                Plate2Plate
+                FoodCompass
               </SheetTitle>
 
               <nav className="mt-4 flex flex-col gap-1 px-4">

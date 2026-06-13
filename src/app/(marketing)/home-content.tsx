@@ -285,7 +285,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
 
             <Safari01
               className="mx-auto"
-              url="plate2plate.vercel.app"
+              url="FoodCompass.vercel.app"
               videoSrc="https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4"
             />
           </div>
@@ -310,7 +310,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
       </section>
 
       {/* ── 2–3. Scroll transition: Who Are We → How It Works ── */}
-      <FlowArt aria-label="Plate2Plate story scroll">
+      <FlowArt aria-label="FoodCompass story scroll">
         <FlowSection
           aria-label="Who are we"
           className="min-h-0!"
@@ -361,7 +361,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
                     <div className="transition-transform duration-300 ease-out-expo hover:-translate-y-0.5">
                       <Safari01
                         className="w-full max-w-none"
-                        url="plate2plate.vercel.app"
+                        url="FoodCompass.vercel.app"
                         videoSrc="https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4"
                       />
                     </div>

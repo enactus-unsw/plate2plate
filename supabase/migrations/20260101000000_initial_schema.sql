@@ -1,4 +1,4 @@
--- Base schema for Plate2Plate (mirrors the production schema documented in CLAUDE.md).
+-- Base schema for FoodCompass (mirrors the production schema documented in CLAUDE.md).
 
 CREATE TYPE perishability_type AS ENUM ('<30 mins', '>=30 mins');
 CREATE TYPE listing_status AS ENUM ('available', 'held', 'unavailable');

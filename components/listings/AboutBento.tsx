@@ -19,7 +19,7 @@ function PullQuoteCard() {
         </blockquote>
       </div>
       <p className="mt-8 text-xs text-p2p-text-secondary">
-        — Enactus UNSW, Plate2Plate
+        — Enactus UNSW, FoodCompass
       </p>
     </div>
   );
@@ -32,7 +32,7 @@ function MissionCard() {
         Our Mission
       </p>
       <p className="text-sm leading-[1.7] text-p2p-text-secondary">
-        Plate2Plate is a campus food rescue platform built by Enactus UNSW. We
+        FoodCompass is a campus food rescue platform built by Enactus UNSW. We
         connect societies and clubs with students in real time — turning surplus
         into sustenance before it becomes waste.
       </p>
@@ -98,7 +98,7 @@ export function AboutBento() {
             Who Are We
           </h2>
           <p className="mt-3 text-base text-p2p-text-secondary">
-            The team and mission behind Plate2Plate.
+            The team and mission behind FoodCompass.
           </p>
         </div>
 
