@@ -2,6 +2,10 @@
 
 import { Leaf } from "lucide-react";
 import { BentoGridShowcase } from "@/components/ui/bento-grid-showcase";
+import Image from "next/image";
+
+import enactus from "../../brand_assets/enactus.jpg";
+import Link from "next/link";
 
 const CARD_BASE =
   "rounded-2xl border border-p2p-border bg-p2p-surface p-6 shadow-card transition-shadow transition-transform duration-200 hover:shadow-card-hover hover:-translate-y-0.5";
@@ -67,15 +71,15 @@ function EnactusCard() {
         <p className="mb-4 text-xs uppercase tracking-widest text-p2p-text-secondary">
           Who Built This
         </p>
-        <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-p2p-primary-light px-3 py-1.5">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-p2p-primary-mid opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-p2p-primary" />
-          </span>
-          <span className="text-xs font-medium text-p2p-primary">
-            Enactus UNSW
-          </span>
-        </div>
+        <Link href="https://enactusunsw.org" target="_blank">
+          <Image
+            src={enactus}
+            width={150}
+            height={150}
+            alt="enactus logo"
+            className="mb-6"
+          />
+        </Link>
         <p className="text-sm leading-[1.7] text-p2p-text-secondary">
           A student-led social enterprise team using business skills to create a
           better, more sustainable world on campus.

@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const FOOTER_LINKS = [
-  { label: "Rubric Events", href: "/rubric-events"},
+  { label: "Rubric Events", href: "/rubric-events" },
   { label: "Arc Events", href: "/arc-events" },
   { label: "Find Food", href: "/collect" },
   { label: "Post Surplus Food", href: "/redistribute" },
