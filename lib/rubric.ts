@@ -20,6 +20,8 @@ export interface RubricEvent {
   isoDateTime: string;
   /** Full URL to the event on campus.hellorubric.com */
   url: string;
+  /** Pricing info from Rubric API, e.g. "$0.00 - $11.00" or "Free" */
+  info: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -78,6 +80,19 @@ async function postRubric(
 function extractEventId(destination: string): string {
   const m = /eid=(\d+)/.exec(destination);
   return m ? m[1] : "";
+}
+
+/** Check if an event is paid based on the info field from Rubric API. */
+function isPaidEvent(info?: string): boolean {
+  if (!info) return false;
+  // If info contains "Free" or "$0.00" as the only price, it's free
+  // Examples: "Free", "$0.00", "$0.00 - $0.00"
+  const trimmed = info.trim();
+  if (trimmed.toLowerCase() === "free") return false;
+  // Check if it's a range starting with $0.00
+  if (/^\$0\.00\s*-\s*\$0\.00$/.test(trimmed)) return false;
+  // Any other pricing info suggests it's paid
+  return /\$\d+\.\d{2}|[Pp]aid|[Tt]icket/.test(info);
 }
 
 /** Format a Date as "YYYY-MM-DD" in the Sydney timezone. */
@@ -165,6 +180,7 @@ export async function fetchRubricEvents(
         url: eid
           ? `${FRONTEND_BASE}/?eid=${eid}`
           : `${FRONTEND_BASE}/search?type=events&universityid=${UNIVERSITY_ID}`,
+        info: String(item.info ?? "").trim(),
       });
     }
 

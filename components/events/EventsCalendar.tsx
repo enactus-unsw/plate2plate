@@ -697,7 +697,8 @@ export function EventsCalendar({ events, maxDateStr }: EventsCalendarProps) {
         >
           campus.hellorubric.com
         </a>
-        .<span className="hidden sm:inline">
+        .
+        <span className="hidden sm:inline">
           {" "}
           Hover any event to preview. Use ← → keys to navigate.
         </span>

@@ -61,6 +61,7 @@ Three changes to the "Post Surplus Food" form (`components/forms/DonorForm.tsx`)
 End-to-end upload was **not** smoke-tested (no Supabase running this session).
 
 **⚠️ Two manual steps before this works in an environment:**
+
 1. Apply `supabase/migrations/20260610000000_listing_photos_storage.sql` (adds `photo_urls`
    column + creates the `listing-photos` bucket + public-read policy).
 2. The earlier `collected`-status migration also still needs applying if not already done.
