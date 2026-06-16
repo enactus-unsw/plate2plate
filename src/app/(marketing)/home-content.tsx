@@ -9,6 +9,7 @@ import { HoverButton } from "@/components/ui/hover-button";
 import { AboutBento } from "@/components/listings/AboutBento";
 import Safari01 from "@/components/ui/safari-01";
 import FlowArt, { FlowSection } from "@/components/ui/story-scroll";
+import { SubscribeModal } from "@/components/landing/SubscribeModal";
 
 /* ─── Copy constants ─── */
 
@@ -219,6 +220,7 @@ interface HomeContentProps {
 export default function HomeContent({ impactStats }: HomeContentProps) {
   const router = useRouter();
   const [howMode, setHowMode] = useState<"donors" | "students">("donors");
+  const [subscribeOpen, setSubscribeOpen] = useState(false);
 
   const howTitle =
     howMode === "donors" ? "For societies & clubs" : "For students";
@@ -441,6 +443,30 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
         </PageWrapper>
       </section>
 
+      {/* ── 6. Email Notifications ── */}
+      <section className="bg-p2p-surface py-16 md:py-24 lg:py-32">
+        <PageWrapper>
+          <FadeIn className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold tracking-[0.16em] text-[--color-primary-mid]">
+              STAY IN THE LOOP
+            </p>
+            <h2 className="heading-tight mt-4 font-heading text-3xl font-semibold leading-tight text-p2p-text sm:text-4xl md:text-5xl">
+              Never miss free food on campus
+            </h2>
+            <p className="mx-auto mt-4 max-w-md text-base text-p2p-text-secondary">
+              Get notified whenever a society or event posts surplus food —
+              claim it before it&apos;s gone.
+            </p>
+            <button
+              onClick={() => setSubscribeOpen(true)}
+              className="mt-8 inline-flex h-12 items-center rounded-xl bg-p2p-primary px-8 text-base font-medium text-p2p-primary-foreground transition-all duration-150 hover:bg-p2p-primary/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 focus-visible:ring-offset-p2p-surface active:scale-[0.98]"
+            >
+              Notify Me
+            </button>
+          </FadeIn>
+        </PageWrapper>
+      </section>
+
       {/* ── 5. Partner Societies ── */}
       <section className="bg-p2p-surface py-16 md:py-24 lg:py-32">
         <PageWrapper>
@@ -462,7 +488,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
         </PageWrapper>
       </section>
 
-      {/* ── 6. Footer CTA Strip ── */}
+      {/* ── 7. Footer CTA Strip ── */}
       <section className="bg-p2p-primary py-16 md:py-24 lg:py-32">
         <PageWrapper>
           <FadeIn className="text-center">
@@ -481,6 +507,11 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
           </FadeIn>
         </PageWrapper>
       </section>
+
+      <SubscribeModal
+        open={subscribeOpen}
+        onClose={() => setSubscribeOpen(false)}
+      />
     </>
   );
 }
