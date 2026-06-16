@@ -45,13 +45,13 @@ export function SubscribeModal({ open, onClose }: SubscribeModalProps) {
   return (
     <>
       <div
-        className="fixed inset-0 z-50 bg-black/10 backdrop-blur-xs duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
+        className="fixed inset-0 z-50 cursor-pointer bg-black/10 backdrop-blur-xs duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
         onClick={handleClose}
       />
       <div className="fixed top-1/2 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-xl border border-[--color-border] bg-p2p-surface-warm p-6 shadow-float outline-none">
         <button
           onClick={handleClose}
-          className="absolute top-3 right-3 flex size-8 items-center justify-center rounded-lg text-[--color-text-secondary] transition-colors hover:bg-[--color-border-subtle] hover:text-[--color-text] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-primary]/25"
+          className="absolute top-3 right-3 flex size-8 cursor-pointer items-center justify-center rounded-lg text-[--color-text-secondary] transition-colors hover:bg-[--color-border-subtle] hover:text-[--color-text] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-primary]/25"
           aria-label="Close"
         >
           <X className="size-4" />
@@ -63,7 +63,7 @@ export function SubscribeModal({ open, onClose }: SubscribeModalProps) {
               <CheckCircle className="size-6 text-[--color-primary]" />
             </div>
             <p className="text-sm font-medium text-[--color-text]">{message}</p>
-            <Button onClick={handleClose} className="mt-4" size="lg">
+            <Button onClick={handleClose} className="mt-4 cursor-pointer" size="lg">
               Got it
             </Button>
           </div>
@@ -99,7 +99,7 @@ export function SubscribeModal({ open, onClose }: SubscribeModalProps) {
               <Button
                 type="submit"
                 disabled={status === "loading"}
-                className="w-full"
+                className="w-full cursor-pointer"
                 size="lg"
               >
                 {status === "loading" ? (
