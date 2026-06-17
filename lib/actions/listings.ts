@@ -9,6 +9,7 @@ import {
 } from "@/lib/validations/listing.schema";
 import { sendEmail } from "@/lib/email/send";
 import { buildDonorConfirmationEmail } from "@/lib/email/templates/donor-confirmation";
+import { notifySubscribers } from "@/lib/email/send-subscriber-notification";
 import type { Listing } from "@/types";
 
 const LISTING_PHOTO_BUCKET = "listing-photos";
@@ -165,6 +166,16 @@ export async function createListing(
       to: values.contact_email,
       subject: "Your listing is live on FoodCompass 🍽️",
       html,
+    });
+
+    notifySubscribers({
+      id: data.id as string,
+      title: values.title,
+      description: values.description || null,
+      food_category: values.food_category,
+      quantity: values.quantity,
+      pickup_location: values.pickup_location,
+      expires_at: expiresAt,
     });
 
     return {
