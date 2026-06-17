@@ -232,25 +232,23 @@ export function DonorForm() {
   async function onSubmit(data: Record<string, unknown>) {
     setServerError(null);
 
-    if (photos.length === 0) {
-      setPhotoError("Please add at least one photo of the food.");
-      document
-        .getElementById("photos-field")
-        ?.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
     setPhotoError(null);
 
-    const formData = new FormData();
-    photos.forEach((file) => formData.append("files", file));
+    let photoUrls: string[] = [];
 
-    const upload = await uploadListingPhotos(formData);
-    if (upload.error || !upload.urls) {
-      setPhotoError(upload.error ?? "Failed to upload photos.");
-      return;
+    if (photos.length > 0) {
+      const formData = new FormData();
+      photos.forEach((file) => formData.append("files", file));
+
+      const upload = await uploadListingPhotos(formData);
+      if (upload.error || !upload.urls) {
+        setPhotoError(upload.error ?? "Failed to upload photos.");
+        return;
+      }
+      photoUrls = upload.urls;
     }
 
-    const result = await createListing(data as ListingFormValues, upload.urls);
+    const result = await createListing(data as ListingFormValues, photoUrls);
 
     if (result.error) {
       setServerError(result.error);
