@@ -459,7 +459,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
             </p>
             <button
               onClick={() => setSubscribeOpen(true)}
-              className="mt-8 inline-flex h-12 items-center rounded-xl bg-p2p-primary px-8 text-base font-medium text-p2p-primary-foreground transition-all duration-150 hover:bg-p2p-primary/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 focus-visible:ring-offset-p2p-surface active:scale-[0.98]"
+              className="mt-8 inline-flex h-12 cursor-pointer items-center rounded-xl bg-p2p-primary px-8 text-base font-medium text-white transition-all duration-150 hover:bg-p2p-primary/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 focus-visible:ring-offset-p2p-surface active:scale-[0.98]"
             >
               Notify Me
             </button>
