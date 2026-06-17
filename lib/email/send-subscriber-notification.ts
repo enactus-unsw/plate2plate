@@ -45,8 +45,7 @@ export async function notifySubscribers(listing: ListingInfo): Promise<void> {
     }
 
     const html = buildSubscriberNotificationEmail(listing);
-    const fromEmail =
-      process.env.RESEND_FROM_EMAIL || "noreply@foodcompass.app";
+    const fromEmail = "noreply@food-compass.org";
     const fromName = "FoodCompass";
 
     await getResend().batch.send(
