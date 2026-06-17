@@ -100,10 +100,6 @@ export async function createListing(
     return { data: null, error: parsed.error.issues[0].message };
   }
 
-  if (!photoUrls || photoUrls.length === 0) {
-    return { data: null, error: "Please add at least one photo of the food." };
-  }
-
   const values = parsed.data;
 
   const expiresAt = new Date(values.expires_at).toISOString();
@@ -126,8 +122,8 @@ export async function createListing(
         food_condition: values.food_condition,
         quantity: values.quantity,
         quantity_remaining: values.quantity,
-        photo_url: photoUrls[0],
-        photo_urls: photoUrls,
+        photo_url: photoUrls?.[0] || null,
+        photo_urls: photoUrls || [],
         pickup_location: values.pickup_location,
         perishability,
         allergens: values.allergens,
