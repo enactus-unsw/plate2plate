@@ -63,7 +63,11 @@ export function SubscribeModal({ open, onClose }: SubscribeModalProps) {
               <CheckCircle className="size-6 text-[--color-primary]" />
             </div>
             <p className="text-sm font-medium text-[--color-text]">{message}</p>
-            <Button onClick={handleClose} className="mt-4 cursor-pointer" size="lg">
+            <Button
+              onClick={handleClose}
+              className="mt-4 cursor-pointer"
+              size="lg"
+            >
               Got it
             </Button>
           </div>
