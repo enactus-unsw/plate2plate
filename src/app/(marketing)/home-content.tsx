@@ -280,7 +280,10 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
                   {HERO_SUB}
                 </p>
               </div>
-</motion.div>
+            </motion.div>
+
+            <div
+              className="pointer-events-none absolute inset-0 z-5 bg-linear-to-b from-[--color-bg]/80 via-[--color-bg]/50 to-transparent"
               aria-hidden="true"
             />
 
