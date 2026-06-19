@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { createListing, uploadListingPhotos } from "@/lib/actions/listings";
+import { compressImage } from "@/lib/utils/compress-image";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -237,8 +238,9 @@ export function DonorForm() {
     let photoUrls: string[] = [];
 
     if (photos.length > 0) {
+      const compressed = await Promise.all(photos.map(compressImage));
       const formData = new FormData();
-      photos.forEach((file) => formData.append("files", file));
+      compressed.forEach((file) => formData.append("files", file));
 
       const upload = await uploadListingPhotos(formData);
       if (upload.error || !upload.urls) {
