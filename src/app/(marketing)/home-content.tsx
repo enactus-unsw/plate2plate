@@ -262,31 +262,34 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
               }}
               className="absolute inset-x-0 top-[28%] z-10 flex flex-col items-center px-6"
             >
-              <div className="mb-4 inline-flex items-center gap-2">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-[--color-primary]" />
-                <span className="text-sm font-medium text-[--color-primary]">
-                  Live on campus
-                </span>
+              <div className="flex flex-col items-center">
+                <div className="mb-4 inline-flex items-center gap-2">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-[--color-primary]" />
+                  <span className="text-sm font-medium text-white/90 [text-shadow:0_1px_6px_rgba(0,0,0,0.6)]">
+                    Live on campus
+                  </span>
+                </div>
+
+                <h1 className="heading-tight mx-auto max-w-3xl font-heading text-5xl font-semibold leading-tight tracking-[-0.03em] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.7),0_1px_4px_rgba(0,0,0,0.5)] lg:text-6xl">
+                  {HERO_HEADLINE}
+                </h1>
+
+                <p className="mx-auto mt-4 max-w-xl text-base font-medium leading-[1.7] text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.9),0_1px_4px_rgba(0,0,0,0.7)] lg:text-lg">
+                  {HERO_SUB}
+                </p>
               </div>
-
-              <h1 className="heading-tight mx-auto max-w-3xl font-heading text-5xl font-semibold leading-tight tracking-[-0.03em] text-[--color-text] drop-shadow-sm lg:text-6xl">
-                {HERO_HEADLINE}
-              </h1>
-
-              <p className="mx-auto mt-4 max-w-xl text-base leading-[1.7] text-[--color-text-secondary] drop-shadow-sm lg:text-lg">
-                {HERO_SUB}
-              </p>
             </motion.div>
 
             <div
-              className="pointer-events-none absolute inset-0 z-5 bg-linear-to-b from-[--color-bg]/60 via-[--color-bg]/20 to-transparent"
+              className="pointer-events-none absolute inset-0 z-5 bg-linear-to-b from-[--color-bg]/80 via-[--color-bg]/50 to-transparent"
               aria-hidden="true"
             />
 
             <Safari01
               className="mx-auto"
               url="plate2plate.vercel.app"
-              videoSrc="https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4"
+              videoSrc="https://videos.pexels.com/video-files/4170293/4170293-uhd_2732_1440_24fps.mp4"
+              dimVideo
             />
           </div>
 
@@ -362,7 +365,8 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
                       <Safari01
                         className="w-full max-w-none"
                         url="plate2plate.vercel.app"
-                        videoSrc="https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4"
+                        videoSrc="https://videos.pexels.com/video-files/7645076/7645076-uhd_2732_1440_24fps.mp4"
+                        objectPosition="center 20%"
                       />
                     </div>
                   </div>

@@ -9,6 +9,8 @@ interface Safari01Props {
   videoSrc?: string;
   url?: string;
   className?: string;
+  dimVideo?: boolean;
+  objectPosition?: string;
 }
 
 const Safari01: React.FC<Safari01Props> = ({
@@ -16,6 +18,8 @@ const Safari01: React.FC<Safari01Props> = ({
   videoSrc,
   url,
   className,
+  dimVideo = false,
+  objectPosition = "center",
 }) => {
   return (
     <div
@@ -36,7 +40,7 @@ const Safari01: React.FC<Safari01Props> = ({
         {/* Center toolbar pill (hidden on mobile) */}
         <div className="pointer-events-none absolute left-1/2 top-1/2 z-5 hidden w-full max-w-2xl -translate-x-1/2 -translate-y-1/2 px-6 sm:block">
           <div className="flex h-5 w-full items-center justify-center rounded-full bg-[#e5e6ec] px-4 text-[10px] font-medium text-[#6b7280]">
-            placeholder can add text
+            https://food-compass.org/
           </div>
         </div>
 
@@ -46,14 +50,20 @@ const Safari01: React.FC<Safari01Props> = ({
 
       <div className="relative z-0 flex aspect-video items-center justify-center bg-[--color-surface-warm]">
         {videoSrc ? (
-          <video
-            className="absolute inset-0 h-full w-full object-cover"
-            src={videoSrc}
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
+          <>
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{ objectPosition }}
+              src={videoSrc}
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
+            {dimVideo && (
+              <div className="pointer-events-none absolute inset-0 bg-black/45" aria-hidden="true" />
+            )}
+          </>
         ) : image ? (
           <Image
             src={image}
