@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import { HoverButton } from "@/components/ui/hover-button";
 import { AboutBento } from "@/components/listings/AboutBento";
 import Safari01 from "@/components/ui/safari-01";
 import FlowArt, { FlowSection } from "@/components/ui/story-scroll";
+import { SubscribeModal } from "@/components/landing/SubscribeModal";
 
 /* ─── Copy constants ─── */
 
@@ -219,6 +220,7 @@ interface HomeContentProps {
 export default function HomeContent({ impactStats }: HomeContentProps) {
   const router = useRouter();
   const [howMode, setHowMode] = useState<"donors" | "students">("donors");
+  const [subscribeOpen, setSubscribeOpen] = useState(false);
 
   const howTitle =
     howMode === "donors" ? "For societies & clubs" : "For students";
@@ -232,7 +234,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
   return (
     <>
       {/* ── 1. Hero ── */}
-      <section className="relative overflow-hidden bg-[--color-bg] py-24">
+      <section className="relative overflow-hidden bg-[--color-bg] py-16 md:py-24">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-primary)_0%,transparent_70%)] opacity-[0.04]" />
 
         <svg
@@ -260,7 +262,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
                 ease: [0.16, 1, 0.3, 1],
                 delay: 0.1,
               }}
-              className="absolute inset-x-0 top-[28%] z-10 flex flex-col items-center px-6"
+              className="z-10 mb-10 flex flex-col items-center px-2 lg:absolute lg:inset-x-0 lg:top-[28%] lg:mb-0 lg:px-6"
             >
               <div className="flex flex-col items-center">
                 <div className="mb-4 inline-flex items-center gap-2">
@@ -278,10 +280,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
                   {HERO_SUB}
                 </p>
               </div>
-            </motion.div>
-
-            <div
-              className="pointer-events-none absolute inset-0 z-5 bg-linear-to-b from-[--color-bg]/80 via-[--color-bg]/50 to-transparent"
+</motion.div>
               aria-hidden="true"
             />
 
@@ -296,14 +295,14 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
             <HoverButton
               variant="primary"
-              className="px-8 py-3 text-sm"
+              className="w-full px-8 py-3 text-sm sm:w-auto"
               onClick={() => router.push("/collect")}
             >
               Find Food
             </HoverButton>
             <HoverButton
               variant="secondary"
-              className="px-8 py-3 text-sm"
+              className="w-full px-8 py-3 text-sm sm:w-auto"
               onClick={() => router.push("/redistribute")}
             >
               Post Surplus Food
@@ -313,7 +312,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
       </section>
 
       {/* ── 2–3. Scroll transition: Who Are We → How It Works ── */}
-      <FlowArt aria-label="Plate2Plate story scroll">
+      <FlowArt aria-label="FoodCompass story scroll">
         <FlowSection
           aria-label="Who are we"
           className="min-h-0!"
@@ -398,14 +397,14 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
                         variant={
                           howMode === "students" ? "primary" : "secondary"
                         }
-                        className="px-5 py-2.5 text-sm"
+                        className="w-full px-5 py-2.5 text-sm sm:w-auto"
                         onClick={() => router.push("/collect")}
                       >
                         Find Food
                       </HoverButton>
                       <HoverButton
                         variant={howMode === "donors" ? "primary" : "secondary"}
-                        className="px-5 py-2.5 text-sm"
+                        className="w-full px-5 py-2.5 text-sm sm:w-auto"
                         onClick={() => router.push("/redistribute")}
                       >
                         Post Surplus Food
@@ -426,13 +425,13 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
       >
         <PageWrapper>
           <FadeIn>
-            <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-8 lg:grid-cols-4">
               {impactStats.map((stat) => (
                 <div
                   key={stat.label}
                   className="border-t-2 border-p2p-primary pt-6"
                 >
-                  <p className="heading-tight font-heading text-4xl font-semibold text-p2p-text md:text-5xl">
+                  <p className="heading-tight font-heading text-3xl font-semibold text-p2p-text sm:text-4xl md:text-5xl">
                     {stat.value}
                   </p>
                   <p className="mt-1 text-sm text-p2p-text-secondary">
@@ -441,6 +440,30 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
                 </div>
               ))}
             </div>
+          </FadeIn>
+        </PageWrapper>
+      </section>
+
+      {/* ── 6. Email Notifications ── */}
+      <section className="bg-p2p-surface py-16 md:py-24 lg:py-32">
+        <PageWrapper>
+          <FadeIn className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold tracking-[0.16em] text-[--color-primary-mid]">
+              STAY IN THE LOOP
+            </p>
+            <h2 className="heading-tight mt-4 font-heading text-3xl font-semibold leading-tight text-p2p-text sm:text-4xl md:text-5xl">
+              Never miss free food on campus
+            </h2>
+            <p className="mx-auto mt-4 max-w-md text-base text-p2p-text-secondary">
+              Get notified whenever a society or event posts surplus food —
+              claim it before it&apos;s gone.
+            </p>
+            <button
+              onClick={() => setSubscribeOpen(true)}
+              className="mt-8 inline-flex h-12 cursor-pointer items-center rounded-xl bg-p2p-primary px-8 text-base font-medium text-white transition-all duration-150 hover:bg-p2p-primary/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 focus-visible:ring-offset-p2p-surface active:scale-[0.98]"
+            >
+              Notify Me
+            </button>
           </FadeIn>
         </PageWrapper>
       </section>
@@ -466,7 +489,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
         </PageWrapper>
       </section>
 
-      {/* ── 6. Footer CTA Strip ── */}
+      {/* ── 7. Footer CTA Strip ── */}
       <section className="bg-p2p-primary py-16 md:py-24 lg:py-32">
         <PageWrapper>
           <FadeIn className="text-center">
@@ -485,6 +508,11 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
           </FadeIn>
         </PageWrapper>
       </section>
+
+      <SubscribeModal
+        open={subscribeOpen}
+        onClose={() => setSubscribeOpen(false)}
+      />
     </>
   );
 }

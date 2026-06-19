@@ -24,7 +24,7 @@ export async function sendEmail({
         "api-key": apiKey,
       },
       body: JSON.stringify({
-        sender: { name: "Plate2Plate", email: "ethan.richard@enactusunsw.org" },
+        sender: { name: "FoodCompass", email: "ethan.richard@enactusunsw.org" },
         to: [{ email: to }],
         subject,
         htmlContent: html,

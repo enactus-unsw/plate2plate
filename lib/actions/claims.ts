@@ -110,7 +110,7 @@ export async function claimListing(
       );
       sendEmail({
         to: values.student_email,
-        subject: "You've claimed food on Plate2Plate 🍽️",
+        subject: "You've claimed food on FoodCompass 🍽️",
         html: studentHtml,
       });
 

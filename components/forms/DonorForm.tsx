@@ -1,13 +1,23 @@
 "use client";
 
-import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Copy, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { createListing, uploadListingPhotos } from "@/lib/actions/listings";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   listingSchema,
   type ListingFormValues,
@@ -27,7 +37,6 @@ import { PhotoUpload } from "@/components/forms/PhotoUpload";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -134,14 +143,14 @@ function SuccessScreen({
         </div>
       </div>
 
-      <div className="flex items-center gap-4 mt-8">
+      <div className="mt-8 flex w-full max-w-lg flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
         <Link
           href="/collect"
           className={cn(
             "inline-flex items-center justify-center rounded-lg px-6 h-11 text-sm font-semibold",
             "bg-p2p-primary text-white hover:bg-p2p-primary-hover",
             "focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2",
-            "active:scale-[0.98] transition-transform transition-colors",
+            "active:scale-[0.98] transition-transform",
           )}
         >
           View on collect feed
@@ -169,6 +178,18 @@ export function DonorForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoError, setPhotoError] = useState<string | null>(null);
+  const [termsOpen, setTermsOpen] = useState(false);
+
+  useEffect(() => {
+    if (termsOpen) {
+      requestAnimationFrame(() => {
+        const el = document.querySelector<HTMLElement>(
+          '[data-slot="alert-dialog-content"]',
+        );
+        el?.scrollTo(0, 0);
+      });
+    }
+  }, [termsOpen]);
 
   const {
     register,
@@ -196,6 +217,11 @@ export function DonorForm() {
     },
   });
 
+  const safetyConfirmed = useWatch({
+    control,
+    name: "safety_confirmed",
+  });
+
   function scrollToFirstError() {
     requestAnimationFrame(() => {
       const el = document.querySelector('[aria-invalid="true"]');
@@ -206,25 +232,23 @@ export function DonorForm() {
   async function onSubmit(data: Record<string, unknown>) {
     setServerError(null);
 
-    if (photos.length === 0) {
-      setPhotoError("Please add at least one photo of the food.");
-      document
-        .getElementById("photos-field")
-        ?.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
     setPhotoError(null);
 
-    const formData = new FormData();
-    photos.forEach((file) => formData.append("files", file));
+    let photoUrls: string[] = [];
 
-    const upload = await uploadListingPhotos(formData);
-    if (upload.error || !upload.urls) {
-      setPhotoError(upload.error ?? "Failed to upload photos.");
-      return;
+    if (photos.length > 0) {
+      const formData = new FormData();
+      photos.forEach((file) => formData.append("files", file));
+
+      const upload = await uploadListingPhotos(formData);
+      if (upload.error || !upload.urls) {
+        setPhotoError(upload.error ?? "Failed to upload photos.");
+        return;
+      }
+      photoUrls = upload.urls;
     }
 
-    const result = await createListing(data as ListingFormValues, upload.urls);
+    const result = await createListing(data as ListingFormValues, photoUrls);
 
     if (result.error) {
       setServerError(result.error);
@@ -526,43 +550,297 @@ export function DonorForm() {
         control={control}
         name="safety_confirmed"
         render={({ field }) => (
-          <section
-            className={cn(
-              "rounded-xl border-2 bg-p2p-surface shadow-card p-5 md:p-6 transition-colors cursor-pointer",
-              "hover:shadow-card-hover active:scale-[0.998] transition-transform",
-              field.value
-                ? "border-p2p-primary bg-p2p-primary-light"
-                : "border-p2p-border",
-            )}
-            onClick={() => field.onChange(!field.value)}
-            onKeyDown={(e) => {
-              if (e.key === " " || e.key === "Enter") {
-                e.preventDefault();
-                field.onChange(!field.value);
-              }
-            }}
-            role="checkbox"
-            aria-checked={field.value}
-            tabIndex={0}
-          >
-            <div className="flex items-start gap-3">
-              <Checkbox
-                checked={field.value}
-                onCheckedChange={(checked) => field.onChange(checked)}
-                className="mt-0.5 shrink-0"
-              />
-              <div>
-                <span className="text-sm font-semibold text-p2p-text block">
-                  Safety confirmation
-                </span>
-                <span className="text-sm text-p2p-text-secondary mt-1 block body-relaxed">
-                  I confirm this food is untouched, safely handled, and suitable
-                  for immediate redistribution.
-                </span>
+          <AlertDialog open={termsOpen} onOpenChange={setTermsOpen}>
+            <section
+              className={cn(
+                "rounded-xl border-2 bg-p2p-surface shadow-card p-5 md:p-6 transition-colors",
+                "hover:shadow-card-hover active:scale-[0.998] transition-transform",
+                field.value
+                  ? "border-p2p-primary bg-p2p-primary-light"
+                  : "border-p2p-border cursor-pointer",
+              )}
+              onClick={() => setTermsOpen(true)}
+              onKeyDown={(e) => {
+                if (e.key === " " || e.key === "Enter") {
+                  e.preventDefault();
+                  setTermsOpen(true);
+                }
+              }}
+              role="button"
+              aria-label="Read and accept the food safety terms"
+              aria-pressed={field.value}
+              tabIndex={0}
+            >
+              <div className="flex items-start gap-3">
+                <div
+                  className={cn(
+                    "mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-full border",
+                    field.value
+                      ? "border-p2p-primary bg-p2p-primary text-white"
+                      : "border-p2p-border bg-p2p-surface-warm text-p2p-text-secondary",
+                  )}
+                >
+                  {field.value ? (
+                    <CheckCircle2 className="size-5" />
+                  ) : (
+                    <span className="text-sm font-semibold">1</span>
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <span className="text-sm font-semibold text-p2p-text block">
+                    Safety Confirmation
+                  </span>
+                  <span className="text-sm text-p2p-text-secondary mt-1 block body-relaxed">
+                    {field.value
+                      ? "Terms accepted. You can post this food listing."
+                      : "Read the food safety terms and accept them before posting."}
+                  </span>
+                </div>
               </div>
-            </div>
-            <FieldError message={errors.safety_confirmed?.message} />
-          </section>
+
+              <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs text-p2p-text-secondary">
+                  {field.value
+                    ? "You can review the terms again if needed."
+                    : "Tap to open the terms and conditions notice."}
+                </p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="shrink-0 transition-transform hover:bg-p2p-primary-light focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98]"
+                >
+                  {field.value ? "Review terms" : "Read terms"}
+                </Button>
+              </div>
+
+              <FieldError message={errors.safety_confirmed?.message} />
+            </section>
+
+            <AlertDialogContent
+              className="!max-h-[90vh] !max-w-2xl overflow-y-auto"
+              initialFocus={false}
+            >
+              <AlertDialogHeader>
+                <AlertDialogTitle>Terms and Conditions</AlertDialogTitle>
+                <AlertDialogDescription>
+                  FoodCampus - user declaration and risk acknowledgement.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+
+              <div className="text-base text-p2p-text-secondary body-relaxed">
+                <section className="space-y-2 border-b border-p2p-border-subtle pb-6">
+                  <h4 className="font-heading text-base font-semibold tracking-tight text-p2p-text">
+                    Last updated: 14th June 2026
+                  </h4>
+                  <p>
+                    This platform is operated by Enactus UNSW (the Society). It
+                    exists solely to connect providers of surplus food with
+                    recipients who wish to collect it. The Society does not
+                    prepare, cook, store, package, transport, inspect, test,
+                    certify, endorse, verify, distribute, or supply any food
+                    listed on the platform.
+                  </p>
+                </section>
+
+                <section className="space-y-2 border-b border-p2p-border-subtle py-6">
+                  <h4 className="font-heading text-base font-semibold tracking-tight text-p2p-text">
+                    Acceptance of Terms
+                  </h4>
+                  <p>
+                    By accessing, posting on, collecting food through, or
+                    otherwise using this platform, you acknowledge that you have
+                    read, understood, and agree to be legally bound by these
+                    Terms and Conditions. If you do not agree, you must not use
+                    the platform.
+                  </p>
+                </section>
+
+                <section className="space-y-2 border-b border-p2p-border-subtle py-6">
+                  <h4 className="font-heading text-base font-semibold tracking-tight text-p2p-text">
+                    Provider Declaration
+                  </h4>
+                  <ul className="list-disc space-y-1.5 pl-5 marker:text-p2p-primary-mid/60">
+                    <li>You are entitled to provide the food.</li>
+                    <li>
+                      The information you provide is accurate and complete.
+                    </li>
+                    <li>Known allergens have been disclosed.</li>
+                    <li>The preparation date and time are accurate.</li>
+                    <li>
+                      The food has been handled, stored, displayed, and
+                      transported in accordance with applicable Australian food
+                      safety laws, standards, regulations, and guidelines.
+                    </li>
+                    <li>
+                      Potentially hazardous food has been maintained under
+                      legally required temperature controls.
+                    </li>
+                    <li>
+                      The food is, to the best of your knowledge, safe and
+                      suitable for human consumption.
+                    </li>
+                    <li>
+                      The food has not been contaminated, adulterated, tampered
+                      with, or exposed to unsafe conditions.
+                    </li>
+                    <li>
+                      You remain solely responsible for the safety, quality,
+                      suitability, handling, storage, transportation, and
+                      condition of the food you provide.
+                    </li>
+                  </ul>
+                </section>
+
+                <section className="space-y-2 border-b border-p2p-border-subtle py-6">
+                  <h4 className="font-heading text-base font-semibold tracking-tight text-p2p-text">
+                    Recipient Acknowledgement
+                  </h4>
+                  <ul className="list-disc space-y-1.5 pl-5 marker:text-p2p-primary-mid/60">
+                    <li>Food may contain allergens or contaminants.</li>
+                    <li>
+                      The platform cannot guarantee the accuracy, completeness,
+                      or reliability of provider information.
+                    </li>
+                    <li>
+                      The platform does not independently verify food safety,
+                      storage conditions, temperature history, allergen
+                      information, ingredient lists, or expiry details.
+                    </li>
+                    <li>
+                      You are responsible for assessing whether food suits your
+                      dietary, medical, religious, ethical, or allergy-related
+                      requirements.
+                    </li>
+                    <li>
+                      You accept all risks associated with consuming food
+                      obtained through the platform.
+                    </li>
+                    <li>
+                      You should not consume food if you have any concerns about
+                      its safety, freshness, preparation, storage, transport,
+                      temperature control, allergen content, or condition.
+                    </li>
+                  </ul>
+                </section>
+
+                <section className="space-y-2 border-b border-p2p-border-subtle py-6">
+                  <h4 className="font-heading text-base font-semibold tracking-tight text-p2p-text">
+                    Food Safety Requirements
+                  </h4>
+                  <p>
+                    Users must comply with all applicable food safety laws and
+                    standards, including the Australia New Zealand Food
+                    Standards Code, Food Safety Standard 3.2.2, any applicable
+                    provisions of Food Safety Standard 3.2.2A, the Food Act 2003
+                    (NSW), NSW Food Authority requirements and guidance, and any
+                    other applicable food safety legislation.
+                  </p>
+                </section>
+
+                <section className="space-y-2 border-b border-p2p-border-subtle py-6">
+                  <h4 className="font-heading text-base font-semibold tracking-tight text-p2p-text">
+                    No Warranties, Assumption of risk, and Indemnity
+                  </h4>
+                  <p>
+                    To the maximum extent permitted by law, the Society makes no
+                    representation, warranty, or guarantee regarding the safety,
+                    suitability, quality, or condition of any food, or the
+                    accuracy of any listing. All food is accepted by recipients
+                    on an as-is basis.
+                  </p>
+                  <p>
+                    Users voluntarily assume all risks associated with
+                    collecting, transporting, storing, reheating, and consuming
+                    food, including allergic reactions, foodborne illness,
+                    contamination, spoilage, and mislabelled or undisclosed
+                    ingredients.
+                  </p>
+                  <p>
+                    To the maximum extent permitted by law, users release and
+                    indemnify the Society and its related people and partners
+                    from claims, liabilities, losses, injuries, or expenses
+                    arising from food listed on the platform, collection or
+                    consumption of food, foodborne illness, allergic reactions,
+                    contamination, or incorrect information supplied by any
+                    user.
+                  </p>
+                </section>
+
+                <section className="space-y-2 border-b border-p2p-border-subtle py-6">
+                  <h4 className="font-heading text-base font-semibold tracking-tight text-p2p-text">
+                    Platform Role Only
+                  </h4>
+                  <p>
+                    The Society does not own, possess, store, control, inspect,
+                    test, approve, or certify food safety compliance. Its role
+                    is limited to providing a platform through which users may
+                    exchange information regarding surplus food.
+                  </p>
+                </section>
+
+                <section className="space-y-2 border-b border-p2p-border-subtle py-6">
+                  <h4 className="font-heading text-base font-semibold tracking-tight text-p2p-text">
+                    Removal of Content and Reporting Concerns
+                  </h4>
+                  <p>
+                    The Society may remove a listing, suspend access, or
+                    restrict use of the platform at its sole discretion where
+                    food safety concerns arise or where these Terms may have
+                    been breached. Users must immediately report suspected
+                    foodborne illness, contamination, misrepresentation,
+                    undisclosed allergens, or unsafe food handling practices
+                    through the platform&apos;s reporting mechanisms.
+                  </p>
+                </section>
+
+                <section className="space-y-2 border-b border-p2p-border-subtle py-6">
+                  <h4 className="font-heading text-base font-semibold tracking-tight text-p2p-text">
+                    Limitation of Liability and Governing Law
+                  </h4>
+                  <p>
+                    To the fullest extent permitted by law, the Society excludes
+                    all liability for any direct, indirect, consequential,
+                    incidental, special, punitive, or economic loss arising out
+                    of or related to the use of the platform or consumption of
+                    food obtained through it. Where liability cannot lawfully be
+                    excluded, it is limited to the minimum extent permitted by
+                    law.
+                  </p>
+                  <p>
+                    These Terms are governed by the laws of New South Wales and
+                    Australia, and users submit to the exclusive jurisdiction of
+                    the courts of New South Wales.
+                  </p>
+                </section>
+
+                <section className="mt-6 rounded-lg border border-p2p-border bg-p2p-surface-warm p-4">
+                  <h4 className="font-heading text-base font-semibold tracking-tight text-p2p-text">
+                    User Confirmation
+                  </h4>
+                  <p className="mt-2">
+                    By selecting I Agree, you confirm that you have read and
+                    understood these Terms and Conditions, you understand that
+                    the Society is not the supplier of food and does not verify
+                    food safety, and you agree to comply with all applicable
+                    food safety laws and standards.
+                  </p>
+                </section>
+              </div>
+
+              <AlertDialogFooter>
+                <AlertDialogCancel>Not yet</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    field.onChange(true);
+                    setTermsOpen(false);
+                  }}
+                >
+                  I have read and agree
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         )}
       />
 
@@ -570,12 +848,12 @@ export function DonorForm() {
       <Button
         type="submit"
         size="lg"
-        disabled={isSubmitting}
+        disabled={isSubmitting || !safetyConfirmed}
         className={cn(
           "w-full h-12 text-base font-semibold",
           "bg-p2p-primary text-white hover:bg-p2p-primary-hover",
           "focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2",
-          "active:scale-[0.98] transition-transform transition-colors",
+          "active:scale-[0.98] transition-transform",
           "disabled:opacity-60",
         )}
       >

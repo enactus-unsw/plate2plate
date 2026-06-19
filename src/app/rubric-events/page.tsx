@@ -2,12 +2,13 @@ import { Calendar } from "lucide-react";
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { EventsCalendar } from "@/components/events/EventsCalendar";
 import { fetchRubricEvents } from "@/lib/rubric";
+import Link from "next/link";
 
 // Revalidate this page via ISR every 5 minutes
 export const revalidate = 300;
 
 export const metadata = {
-  title: "Campus Events — Plate2Plate",
+  title: "Campus Events — FoodCompass",
   description:
     "Upcoming UNSW campus events on Rubric — potential sources of surplus food to rescue.",
 };
@@ -23,18 +24,27 @@ function offsetDate(days: number): string {
 const FOOD_EVENT_REGEX =
   /\b(barbecue|barbeque|bbq|sizzle|free food|lunch|dinner|breakfast|brunch|bbq|barbecue|pizza|catering|catered|snack|meal|feast|roast|roost)\b/i;
 const SOCIAL_NOISE_REGEX = /\b(club|night|after party)\b/i;
-const PAID_EVENT_REGEX = /(\$|price|cost|ticket|entry fee|aud|AUD|pay|\$)/i;
+
+/** Check if an event is paid based on the info field from Rubric API. */
+function isPaidEvent(info?: string): boolean {
+  if (!info) return false;
+  const trimmed = info.trim();
+  if (trimmed.toLowerCase() === "free") return false;
+  if (/^\$0\.00\s*-\s*\$0\.00$/.test(trimmed)) return false;
+  return /\$\d+\.\d{2}|[Pp]aid|[Tt]icket/.test(info);
+}
 
 function isFoodRelatedEvent(event: {
   title: string;
   society: string;
   category: string;
+  info: string;
 }): boolean {
   const searchableText = `${event.title} ${event.society} ${event.category}`;
   return (
     FOOD_EVENT_REGEX.test(searchableText) &&
     !SOCIAL_NOISE_REGEX.test(searchableText) &&
-    !PAID_EVENT_REGEX.test(searchableText)
+    !isPaidEvent(event.info)
   );
 }
 
@@ -47,7 +57,7 @@ export default async function EventsPage() {
   ).filter(isFoodRelatedEvent);
 
   return (
-    <PageWrapper className="py-12 md:py-16">
+    <PageWrapper className="py-8 sm:py-12 md:py-16">
       {/* ── Page header ───────────────────────────────────────────────── */}
       <div className="mb-8 flex items-start gap-4">
         <div className="hidden rounded-xl bg-p2p-primary-light p-3 sm:block">
@@ -68,12 +78,12 @@ export default async function EventsPage() {
               Rubric
             </a>
             . Keep an eye out and check{" "}
-            <a
+            <Link
               href="/collect"
               className="font-medium text-p2p-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-p2p-primary"
             >
               the collect feed
-            </a>{" "}
+            </Link>{" "}
             for active listings.
           </p>
         </div>
