@@ -458,7 +458,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
               Never miss free food on campus
             </h2>
             <p className="mx-auto mt-4 max-w-md text-base text-p2p-text-secondary">
-              Get notified whenever a society or event posts surplus food —
+              Get notified whenever a society or event posts surplus food,
               claim it before it&apos;s gone.
             </p>
             <button
