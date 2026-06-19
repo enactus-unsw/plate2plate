@@ -71,11 +71,11 @@ export default async function ListingDetailPage({
   const listing = data as Listing;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16 md:py-24 lg:px-8">
       {/* Back button */}
       <Link
         href="/collect"
-        className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-p2p-text-secondary transition-transform hover:text-p2p-primary focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98]"
+        className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium sm:mb-8 text-p2p-text-secondary transition-transform hover:text-p2p-primary focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98]"
       >
         <ArrowLeft size={16} />
         Back to listings

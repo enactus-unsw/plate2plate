@@ -40,7 +40,7 @@ export default async function ManagePage({
   const listing = result.data;
 
   return (
-    <PageWrapper className="py-16 md:py-24">
+    <PageWrapper className="py-10 sm:py-16 md:py-24">
       <Link
         href="/"
         className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-p2p-text-secondary transition-colors hover:text-p2p-primary focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98]"

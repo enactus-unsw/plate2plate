@@ -3,6 +3,10 @@
 import { Leaf } from "lucide-react";
 import { motion } from "framer-motion";
 import { BentoGridShowcase } from "@/components/ui/bento-grid-showcase";
+import Image from "next/image";
+
+import enactus from "../../brand_assets/enactus.jpg";
+import Link from "next/link";
 
 const CARD_BASE =
   "rounded-2xl border border-p2p-border bg-p2p-surface p-6 shadow-card transition-shadow transition-transform duration-200 hover:shadow-card-hover hover:-translate-y-0.5";
@@ -27,12 +31,14 @@ function PullQuoteCard() {
           <span className="text-p2p-primary">We built the bridge.</span>&rdquo;
         </blockquote>
       </div>
+
       <div className="mt-8 flex items-center gap-3">
         <div className="h-px flex-1 bg-p2p-border" />
-        <p className="text-xs font-medium text-p2p-text-secondary">
-          Enactus UNSW, Plate2Plate
+        <p className="mt-8 text-xs text-p2p-text-secondary">
+          — Enactus UNSW, FoodCompass
         </p>
       </div>
+
     </div>
   );
 }
@@ -109,20 +115,18 @@ function EnactusCard() {
         <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-p2p-text-secondary">
           Who Built This
         </p>
-        <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-p2p-primary-light px-3 py-1.5">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-p2p-primary-mid opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-p2p-primary" />
-          </span>
-          <span className="text-xs font-medium text-p2p-primary">Enactus UNSW</span>
-        </div>
-        <p className="font-heading text-xl font-semibold leading-snug text-p2p-text md:text-2xl">
-          Student-led.{" "}
-          <span className="text-p2p-primary">Mission-driven.</span>
-        </p>
-        <p className="mt-3 text-sm leading-[1.7] text-p2p-text-secondary">
-          A social enterprise team using business skills to create a more
-          sustainable campus, one rescued meal at a time.
+        <Link href="https://enactusunsw.org" target="_blank">
+          <Image
+            src={enactus}
+            width={150}
+            height={150}
+            alt="enactus logo"
+            className="mb-6"
+          />
+        </Link>
+        <p className="text-sm leading-[1.7] text-p2p-text-secondary">
+          A student-led social enterprise team using business skills to create a
+          better, more sustainable world on campus.
         </p>
       </div>
     </div>

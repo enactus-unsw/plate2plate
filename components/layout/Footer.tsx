@@ -1,9 +1,10 @@
 import Link from "next/link";
 
 const FOOTER_LINKS = [
+  { label: "Rubric Events", href: "/rubric-events" },
+  { label: "Arc Events", href: "/arc-events" },
   { label: "Find Food", href: "/collect" },
   { label: "Post Surplus Food", href: "/redistribute" },
-  { label: "Arc Events", href: "/arc-events" },
 ] as const;
 
 export function Footer() {
@@ -18,7 +19,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <span className="font-heading text-lg font-semibold text-p2p-surface-warm">
-              Plate2Plate
+              FoodCompass
             </span>
             <p className="mt-1 text-sm text-p2p-text-disabled">Enactus UNSW</p>
           </div>
@@ -40,7 +41,7 @@ export function Footer() {
         {/* Bottom row */}
         <div className="border-t border-white/10 pt-6">
           <p className="text-xs text-p2p-text-disabled">
-            &copy; 2025 Plate2Plate &middot; Enactus UNSW &middot; Built to
+            &copy; 2026 FoodCompass &middot; Enactus UNSW &middot; Built to
             reduce food waste
           </p>
         </div>

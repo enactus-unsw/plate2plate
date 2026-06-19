@@ -9,6 +9,7 @@ import {
 } from "@/lib/validations/listing.schema";
 import { sendEmail } from "@/lib/email/send";
 import { buildDonorConfirmationEmail } from "@/lib/email/templates/donor-confirmation";
+import { notifySubscribers } from "@/lib/email/send-subscriber-notification";
 import type { Listing } from "@/types";
 
 const LISTING_PHOTO_BUCKET = "listing-photos";
@@ -99,10 +100,6 @@ export async function createListing(
     return { data: null, error: parsed.error.issues[0].message };
   }
 
-  if (!photoUrls || photoUrls.length === 0) {
-    return { data: null, error: "Please add at least one photo of the food." };
-  }
-
   const values = parsed.data;
 
   const expiresAt = new Date(values.expires_at).toISOString();
@@ -125,8 +122,8 @@ export async function createListing(
         food_condition: values.food_condition,
         quantity: values.quantity,
         quantity_remaining: values.quantity,
-        photo_url: photoUrls[0],
-        photo_urls: photoUrls,
+        photo_url: photoUrls?.[0] || null,
+        photo_urls: photoUrls || [],
         pickup_location: values.pickup_location,
         perishability,
         allergens: values.allergens,
@@ -163,8 +160,18 @@ export async function createListing(
     );
     sendEmail({
       to: values.contact_email,
-      subject: "Your listing is live on Plate2Plate 🍽️",
+      subject: "Your listing is live on FoodCompass 🍽️",
       html,
+    });
+
+    notifySubscribers({
+      id: data.id as string,
+      title: values.title,
+      description: values.description || null,
+      food_category: values.food_category,
+      quantity: values.quantity,
+      pickup_location: values.pickup_location,
+      expires_at: expiresAt,
     });
 
     return {

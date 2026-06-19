@@ -34,7 +34,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Plate2Plate custom colours */
+  /* FoodCompass custom colours */
   --color-p2p-bg: var(--p2p-bg);
   --color-p2p-surface: var(--p2p-surface);
   --color-p2p-surface-warm: var(--p2p-surface-warm);
@@ -65,7 +65,7 @@
 }
 
 :root {
-  /* Plate2Plate design tokens */
+  /* FoodCompass design tokens */
   --p2p-bg: #f9f8f5;
   --p2p-surface: #ffffff;
   --p2p-surface-warm: #f4f0e8;
@@ -85,7 +85,7 @@
   --p2p-success: #2e5d3e;
   --p2p-overlay: rgba(24, 22, 15, 0.4);
 
-  /* shadcn mapped to Plate2Plate palette */
+  /* shadcn mapped to FoodCompass palette */
   --background: #f9f8f5;
   --foreground: #18160f;
   --card: #ffffff;

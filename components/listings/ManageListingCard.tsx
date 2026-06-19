@@ -80,7 +80,7 @@ export function ManageListingCard({ listing }: ManageListingCardProps) {
   const [closeLoading, setCloseLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const managementUrl = `plate2plate.vercel.app/manage/${listing.management_token}`;
+  const managementUrl = `food-compas.org/manage/${listing.management_token}`;
 
   const statusConfig =
     cardState !== "default"
