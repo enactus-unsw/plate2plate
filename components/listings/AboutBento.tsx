@@ -38,14 +38,15 @@ function PullQuoteCard() {
           — Enactus UNSW, FoodCompass
         </p>
       </div>
-
     </div>
   );
 }
 
 function MissionCard() {
   return (
-    <div className={`${CARD_BASE} relative flex h-full flex-col justify-between overflow-hidden`}>
+    <div
+      className={`${CARD_BASE} relative flex h-full flex-col justify-between overflow-hidden`}
+    >
       <div>
         <div className="mb-5 h-[3px] w-7 rounded-full bg-p2p-primary" />
         <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-p2p-text-secondary">
@@ -56,8 +57,8 @@ function MissionCard() {
           <span className="text-p2p-primary">sustenance</span>.
         </p>
         <p className="mt-4 text-sm leading-[1.7] text-p2p-text-secondary">
-          We connect UNSW societies and clubs with nearby students in real
-          time, so food that would go to waste feeds someone instead.
+          We connect UNSW societies and clubs with nearby students in real time,
+          so food that would go to waste feeds someone instead.
         </p>
       </div>
       <div className="mt-6 inline-flex items-center gap-2 self-start rounded-full bg-p2p-primary-light px-3 py-1.5">
@@ -90,7 +91,9 @@ function StatisticCard() {
         <div className="mt-8">
           <div className="mb-1.5 flex items-center justify-between">
             <span className="text-xs text-p2p-text-secondary">Rescued</span>
-            <span className="text-xs font-medium text-p2p-primary">vs wasted</span>
+            <span className="text-xs font-medium text-p2p-primary">
+              vs wasted
+            </span>
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-p2p-primary-light">
             <motion.div
@@ -98,7 +101,11 @@ function StatisticCard() {
               initial={{ width: 0 }}
               whileInView={{ width: "75%" }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              transition={{
+                duration: 1.2,
+                ease: [0.16, 1, 0.3, 1],
+                delay: 0.2,
+              }}
             />
           </div>
         </div>
@@ -109,7 +116,9 @@ function StatisticCard() {
 
 function EnactusCard() {
   return (
-    <div className={`${CARD_BASE} relative flex h-full flex-col justify-between overflow-hidden`}>
+    <div
+      className={`${CARD_BASE} relative flex h-full flex-col justify-between overflow-hidden`}
+    >
       <Leaf className="pointer-events-none absolute -bottom-4 -right-4 h-40 w-40 text-p2p-primary opacity-[0.06]" />
       <div className="relative">
         <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-p2p-text-secondary">
@@ -154,7 +163,11 @@ export function AboutBento() {
             className="text-xs font-semibold uppercase tracking-[0.16em] text-p2p-primary-mid"
             variants={{
               hidden: { opacity: 0, y: 12 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+              },
             }}
           >
             Enactus UNSW
@@ -189,7 +202,11 @@ export function AboutBento() {
             className="mx-auto mt-4 flex max-w-xs items-center gap-3"
             variants={{
               hidden: { opacity: 0, scaleX: 0.4 },
-              visible: { opacity: 1, scaleX: 1, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+              visible: {
+                opacity: 1,
+                scaleX: 1,
+                transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+              },
             }}
           >
             <div className="h-px flex-1 bg-p2p-border" />
@@ -201,7 +218,11 @@ export function AboutBento() {
             className="mt-4 text-base leading-[1.7] text-p2p-text-secondary"
             variants={{
               hidden: { opacity: 0, y: 10 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+              },
             }}
           >
             The team and mission behind Plate2Plate.
