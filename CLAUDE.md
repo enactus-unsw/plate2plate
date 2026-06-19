@@ -21,16 +21,16 @@ It redistributes untouched surplus food from university events to students befor
 
 ## Tech Stack
 
-| Layer           | Choice                                   |
-| --------------- | ---------------------------------------- |
-| Framework       | Next.js 14+ (App Router, TypeScript)     |
-| Styling         | Tailwind CSS + shadcn/ui                 |
-| Database        | Supabase (PostgreSQL)                    |
-| Background jobs | Supabase pg_cron or Vercel Cron Jobs     |
-| Email           | Brevo (transactional email via REST API) |
-| Deployment      | Vercel                                   |
-| Validation      | Zod                                      |
-| Forms           | React Hook Form + Zod resolver           |
+| Layer           | Choice                               |
+| --------------- | ------------------------------------ |
+| Framework       | Next.js 14+ (App Router, TypeScript) |
+| Styling         | Tailwind CSS + shadcn/ui             |
+| Database        | Supabase (PostgreSQL)                |
+| Background jobs | Supabase pg_cron or Vercel Cron Jobs |
+| Email           | Resend (transactional email)         |
+| Deployment      | Vercel                               |
+| Validation      | Zod                                  |
+| Forms           | React Hook Form + Zod resolver       |
 
 ---
 
@@ -96,7 +96,7 @@ FoodCompass/
 ### Server Actions Over API Routes
 
 - Prefer `'use server'` Server Actions for all mutations (create listing, claim, close listing)
-- Reserve `/api/` routes only for cron job webhooks and external triggers (e.g. Brevo webhook)
+- Reserve `/api/` routes only for cron job webhooks and external triggers
 
 ### Data Immutability — Soft Deletes Only
 
@@ -207,7 +207,7 @@ UNCLAIMED available listing:
     claim_status = 'completed'
     AND completed_at <= now() - interval '12 hours'
     AND feedback_sent = false
-  → Send feedback email via Brevo
+  → Send feedback email via Resend
   → Set feedback_sent = true
 ```
 
@@ -465,7 +465,7 @@ Every clickable/interactive element must define all three:
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=       # server-only, never exposed to client
-BREVO_API_KEY=                   # server-only
+RESEND_API_KEY=                  # server-only
 CRON_SECRET=                     # secret header for cron job routes
 NEXT_PUBLIC_APP_URL=             # e.g. https://FoodCompass.vercel.app
 ```
