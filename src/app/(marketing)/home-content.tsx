@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { PageWrapper } from "@/components/layout/PageWrapper";
 import { HoverButton } from "@/components/ui/hover-button";
+import { Tiles } from "@/components/ui/tiles";
 import { AboutBento } from "@/components/listings/AboutBento";
 import Safari01 from "@/components/ui/safari-01";
 import FlowArt, { FlowSection } from "@/components/ui/story-scroll";
@@ -214,8 +215,19 @@ export default function HomeContent() {
   return (
     <>
       {/* ── 1. Hero ── */}
-      <section className="relative overflow-hidden bg-[--color-bg] py-16 md:py-24">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-primary)_0%,transparent_70%)] opacity-[0.04]" />
+      <section className="relative -mt-24 overflow-hidden bg-[--color-bg] pb-16 pt-40 md:pb-24 md:pt-48">
+        <div
+          className="absolute inset-0 z-0 overflow-hidden opacity-60 [mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_92%)]"
+          aria-hidden="true"
+        >
+          <Tiles
+            rows={40}
+            cols={50}
+            tileSize="md"
+            tileClassName="border-[--color-border-subtle]"
+          />
+        </div>
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,var(--color-primary)_0%,transparent_70%)] opacity-[0.04]" />
 
         <svg
           className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.03]"
@@ -242,23 +254,43 @@ export default function HomeContent() {
                 ease: [0.16, 1, 0.3, 1],
                 delay: 0.1,
               }}
-              className="z-10 mb-10 flex flex-col items-center px-2 lg:absolute lg:inset-x-0 lg:top-[28%] lg:mb-0 lg:px-6"
+              className="absolute inset-x-0 top-[29%] z-10 flex flex-col items-center px-4 sm:top-[20%] lg:top-[28%] lg:px-6"
             >
               <div className="flex flex-col items-center">
-                <div className="mb-4 inline-flex items-center gap-2">
+                <div className="mb-3 hidden items-center gap-2 sm:inline-flex">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-[--color-primary]" />
                   <span className="text-sm font-medium text-white/90 [text-shadow:0_1px_6px_rgba(0,0,0,0.6)]">
                     Live on campus
                   </span>
                 </div>
 
-                <h1 className="heading-tight mx-auto max-w-3xl font-heading text-5xl font-semibold leading-tight tracking-[-0.03em] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.7),0_1px_4px_rgba(0,0,0,0.5)] lg:text-6xl">
+                <h1 className="heading-tight mx-auto max-w-3xl text-center font-heading text-3xl font-semibold leading-tight tracking-[-0.03em] text-white [text-shadow:0_2px_20px_rgba(0,0,0,0.7),0_1px_4px_rgba(0,0,0,0.5)] sm:text-4xl lg:text-5xl xl:text-6xl">
                   {HERO_HEADLINE}
                 </h1>
 
-                <p className="mx-auto mt-4 max-w-xl text-base font-medium leading-[1.7] text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.9),0_1px_4px_rgba(0,0,0,0.7)] lg:text-lg">
+                <p className="mx-auto mt-3 max-w-xl text-center text-sm font-medium leading-[1.7] text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.9),0_1px_4px_rgba(0,0,0,0.7)] sm:text-base lg:text-lg">
                   {HERO_SUB}
                 </p>
+
+                {/* Buttons inside container — desktop only */}
+                <div className="mt-6 hidden items-center justify-center gap-4 lg:flex lg:flex-row">
+                  <HoverButton
+                    variant="primary"
+                    className="px-8 py-3 text-sm"
+                    style={{ backgroundColor: "rgba(255,255,255,0.92)" }}
+                    onClick={() => router.push("/collect")}
+                  >
+                    Find Food
+                  </HoverButton>
+                  <HoverButton
+                    variant="secondary"
+                    className="px-8 py-3 text-sm"
+                    style={{ backgroundColor: "rgba(255,255,255,0.82)" }}
+                    onClick={() => router.push("/redistribute")}
+                  >
+                    Post Surplus Food
+                  </HoverButton>
+                </div>
               </div>
             </motion.div>
 
@@ -275,7 +307,8 @@ export default function HomeContent() {
             />
           </div>
 
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+          {/* Buttons below container — mobile/tablet only */}
+          <div className="mt-6 flex flex-col items-center gap-3 lg:hidden">
             <HoverButton
               variant="primary"
               className="w-full px-8 py-3 text-sm sm:w-auto"
