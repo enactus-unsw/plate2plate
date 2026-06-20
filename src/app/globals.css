@@ -105,6 +105,9 @@
   --input: #e5ddd0;
   --ring: #2e5d3e;
   --radius: 0.75rem;
+
+  /* Tiles hover fill — brand green tint (keeps the interactive grid on-palette) */
+  --tile: #ebf2ec;
 }
 
 /* Surface depth shadow utilities */
