@@ -59,15 +59,6 @@ const STUDENT_STEPS = [
   },
 ] as const;
 
-const PARTNER_SOCIETIES = [
-  "Arc @ UNSW",
-  "CSESoc",
-  "MedSoc",
-  "FinSoc",
-  "EnviroSoc",
-  "Enactus UNSW",
-] as const;
-
 const CTA_HEADLINE = "Have food to give away?";
 const CTA_SUB =
   "Post a listing in under 60 seconds. Students on campus will see it immediately.";
@@ -204,20 +195,9 @@ function PillToggle({
   );
 }
 
-/* ─── Props ─── */
-
-interface ImpactStat {
-  value: string;
-  label: string;
-}
-
-interface HomeContentProps {
-  impactStats: ImpactStat[];
-}
-
 /* ─── Home content ─── */
 
-export default function HomeContent({ impactStats }: HomeContentProps) {
+export default function HomeContent() {
   const router = useRouter();
   const [howMode, setHowMode] = useState<"donors" | "students">("donors");
   const [subscribeOpen, setSubscribeOpen] = useState(false);
@@ -338,7 +318,7 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
           }}
         >
           <section
-            className="relative w-full overflow-hidden py-16 md:py-24 lg:py-32"
+            className="relative w-full overflow-hidden py-16 pb-10 md:py-24 md:pb-14 lg:py-32 lg:pb-16"
             aria-label="How it works"
           >
             <div
@@ -421,34 +401,8 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
         </FlowSection>
       </FlowArt>
 
-      {/* ── 4. Impact Stats ── */}
-      <section
-        id="impact"
-        className="bg-p2p-surface-warm py-16 md:py-24 lg:py-32"
-      >
-        <PageWrapper>
-          <FadeIn>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-8 lg:grid-cols-4">
-              {impactStats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="border-t-2 border-p2p-primary pt-6"
-                >
-                  <p className="heading-tight font-heading text-3xl font-semibold text-p2p-text sm:text-4xl md:text-5xl">
-                    {stat.value}
-                  </p>
-                  <p className="mt-1 text-sm text-p2p-text-secondary">
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
-        </PageWrapper>
-      </section>
-
-      {/* ── 6. Email Notifications ── */}
-      <section className="bg-p2p-surface py-16 md:py-24 lg:py-32">
+      {/* ── 5. Email Notifications ── */}
+      <section className="bg-p2p-surface py-10 pt-10 md:py-14 lg:py-16">
         <PageWrapper>
           <FadeIn className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold tracking-[0.16em] text-[--color-primary-mid]">
@@ -467,27 +421,6 @@ export default function HomeContent({ impactStats }: HomeContentProps) {
             >
               Notify Me
             </button>
-          </FadeIn>
-        </PageWrapper>
-      </section>
-
-      {/* ── 5. Partner Societies ── */}
-      <section className="bg-p2p-surface py-16 md:py-24 lg:py-32">
-        <PageWrapper>
-          <FadeIn className="text-center">
-            <h2 className="text-3xl font-semibold text-p2p-text md:text-4xl">
-              Trusted by UNSW societies
-            </h2>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-              {PARTNER_SOCIETIES.map((name) => (
-                <span
-                  key={name}
-                  className="rounded-full border border-p2p-border bg-p2p-surface px-5 py-2 text-sm font-medium text-p2p-text-secondary"
-                >
-                  {name}
-                </span>
-              ))}
-            </div>
           </FadeIn>
         </PageWrapper>
       </section>
