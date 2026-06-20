@@ -10,7 +10,7 @@ const WEEK_2_EVENTS: ArcEvent[] = [
     title: "Food Hub (Paddington)",
     description:
       "Free pantry staples, fresh produce, and hygiene products for Paddington students.",
-    date: "Tue 9 June 2026",
+    date: "Tue 23 June 2026",
     time: "12:00 PM – 2:00 PM",
     location: "D Block Entrance, Paddington Campus",
     category: "Pantry",
@@ -22,7 +22,7 @@ const WEEK_2_EVENTS: ArcEvent[] = [
     title: "Food Hub (Kensington)",
     description:
       "Free groceries and pantry essentials. Please register on Humanitix before visiting.",
-    date: "Wed 10 June 2026",
+    date: "Mon 22 June 2026",
     time: "2:00 PM – 4:00 PM",
     location: "Gate 2, Kensington Campus",
     category: "Pantry",
@@ -34,7 +34,7 @@ const WEEK_2_EVENTS: ArcEvent[] = [
     title: "Arc Picnic | Arc Savers",
     description:
       "Take a break between classes at the Arc Savers Picnic to unwind with free food, new friends, and a relaxing campus vibe.",
-    date: "Wed 10 June 2026",
+    date: "Wed 14 Jul 2026",
     time: "12:00 PM – 3:00 PM",
     location: "Helen Maguire Lawn, Quadrangle Building (E15)",
     category: "Social Event",
@@ -46,7 +46,7 @@ const WEEK_2_EVENTS: ArcEvent[] = [
     title: "Food Hub (Kensington)",
     description:
       "Weekly pantry session providing free food support to students in need.",
-    date: "Fri 12 June 2026",
+    date: "Fri 14 Jul 2026",
     time: "12:00 PM – 2:00 PM",
     location: "Gate 2, Kensington Campus",
     category: "Pantry",
