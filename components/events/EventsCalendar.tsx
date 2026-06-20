@@ -1,14 +1,11 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { useState, useMemo, useEffect } from "react";
 import {
   ChevronLeft,
   ChevronRight,
   ExternalLink,
   CalendarX,
-  Clock,
-  Users,
 } from "lucide-react";
 import type { RubricEvent } from "@/lib/rubric";
 
@@ -50,109 +47,15 @@ function formatWeekLabel(start: Date, end: Date): string {
 // Sub-components
 // ---------------------------------------------------------------------------
 
-// ── Hover Popover ────────────────────────────────────────────────────────────
-
-interface PopoverState {
-  event: RubricEvent;
-  rect: DOMRect;
-}
-
-function EventPopover({
-  event,
-  rect,
-  onMouseEnter,
-  onMouseLeave,
-}: {
-  event: RubricEvent;
-  rect: DOMRect;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
-}) {
-  const W = 260;
-  const GAP = 10;
-  const showBelow = rect.top < 220;
-  const top = showBelow ? rect.bottom + GAP : rect.top - GAP;
-  const left = Math.max(
-    8,
-    Math.min(
-      rect.left + rect.width / 2 - W / 2,
-      (typeof window !== "undefined" ? window.innerWidth : 1024) - W - 8,
-    ),
-  );
-
-  return createPortal(
-    <div
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      style={{
-        position: "fixed",
-        top,
-        left,
-        transform: showBelow ? undefined : "translateY(-100%)",
-        width: W,
-        zIndex: 9999,
-      }}
-      className="shadow-float animate-in fade-in zoom-in-95 rounded-xl border border-p2p-border bg-p2p-surface p-4 duration-150"
-    >
-      {/* Time + category */}
-      <div className="mb-2.5 flex items-center gap-2">
-        <div className="flex items-center gap-1 text-xs text-p2p-text-secondary">
-          <Clock size={11} />
-          <span className="font-mono">{event.timeStr}</span>
-        </div>
-        {event.category && (
-          <span className="ml-auto rounded-full bg-p2p-primary-light px-2 py-0.5 text-[10px] font-medium text-p2p-primary">
-            {event.category}
-          </span>
-        )}
-      </div>
-
-      {/* Title */}
-      <p className="mb-1.5 text-sm font-semibold leading-snug text-p2p-text">
-        {event.title}
-      </p>
-
-      {/* Society */}
-      <div className="mb-4 flex items-center gap-1.5 text-xs text-p2p-text-secondary">
-        <Users size={11} className="shrink-0" />
-        <span className="line-clamp-1">{event.society}</span>
-      </div>
-
-      <div className="mb-3 h-px bg-p2p-border-subtle" />
-
-      {/* CTA */}
-      <a
-        href={event.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-p2p-primary px-3 py-2 text-xs font-medium text-white transition-[background-color,transform] duration-150 hover:bg-p2p-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98]"
-      >
-        View on Rubric
-        <ExternalLink size={11} />
-      </a>
-    </div>,
-    document.body,
-  );
-}
-
 // ── Event Pill ────────────────────────────────────────────────────────────────
 
-function EventPill({
-  event,
-  onHover,
-  onLeave,
-}: {
-  event: RubricEvent;
-  onHover: (ev: RubricEvent, rect: DOMRect) => void;
-  onLeave: () => void;
-}) {
+function EventPill({ event }: { event: RubricEvent }) {
   return (
-    <div
-      onMouseEnter={(e) =>
-        onHover(event, e.currentTarget.getBoundingClientRect())
-      }
-      onMouseLeave={onLeave}
-      className="group flex cursor-default flex-col gap-0.5 rounded-lg border border-p2p-primary/20 bg-p2p-primary-light p-2.5 transition-[background-color,box-shadow,transform] duration-150 hover:bg-p2p-primary hover:shadow-card-hover"
+    <a
+      href={event.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex flex-col gap-0.5 rounded-lg border border-p2p-primary/20 bg-p2p-primary-light p-2.5 transition-[background-color,box-shadow,transform] duration-150 hover:bg-p2p-primary hover:shadow-card-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-1 active:scale-[0.98]"
     >
       <span className="font-mono text-[10px] font-medium text-p2p-primary-mid group-hover:text-white/70">
         {event.timeStr}
@@ -160,10 +63,11 @@ function EventPill({
       <span className="line-clamp-2 text-xs font-semibold leading-snug text-p2p-text group-hover:text-white">
         {event.title}
       </span>
-      <span className="line-clamp-1 text-[10px] text-p2p-text-secondary group-hover:text-white/80">
-        {event.society}
+      <span className="flex items-center gap-1 line-clamp-1 text-[10px] text-p2p-text-secondary group-hover:text-white/80">
+        <span className="line-clamp-1">{event.society}</span>
+        <ExternalLink size={9} className="ml-auto shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
       </span>
-    </div>
+    </a>
   );
 }
 
@@ -375,8 +279,6 @@ export function EventsCalendar({ events, maxDateStr }: EventsCalendarProps) {
   );
   const [slideDir, setSlideDir] = useState<"left" | "right">("right");
   const [animKey, setAnimKey] = useState(0);
-  const [popover, setPopover] = useState<PopoverState | null>(null);
-  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const weekDays = useMemo(
     () => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)),
@@ -451,20 +353,6 @@ export function EventsCalendar({ events, maxDateStr }: EventsCalendarProps) {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [maxDateStr]);
-
-  // Popover handlers — small delay so mouse can move from pill to popup
-  function showPopover(event: RubricEvent, rect: DOMRect) {
-    if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
-    setPopover({ event, rect });
-  }
-
-  function scheduleHide() {
-    hideTimerRef.current = setTimeout(() => setPopover(null), 120);
-  }
-
-  function cancelHide() {
-    if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
-  }
 
   const animClass =
     slideDir === "right" ? "animate-slide-in-right" : "animate-slide-in-left";
@@ -632,8 +520,6 @@ export function EventsCalendar({ events, maxDateStr }: EventsCalendarProps) {
                       <EventPill
                         key={ev.id + ev.isoDateTime}
                         event={ev}
-                        onHover={showPopover}
-                        onLeave={scheduleHide}
                       />
                     ))
                   )}
@@ -700,20 +586,10 @@ export function EventsCalendar({ events, maxDateStr }: EventsCalendarProps) {
         .
         <span className="hidden sm:inline">
           {" "}
-          Hover any event to preview. Use ← → keys to navigate.
+          Click any event to view it on Rubric. Use ← → keys to navigate.
         </span>
         <span className="sm:hidden"> Tap any event to view it on Rubric.</span>
       </p>
-
-      {/* ── Hover popover (portaled) ────────────────────────────────────── */}
-      {popover && (
-        <EventPopover
-          event={popover.event}
-          rect={popover.rect}
-          onMouseEnter={cancelHide}
-          onMouseLeave={scheduleHide}
-        />
-      )}
     </div>
   );
 }

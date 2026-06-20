@@ -4,7 +4,7 @@ import {
   type ArcEvent,
 } from "@/components/listings/ArcEventCard";
 
-const WEEK_2_EVENTS: ArcEvent[] = [
+const WEEK_EVENTS: ArcEvent[] = [
   {
     id: "foodhub-paddy",
     title: "Food Hub (Paddington)",
@@ -65,12 +65,12 @@ export default function ArcEventsPage() {
         <p className="mt-4 text-base leading-relaxed text-p2p-text-secondary sm:mt-6 sm:text-lg">
           Beyond individual rescue listings, Arc and UNSW run regular food
           programs. Here&apos;s what&apos;s happening in{" "}
-          <span className="font-semibold text-p2p-primary">Week 2</span>.
+          <span className="font-semibold text-p2p-primary">Week 4</span>.
         </p>
       </header>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {WEEK_2_EVENTS.map((event) => (
+        {WEEK_EVENTS.map((event) => (
           <ArcEventCard key={event.id} event={event} />
         ))}
       </div>
