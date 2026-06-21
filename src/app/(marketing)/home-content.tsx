@@ -9,6 +9,7 @@ import { HoverButton } from "@/components/ui/hover-button";
 import { Tiles } from "@/components/ui/tiles";
 import { AboutBento } from "@/components/listings/AboutBento";
 import Safari01 from "@/components/ui/safari-01";
+import IPhoneMockup from "@/components/ui/iphone-mockup";
 import FlowArt, { FlowSection } from "@/components/ui/story-scroll";
 import { SubscribeModal } from "@/components/landing/SubscribeModal";
 
@@ -35,7 +36,7 @@ const DONOR_STEPS = [
     num: "3",
     kicker: "RELAX",
     title: "Students claim and collect",
-    desc: "Students reserve a portion and pick it up at your location. Close anytime with your private link.",
+    desc: "Students reserve a portion and collect it from your location. Afterward, use the link in your email to either confirm the food was successfully picked up or update the listing if there was an issue.",
   },
 ] as const;
 
@@ -127,7 +128,7 @@ function StepRail({
           className="group relative grid grid-cols-[44px_1fr] gap-4"
         >
           <div className="relative flex items-start justify-center">
-            <div className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[--color-border] bg-[--color-surface] shadow-card transition-transform duration-200 ease-out-expo group-hover:-translate-y-0.5">
+            <div className="relative z-10 flex h-9 w-9 items-center justify-center rounded-full border border-p2p-border bg-p2p-surface shadow-card transition-transform duration-200 ease-out-expo group-hover:-translate-y-0.5">
               <span className="text-sm font-semibold text-[--color-primary]">
                 {step.num}
               </span>
@@ -355,11 +356,22 @@ export default function HomeContent() {
             aria-label="How it works"
           >
             <div
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--color-primary)_0%,transparent_62%)] opacity-[0.035]"
+              className="absolute inset-0 z-0 overflow-hidden opacity-60 [mask-image:linear-gradient(to_bottom,transparent_0%,black_15%,black_92%,transparent_100%)]"
+              aria-hidden="true"
+            >
+              <Tiles
+                rows={40}
+                cols={50}
+                tileSize="md"
+                tileClassName="border-[--color-border-subtle]"
+              />
+            </div>
+            <div
+              className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,var(--color-primary)_0%,transparent_62%)] opacity-[0.035]"
               aria-hidden="true"
             />
 
-            <PageWrapper className="relative">
+            <PageWrapper className="relative z-10">
               <FadeIn>
                 <div className="mx-auto max-w-5xl text-center">
                   <p className="text-xs font-semibold tracking-[0.16em] text-[--color-primary-mid]">
@@ -374,20 +386,40 @@ export default function HomeContent() {
                 </div>
 
                 <div className="mt-14 grid items-stretch gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
-                  {/* Left: Reuse exact Safari video container + same hero stock video */}
-                  <div className="relative">
-                    <div className="transition-transform duration-300 ease-out-expo hover:-translate-y-0.5">
-                      <Safari01
-                        className="w-full max-w-none"
-                        url="plate2plate.vercel.app"
-                        videoSrc="https://videos.pexels.com/video-files/7645076/7645076-uhd_2732_1440_24fps.mp4"
-                        objectPosition="center 20%"
-                      />
+                  {/* Left: iPhone mockup with mode-specific demo video inside */}
+                  <div className="relative flex justify-center">
+                    {/* Sizing box reserves the scaled footprint (origin-top-left) */}
+                    <div className="h-[526px] w-[250px] lg:h-[596px] lg:w-[284px]">
+                      <div className="origin-top-left scale-[0.6] transition-transform duration-300 ease-out-expo hover:-translate-y-0.5 lg:scale-[0.78]">
+                        <IPhoneMockup
+                          model="15-pro"
+                          color="black"
+                          safeArea={false}
+                          showHomeIndicator={false}
+                          screenBg="#000"
+                        >
+                          <video
+                            key={howMode}
+                            className="h-full w-full object-cover"
+                            src={
+                              howMode === "donors"
+                                ? "/doner_vid.mp4"
+                                : "/collector_vid.mp4"
+                            }
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            controls
+                            controlsList="nodownload"
+                          />
+                        </IPhoneMockup>
+                      </div>
                     </div>
                   </div>
 
                   {/* Right: Steps */}
-                  <div className="rounded-2xl border border-[--color-border] bg-[--color-surface] p-5 shadow-card md:p-6">
+                  <div className="rounded-2xl border border-p2p-border bg-p2p-surface p-5 shadow-card md:p-6">
                     <div className="flex items-start justify-between gap-6">
                       <div>
                         <p className="text-xs font-semibold tracking-[0.16em] text-[--color-text-secondary]">
