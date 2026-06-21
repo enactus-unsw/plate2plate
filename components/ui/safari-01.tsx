@@ -11,6 +11,8 @@ interface Safari01Props {
   className?: string;
   dimVideo?: boolean;
   objectPosition?: string;
+  controls?: boolean;
+  objectFit?: "cover" | "contain";
 }
 
 const Safari01: React.FC<Safari01Props> = ({
@@ -20,6 +22,8 @@ const Safari01: React.FC<Safari01Props> = ({
   className,
   dimVideo = false,
   objectPosition = "center",
+  controls = false,
+  objectFit = "cover",
 }) => {
   return (
     <div
@@ -52,13 +56,19 @@ const Safari01: React.FC<Safari01Props> = ({
         {videoSrc ? (
           <>
             <video
-              className="absolute inset-0 h-full w-full object-cover"
+              key={videoSrc}
+              className={cn(
+                "absolute inset-0 h-full w-full",
+                objectFit === "contain" ? "object-contain" : "object-cover",
+              )}
               style={{ objectPosition }}
               src={videoSrc}
               autoPlay
               muted
               loop
               playsInline
+              controls={controls}
+              controlsList="nodownload"
             />
             {dimVideo && (
               <div className="pointer-events-none absolute inset-0 bg-black/45" aria-hidden="true" />
