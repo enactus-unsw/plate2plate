@@ -16,7 +16,7 @@ import { SubscribeModal } from "@/components/landing/SubscribeModal";
 
 /* ─── Copy constants ─── */
 
-const HERO_HEADLINE = "Good food. Right place. Right now.";
+const HERO_HEADLINE = "Never miss free food at UNSW";
 const HERO_SUB =
   "Free food from UNSW events, rescued before it goes to waste. Claim yours in seconds.";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface InViewVideoProps {
@@ -11,7 +11,8 @@ interface InViewVideoProps {
 
 /**
  * Native video that autoplays when scrolled into view and pauses when it
- * leaves the viewport. Keeps the browser's native controls (pause/rewind).
+ * leaves the viewport. Native controls (pause/rewind) are enabled only on
+ * larger screens — on mobile they are hidden to avoid iOS's dark control scrim.
  */
 const InViewVideo: React.FC<InViewVideoProps> = ({
   src,
@@ -19,6 +20,15 @@ const InViewVideo: React.FC<InViewVideoProps> = ({
   playbackRate = 1.5,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [showControls, setShowControls] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia("(min-width: 768px)");
+    const update = () => setShowControls(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -47,7 +57,7 @@ const InViewVideo: React.FC<InViewVideoProps> = ({
       muted
       loop
       playsInline
-      controls
+      controls={showControls}
       controlsList="nodownload"
       onLoadedMetadata={(e) => {
         e.currentTarget.playbackRate = playbackRate;
