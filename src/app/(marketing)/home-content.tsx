@@ -10,6 +10,7 @@ import { Tiles } from "@/components/ui/tiles";
 import { AboutBento } from "@/components/listings/AboutBento";
 import Safari01 from "@/components/ui/safari-01";
 import IPhoneMockup from "@/components/ui/iphone-mockup";
+import InViewVideo from "@/components/ui/in-view-video";
 import FlowArt, { FlowSection } from "@/components/ui/story-scroll";
 import { SubscribeModal } from "@/components/landing/SubscribeModal";
 
@@ -360,7 +361,7 @@ export default function HomeContent() {
               aria-hidden="true"
             >
               <Tiles
-                rows={40}
+                rows={64}
                 cols={50}
                 tileSize="md"
                 tileClassName="border-[--color-border-subtle]"
@@ -398,20 +399,14 @@ export default function HomeContent() {
                           showHomeIndicator={false}
                           screenBg="#000"
                         >
-                          <video
+                          <InViewVideo
                             key={howMode}
-                            className="h-full w-full object-cover"
                             src={
                               howMode === "donors"
                                 ? "/doner_vid.mp4"
                                 : "/collector_vid.mp4"
                             }
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            controls
-                            controlsList="nodownload"
+                            playbackRate={1.5}
                           />
                         </IPhoneMockup>
                       </div>
