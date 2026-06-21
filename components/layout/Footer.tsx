@@ -121,7 +121,7 @@ export function Footer() {
         {/* Bottom row */}
         <div className="border-t border-white/10 pt-6">
           <p className="text-xs text-p2p-text-disabled">
-            &copy; 2026 Plate2Plate &middot; Enactus UNSW &middot; Built to
+            &copy; 2026 FoodCompass &middot; Enactus UNSW &middot; Built to
             reduce food waste
           </p>
         </div>

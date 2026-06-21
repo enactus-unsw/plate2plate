@@ -224,7 +224,7 @@ export function AboutBento() {
               },
             }}
           >
-            The team and mission behind Plate2Plate.
+            The team and mission behind FoodCompass.
           </motion.p>
         </motion.div>
 
