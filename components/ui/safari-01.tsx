@@ -71,7 +71,10 @@ const Safari01: React.FC<Safari01Props> = ({
               controlsList="nodownload"
             />
             {dimVideo && (
-              <div className="pointer-events-none absolute inset-0 bg-black/45" aria-hidden="true" />
+              <div
+                className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/70"
+                aria-hidden="true"
+              />
             )}
           </>
         ) : image ? (

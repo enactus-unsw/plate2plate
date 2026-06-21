@@ -119,7 +119,6 @@ function EnactusCard() {
     <div
       className={`${CARD_BASE} relative flex h-full flex-col justify-between overflow-hidden`}
     >
-      <Leaf className="pointer-events-none absolute -bottom-4 -right-4 h-40 w-40 text-p2p-primary opacity-[0.06]" />
       <div className="relative">
         <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-p2p-text-secondary">
           Who Built This
