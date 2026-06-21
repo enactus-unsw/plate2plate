@@ -44,7 +44,6 @@ export async function notifySubscribers(listing: ListingInfo): Promise<void> {
       return;
     }
 
-    const html = buildSubscriberNotificationEmail(listing);
     const fromEmail = "noreply@food-compass.org";
     const fromName = "FoodCompass";
 
@@ -53,7 +52,7 @@ export async function notifySubscribers(listing: ListingInfo): Promise<void> {
         from: `${fromName} <${fromEmail}>`,
         to: [sub.email],
         subject: `New: ${listing.title} — free food on campus`,
-        html,
+        html: buildSubscriberNotificationEmail(listing, sub.email),
       })),
     );
 

@@ -10,9 +10,14 @@ interface SubscriberEmailListing {
 
 export function buildSubscriberNotificationEmail(
   listing: SubscriberEmailListing,
+  recipientEmail?: string,
 ): string {
   const appUrl =
     process.env.NEXT_PUBLIC_APP_URL || "https://FoodCompass.vercel.app";
+
+  const unsubscribeUrl = recipientEmail
+    ? `${appUrl}/unsubscribe?email=${encodeURIComponent(recipientEmail)}`
+    : `${appUrl}/unsubscribe`;
 
   const expiresAt = new Date(listing.expires_at);
   const expiresStr = expiresAt.toLocaleDateString("en-AU", {
@@ -126,7 +131,7 @@ export function buildSubscriberNotificationEmail(
                 <tr>
                   <td style="padding-top:24px;text-align:center;">
                     <p style="font-size:12px;color:#ADA396;margin:0;">FoodCompass &middot; Enactus UNSW &middot; Reducing food waste on campus</p>
-                    <p style="font-size:12px;color:#ADA396;margin:8px 0 0;">You received this because you subscribed to food alerts. <a href="${appUrl}/unsubscribe" style="color:#ADA396;">Unsubscribe</a></p>
+                    <p style="font-size:12px;color:#ADA396;margin:8px 0 0;">You received this because you subscribed to food alerts. <a href="${unsubscribeUrl}" style="color:#ADA396;">Unsubscribe</a></p>
                   </td>
                 </tr>
               </table>
