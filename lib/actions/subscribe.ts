@@ -8,7 +8,7 @@ const emailSchema = z.email("Please enter a valid email address.");
 export async function subscribeToNotifications(
   email: string,
 ): Promise<{ error?: string }> {
-  const parsed = emailSchema.safeParse(email);
+  const parsed = emailSchema.safeParse(email.trim().toLowerCase());
 
   if (!parsed.success) {
     return { error: parsed.error.issues[0].message };
@@ -32,6 +32,35 @@ export async function subscribeToNotifications(
     return {};
   } catch (err) {
     console.error("subscribeToNotifications unexpected error:", err);
+    return { error: "Something went wrong. Please try again." };
+  }
+}
+
+export async function unsubscribeFromNotifications(
+  email: string,
+): Promise<{ error?: string }> {
+  const parsed = emailSchema.safeParse(email.trim().toLowerCase());
+
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0].message };
+  }
+
+  try {
+    const supabase = await createServiceClient();
+
+    const { error } = await supabase
+      .from("subscribers")
+      .delete()
+      .eq("email", parsed.data);
+
+    if (error) {
+      console.error("unsubscribeFromNotifications DB error:", error);
+      return { error: "Something went wrong. Please try again." };
+    }
+
+    return {};
+  } catch (err) {
+    console.error("unsubscribeFromNotifications unexpected error:", err);
     return { error: "Something went wrong. Please try again." };
   }
 }
