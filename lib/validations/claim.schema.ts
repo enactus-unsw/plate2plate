@@ -19,6 +19,9 @@ export const claimFormSchema = z.object({
     .refine((val) => !isNaN(Date.parse(val)), {
       message: "Must be a valid ISO datetime",
     }),
+  accepted_terms: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions before claiming food.",
+  }),
 });
 
 export type ClaimFormValues = z.infer<typeof claimFormSchema>;

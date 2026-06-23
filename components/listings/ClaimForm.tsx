@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, Mail } from "lucide-react";
+import { CheckCircle2, Mail, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -12,6 +12,17 @@ import {
 } from "@/lib/validations/claim.schema";
 import { claimListing } from "@/lib/actions/claims";
 import { useClaimedListings } from "@/hooks/use-claimed-listings";
+import { cn } from "@/lib/utils";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import type { Listing } from "@/types";
 
 interface ClaimFormProps {
@@ -64,6 +75,7 @@ export function ClaimForm({ listing }: ClaimFormProps) {
   const { addClaim } = useClaimedListings();
   const [submitted, setSubmitted] = useState(false);
   const [chosenEta, setChosenEta] = useState<string>("");
+  const [termsOpen, setTermsOpen] = useState(false);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -78,6 +90,8 @@ export function ClaimForm({ listing }: ClaimFormProps) {
   const {
     register,
     handleSubmit,
+    control,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<ClaimFormValues>({
     resolver: zodResolver(claimFormSchema),
@@ -86,8 +100,11 @@ export function ClaimForm({ listing }: ClaimFormProps) {
       student_email: "",
       zid: "",
       student_eta: "",
+      accepted_terms: false,
     },
   });
+
+  const acceptedTerms = watch("accepted_terms");
 
   function scrollToFirstError() {
     requestAnimationFrame(() => {
@@ -311,13 +328,141 @@ export function ClaimForm({ listing }: ClaimFormProps) {
           )}
         </div>
 
+        {/* Recipient Acknowledgement */}
+        <Controller
+          name="accepted_terms"
+          control={control}
+          render={({ field }) => (
+            <AlertDialog open={termsOpen} onOpenChange={setTermsOpen}>
+              <div>
+                <label className="mb-1.5 block text-sm font-medium text-p2p-text">
+                  Recipient Acknowledgement
+                  <RequiredMark />
+                </label>
+                <button
+                  type="button"
+                  className={cn(
+                    "flex w-full items-center justify-between rounded-lg border px-3.5 py-2.5 text-left text-base transition-shadow focus:outline-none focus:ring-2 focus:ring-p2p-primary focus:ring-offset-1 min-h-[44px]",
+                    field.value
+                      ? "border-p2p-primary bg-p2p-primary-light text-p2p-text"
+                      : "border-p2p-border bg-white text-p2p-text-secondary hover:border-p2p-text-disabled",
+                  )}
+                  onClick={() => setTermsOpen(true)}
+                >
+                  <span>
+                    {field.value
+                      ? "Terms accepted"
+                      : "Read and accept terms"}
+                  </span>
+                  <CheckCircle2
+                    size={18}
+                    className={cn(
+                      "shrink-0",
+                      field.value
+                        ? "text-p2p-primary"
+                        : "text-p2p-text-disabled",
+                    )}
+                  />
+                </button>
+                {errors.accepted_terms && (
+                  <p className="mt-1 text-xs text-p2p-red" role="alert">
+                    {errors.accepted_terms.message}
+                  </p>
+                )}
+              </div>
+
+              <AlertDialogContent
+                className="!max-h-[90vh] !max-w-2xl max-sm:!w-[calc(100%-2rem)] overflow-y-auto"
+                initialFocus={false}
+              >
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Recipient Acknowledgement & Food Safety Requirements
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Please read and accept these terms before claiming food.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+
+                <div className="space-y-2 max-sm:px-1 sm:px-2 text-base text-p2p-text-secondary">
+                  <section className="space-y-3 border-b border-p2p-border-subtle max-sm:pb-4 sm:pb-6">
+                    <h4 className="font-heading text-base font-semibold tracking-tight text-p2p-text">
+                      Recipient Acknowledgement
+                    </h4>
+                    <ul className="list-disc space-y-2 pl-5 marker:text-p2p-primary-mid/60 text-sm max-sm:text-xs">
+                      <li>Food may contain allergens or contaminants.</li>
+                      <li>
+                        The platform cannot guarantee the accuracy,
+                        completeness, or reliability of provider information.
+                      </li>
+                      <li>
+                        The platform does not independently verify food safety,
+                        storage conditions, temperature history, allergen
+                        information, ingredient lists, or expiry details.
+                      </li>
+                      <li>
+                        You are responsible for assessing whether food suits
+                        your dietary, medical, religious, ethical, or
+                        allergy-related requirements.
+                      </li>
+                      <li>
+                        You accept all risks associated with consuming food
+                        obtained through the platform.
+                      </li>
+                      <li>
+                        You should not consume food if you have any concerns
+                        about its safety, freshness, preparation, storage,
+                        transport, temperature control, allergen content, or
+                        condition.
+                      </li>
+                    </ul>
+                  </section>
+
+                  <section className="space-y-3 border-b border-p2p-border-subtle max-sm:pb-4 sm:pb-6">
+                    <h4 className="font-heading text-base font-semibold tracking-tight text-p2p-text">
+                      Food Safety Requirements
+                    </h4>
+                    <p className="text-sm max-sm:text-xs">
+                      Users must comply with all applicable food safety laws and
+                      standards, including the Australia New Zealand Food
+                      Standards Code, Food Safety Standard 3.2.2, any applicable
+                      provisions of Food Safety Standard 3.2.2A, the Food Act
+                      2003 (NSW), NSW Food Authority requirements and guidance,
+                      and any other applicable food safety legislation.
+                    </p>
+                  </section>
+                </div>
+
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Not yet</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      field.onChange(true);
+                      setTermsOpen(false);
+                    }}
+                  >
+                    I Agree
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+        />
+
         {/* Submit */}
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !acceptedTerms}
           className="w-full rounded-lg bg-p2p-primary px-4 py-3 text-base font-medium text-white transition-shadow transition-transform hover:bg-p2p-primary-hover focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed min-h-[44px]"
         >
-          {isSubmitting ? "Claiming..." : "Claim this food"}
+          {isSubmitting ? (
+            <>
+              <Loader2 className="size-5 animate-spin mr-2 inline" />
+              Claiming...
+            </>
+          ) : (
+            "Claim this food"
+          )}
         </button>
       </form>
     </div>
