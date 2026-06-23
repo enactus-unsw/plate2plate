@@ -5,6 +5,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { normalizePhotoUrls } from "@/lib/utils/normalize-photo-urls";
 import type { Listing } from "@/types";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
@@ -55,7 +56,11 @@ export function useRealtimeListings(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "listings" },
         (payload) => {
-          const newListing = payload.new as Listing;
+          const raw = payload.new as Listing;
+          const newListing = {
+            ...raw,
+            photo_urls: normalizePhotoUrls(raw.photo_urls, raw.photo_url),
+          } as Listing;
           if (
             newListing.status === "available" ||
             newListing.status === "held"
@@ -69,7 +74,11 @@ export function useRealtimeListings(
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "listings" },
         (payload) => {
-          const updated = payload.new as Listing;
+          const raw = payload.new as Listing;
+          const updated = {
+            ...raw,
+            photo_urls: normalizePhotoUrls(raw.photo_urls, raw.photo_url),
+          } as Listing;
           setListings((prev) => {
             if (updated.status !== "available" && updated.status !== "held") {
               return prev.filter((l) => l.id !== updated.id);

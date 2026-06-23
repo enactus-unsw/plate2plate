@@ -72,9 +72,7 @@ export function UnsubscribeForm({ initialEmail = "" }: UnsubscribeFormProps) {
           disabled={status === "loading"}
         />
 
-        {message ? (
-          <p className="text-sm text-p2p-red">{message}</p>
-        ) : null}
+        {message ? <p className="text-sm text-p2p-red">{message}</p> : null}
 
         <Button
           type="submit"

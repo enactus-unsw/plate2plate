@@ -65,7 +65,10 @@ function EventPill({ event }: { event: RubricEvent }) {
       </span>
       <span className="flex items-center gap-1 line-clamp-1 text-[10px] text-p2p-text-secondary group-hover:text-white/80">
         <span className="line-clamp-1">{event.society}</span>
-        <ExternalLink size={9} className="ml-auto shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
+        <ExternalLink
+          size={9}
+          className="ml-auto shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+        />
       </span>
     </a>
   );
@@ -517,10 +520,7 @@ export function EventsCalendar({ events, maxDateStr }: EventsCalendarProps) {
                     </div>
                   ) : (
                     dayEvents.map((ev) => (
-                      <EventPill
-                        key={ev.id + ev.isoDateTime}
-                        event={ev}
-                      />
+                      <EventPill key={ev.id + ev.isoDateTime} event={ev} />
                     ))
                   )}
                 </div>

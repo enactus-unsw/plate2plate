@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { ListingFeed } from "@/components/listings/ListingFeed";
 import { ListingFeedRealtime } from "@/components/listings/ListingFeedRealtime";
+import { normalizePhotoUrls } from "@/lib/utils/normalize-photo-urls";
 import { CollectFilters } from "./filters";
 import type { Listing } from "@/types";
 
@@ -69,7 +70,11 @@ async function ListingsLoader({
     );
   }
 
-  const listings = (data ?? []) as Listing[];
+  const raw = (data ?? []) as Listing[];
+  const listings = raw.map((l) => ({
+    ...l,
+    photo_urls: normalizePhotoUrls(l.photo_urls, l.photo_url),
+  })) as Listing[];
   return (
     <ListingFeedRealtime
       initialListings={listings}

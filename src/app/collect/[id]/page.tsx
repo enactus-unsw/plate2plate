@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -13,8 +12,10 @@ import { CountdownTimer } from "@/components/shared/CountdownTimer";
 import { AllergenTag } from "@/components/shared/AllergenTag";
 import { DietaryTag } from "@/components/shared/DietaryTag";
 import { ClaimForm } from "@/components/listings/ClaimForm";
+import { PhotoGallery } from "@/components/listings/PhotoGallery";
 import { FOOD_CONDITION_LABELS } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/server";
+import { normalizePhotoUrls } from "@/lib/utils/normalize-photo-urls";
 import type { Listing, FoodCondition } from "@/types";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
@@ -68,7 +69,10 @@ export default async function ListingDetailPage({
     notFound();
   }
 
-  const listing = data as Listing;
+  const listing = {
+    ...data,
+    photo_urls: normalizePhotoUrls(data.photo_urls, data.photo_url),
+  } as Listing;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16 md:py-24 lg:px-8">
@@ -85,17 +89,9 @@ export default async function ListingDetailPage({
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-5 lg:gap-10">
         {/* Left column — detail */}
         <div className="lg:col-span-3">
-          {/* Photo */}
-          <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-xl">
-            <Image
-              src={listing.photo_url || "/placeholder-food.png"}
-              alt={listing.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 60vw"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+          {/* Photo gallery */}
+          <div className="mb-6">
+            <PhotoGallery images={listing.photo_urls} title={listing.title} />
           </div>
 
           {/* Title */}

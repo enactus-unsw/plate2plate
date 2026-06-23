@@ -34,6 +34,13 @@ export function ListingCard({ listing }: ListingCardProps) {
               Fully Reserved
             </div>
           )}
+
+          {Array.isArray(listing.photo_urls) &&
+            listing.photo_urls.length > 1 && (
+              <div className="absolute bottom-3 right-3 rounded-full bg-black/50 px-2 py-0.5 text-xs font-medium text-white">
+                {listing.photo_urls.length} photos
+              </div>
+            )}
         </div>
 
         {/* Body */}
