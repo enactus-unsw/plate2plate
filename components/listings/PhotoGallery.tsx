@@ -50,7 +50,7 @@ export function PhotoGallery({ images, title }: PhotoGalleryProps) {
               onClick={() => setSelectedIndex(safeIndex - 1)}
               disabled={safeIndex === 0}
               aria-label="Previous photo"
-              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-1.5 text-white opacity-0 transition-opacity hover:bg-black/60 focus-visible:opacity-100 group-hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-0"
+              className="absolute left-3 cursor-pointer top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-1.5 text-white opacity-0 transition-opacity hover:bg-black/60 focus-visible:opacity-100 group-hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-0"
             >
               <ChevronLeft size={20} />
             </button>
@@ -58,7 +58,7 @@ export function PhotoGallery({ images, title }: PhotoGalleryProps) {
               onClick={() => setSelectedIndex(safeIndex + 1)}
               disabled={safeIndex === normalized.length - 1}
               aria-label="Next photo"
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-1.5 text-white opacity-0 transition-opacity hover:bg-black/60 focus-visible:opacity-100 group-hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-0"
+              className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-1.5 text-white opacity-0 transition-opacity hover:bg-black/60 focus-visible:opacity-100 group-hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-0"
             >
               <ChevronRight size={20} />
             </button>
