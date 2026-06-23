@@ -350,9 +350,7 @@ export function ClaimForm({ listing }: ClaimFormProps) {
                   onClick={() => setTermsOpen(true)}
                 >
                   <span>
-                    {field.value
-                      ? "Terms accepted"
-                      : "Read and accept terms"}
+                    {field.value ? "Terms accepted" : "Read and accept terms"}
                   </span>
                   <CheckCircle2
                     size={18}
