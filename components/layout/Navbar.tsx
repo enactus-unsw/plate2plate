@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import {
   Sheet,
@@ -10,6 +10,7 @@ import {
   SheetContent,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 import { HoverButton } from "@/components/ui/hover-button";
 
 const linkFocusClasses =
@@ -17,7 +18,19 @@ const linkFocusClasses =
 
 export function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  function isActive(path: string): boolean {
+    if (path === "/" || path === "/#about") return pathname === "/";
+    return pathname.startsWith(path);
+  }
+
+  const linkActiveClasses = "bg-p2p-primary-light text-p2p-text";
+  const linkInactiveClasses =
+    "text-p2p-text-secondary hover:bg-p2p-primary-light hover:text-p2p-text";
+  const linkBaseClasses =
+    "rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-150 active:scale-[0.98]";
 
   return (
     <header className="sticky top-4 z-50 px-4 sm:px-6">
@@ -50,21 +63,21 @@ export function Navbar() {
         <div className="hidden items-center gap-4 md:flex">
           <Link
             href="/#about"
-            className={`rounded-full px-3 py-1.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
+            className={`${linkBaseClasses} ${isActive("/") ? linkActiveClasses : linkInactiveClasses} ${linkFocusClasses}`}
           >
             About
           </Link>
 
           <Link
             href="/rubric-events"
-            className={`rounded-full px-3 py-1.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
+            className={`${linkBaseClasses} ${isActive("/rubric-events") ? linkActiveClasses : linkInactiveClasses} ${linkFocusClasses}`}
           >
             Rubric Events
           </Link>
 
           <Link
             href="/arc-events"
-            className={`rounded-full px-3 py-1.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
+            className={`${linkBaseClasses} ${isActive("/arc-events") ? linkActiveClasses : linkInactiveClasses} ${linkFocusClasses}`}
           >
             Arc Events
           </Link>
@@ -72,13 +85,19 @@ export function Navbar() {
           <div className="mx-2 h-5 w-px bg-p2p-border-subtle" />
 
           <HoverButton
-            variant="primary"
+            variant={isActive("/collect") ? "primary" : "secondary"}
+            className={cn(
+              isActive("/collect") && "ring-2 ring-p2p-primary ring-inset",
+            )}
             onClick={() => router.push("/collect")}
           >
             Find Food
           </HoverButton>
           <HoverButton
-            variant="secondary"
+            variant={isActive("/redistribute") ? "primary" : "secondary"}
+            className={cn(
+              isActive("/redistribute") && "ring-2 ring-p2p-primary ring-inset",
+            )}
             onClick={() => router.push("/redistribute")}
           >
             Post Surplus Food
@@ -111,7 +130,7 @@ export function Navbar() {
                 <Link
                   href="/#about"
                   onClick={() => setMobileOpen(false)}
-                  className={`rounded-lg px-3 py-2.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
+                  className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150 active:scale-[0.98] ${isActive("/") ? "bg-p2p-primary-light text-p2p-text" : "text-p2p-text-secondary hover:bg-p2p-primary-light hover:text-p2p-text"} ${linkFocusClasses}`}
                 >
                   About
                 </Link>
@@ -119,7 +138,7 @@ export function Navbar() {
                 <Link
                   href="/rubric-events"
                   onClick={() => setMobileOpen(false)}
-                  className={`rounded-lg px-3 py-2.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
+                  className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150 active:scale-[0.98] ${isActive("/rubric-events") ? "bg-p2p-primary-light text-p2p-text" : "text-p2p-text-secondary hover:bg-p2p-primary-light hover:text-p2p-text"} ${linkFocusClasses}`}
                 >
                   Rubric Events
                 </Link>
@@ -127,7 +146,7 @@ export function Navbar() {
                 <Link
                   href="/arc-events"
                   onClick={() => setMobileOpen(false)}
-                  className={`rounded-lg px-3 py-2.5 text-sm font-medium text-p2p-text-secondary transition-colors duration-150 hover:bg-p2p-primary-light hover:text-p2p-text active:scale-[0.98] ${linkFocusClasses}`}
+                  className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150 active:scale-[0.98] ${isActive("/arc-events") ? "bg-p2p-primary-light text-p2p-text" : "text-p2p-text-secondary hover:bg-p2p-primary-light hover:text-p2p-text"} ${linkFocusClasses}`}
                 >
                   Arc Events
                 </Link>
@@ -135,7 +154,7 @@ export function Navbar() {
                 <Link
                   href="/collect"
                   onClick={() => setMobileOpen(false)}
-                  className={`rounded-lg bg-p2p-primary px-3 py-2.5 text-sm font-medium text-white transition-[background-color,transform] duration-150 hover:bg-p2p-primary-hover active:scale-[0.98] ${linkFocusClasses}`}
+                  className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150 active:scale-[0.98] ${isActive("/collect") ? "bg-p2p-primary text-white ring-2 ring-white/50 ring-inset" : "bg-p2p-primary text-white hover:bg-p2p-primary-hover"} ${linkFocusClasses}`}
                 >
                   Find Food
                 </Link>
@@ -143,7 +162,7 @@ export function Navbar() {
                 <Link
                   href="/redistribute"
                   onClick={() => setMobileOpen(false)}
-                  className={`rounded-lg border border-p2p-border bg-p2p-surface-warm px-3 py-2.5 text-sm font-medium text-p2p-text transition-[background-color,transform] duration-150 hover:bg-p2p-primary-light active:scale-[0.98] ${linkFocusClasses}`}
+                  className={`rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors duration-150 active:scale-[0.98] ${isActive("/redistribute") ? "border-p2p-primary bg-p2p-primary-light text-p2p-text" : "border-p2p-border bg-p2p-surface-warm text-p2p-text hover:bg-p2p-primary-light"} ${linkFocusClasses}`}
                 >
                   Post Surplus Food
                 </Link>
