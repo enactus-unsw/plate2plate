@@ -354,7 +354,11 @@ export function DonorForm() {
                     className="mt-1.5 w-full bg-p2p-surface"
                     aria-invalid={!!errors.food_condition}
                   >
-                    <SelectValue placeholder="Select condition" />
+                    <SelectValue placeholder="Select condition">
+                      {field.value
+                        ? FOOD_CONDITION_LABELS[field.value as FoodCondition]
+                        : "Select condition"}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {FOOD_CONDITIONS.map((cond) => (
