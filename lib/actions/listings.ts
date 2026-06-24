@@ -130,6 +130,7 @@ export async function createListing(
         dietary_tags: values.dietary_tags,
         contact_email: values.contact_email,
         contact_phone: values.contact_phone || null,
+        contact_name: values.contact_name,
         zid: values.zid,
         notes: values.notes || null,
         served_at: values.served_at || null,

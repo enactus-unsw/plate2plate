@@ -141,6 +141,7 @@ CREATE TABLE listings (
   allergens       TEXT[] DEFAULT '{}',
   dietary_tags    TEXT[] DEFAULT '{}',
   notes           TEXT,
+  contact_name    TEXT NOT NULL,
   contact_email   TEXT NOT NULL,
   contact_phone   TEXT,
   zid             TEXT NOT NULL,

@@ -39,6 +39,10 @@ export const listingSchema = z.object({
   // Free-text allowed so donors can add allergens/tags not in the preset list.
   allergens: z.array(z.string().trim().min(1)).optional().default([]),
   dietary_tags: z.array(z.string().trim().min(1)).optional().default([]),
+  contact_name: z
+    .string()
+    .min(1, "Name is required")
+    .max(100, "Name must be 100 characters or fewer"),
   contact_email: z
     .string()
     .min(1, "Email is required")

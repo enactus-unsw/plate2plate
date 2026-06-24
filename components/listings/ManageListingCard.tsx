@@ -11,6 +11,7 @@ import {
   XCircle,
   Loader2,
   AlertTriangle,
+  User,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -255,6 +256,10 @@ export function ManageListingCard({ listing }: ManageListingCardProps) {
         <p className="mb-1.5 text-xs font-medium uppercase tracking-wide text-p2p-text-secondary">
           Contact
         </p>
+        <div className="flex items-center gap-2 text-sm text-p2p-text">
+          <User size={14} className="shrink-0 text-p2p-text-secondary" />
+          <span>{listing.contact_name}</span>
+        </div>
         <div className="flex items-center gap-2 text-sm text-p2p-text">
           <Mail size={14} className="shrink-0 text-p2p-text-secondary" />
           <span>{listing.contact_email}</span>

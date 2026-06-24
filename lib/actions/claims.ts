@@ -87,7 +87,7 @@ export async function claimListing(
     const { data: fullListing } = await supabase
       .from("listings")
       .select(
-        "id, title, food_category, pickup_location, expires_at, contact_email, contact_phone, management_token",
+        "id, title, food_category, pickup_location, expires_at, contact_name, contact_email, contact_phone, management_token",
       )
       .eq("id", listingId)
       .single();
@@ -100,6 +100,7 @@ export async function claimListing(
           food_category: fullListing.food_category,
           pickup_location: fullListing.pickup_location,
           expires_at: fullListing.expires_at,
+          contact_name: fullListing.contact_name,
           contact_email: fullListing.contact_email,
           contact_phone: fullListing.contact_phone,
         },

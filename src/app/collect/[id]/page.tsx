@@ -7,6 +7,7 @@ import {
   Clock,
   Mail,
   Phone,
+  User,
 } from "lucide-react";
 import { CountdownTimer } from "@/components/shared/CountdownTimer";
 import { AllergenTag } from "@/components/shared/AllergenTag";
@@ -44,10 +45,6 @@ function formatExpiryDate(iso: string): string {
   const period = hours >= 12 ? "PM" : "AM";
   const h12 = hours % 12 || 12;
   return `${h12}:${mins} ${period} — ${day}, ${date} ${month}`;
-}
-
-function getDonorName(email: string): string {
-  return email.split("@")[0];
 }
 
 export default async function ListingDetailPage({
@@ -103,7 +100,7 @@ export default async function ListingDetailPage({
           <p className="mb-4 text-sm text-p2p-text-secondary">
             Posted by{" "}
             <span className="font-medium text-p2p-text">
-              {getDonorName(listing.contact_email)}
+              {listing.contact_name}
             </span>
           </p>
 
@@ -232,6 +229,10 @@ export default async function ListingDetailPage({
                     Contact the donor
                   </p>
                   <div className="space-y-1.5">
+                    <p className="flex items-center gap-2 text-sm text-p2p-text">
+                      <User size={14} className="shrink-0 text-p2p-primary" />
+                      {listing.contact_name}
+                    </p>
                     <a
                       href={`mailto:${listing.contact_email}`}
                       className="flex items-center gap-2 text-sm text-p2p-primary transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-p2p-primary focus-visible:ring-offset-2"

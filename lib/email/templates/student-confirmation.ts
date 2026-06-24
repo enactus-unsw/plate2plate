@@ -4,6 +4,7 @@ interface StudentEmailListing {
   food_category: string;
   pickup_location: string;
   expires_at: string;
+  contact_name: string;
   contact_email: string;
   contact_phone?: string | null;
 }
@@ -46,6 +47,10 @@ export function buildStudentConfirmationEmail(
 
   const contactSection = listing.contact_phone
     ? `<tr>
+                        <td style="padding:4px 0;font-size:14px;color:#6B6254;vertical-align:top;">Donor</td>
+                        <td style="padding:4px 0;font-size:14px;color:#18160F;font-weight:600;">${listing.contact_name}</td>
+                      </tr>
+                      <tr>
                         <td style="padding:4px 0;font-size:14px;color:#6B6254;vertical-align:top;">Email</td>
                         <td style="padding:4px 0;font-size:14px;"><a href="mailto:${listing.contact_email}" style="color:#2E5D3E;text-decoration:none;">${listing.contact_email}</a></td>
                       </tr>
@@ -54,6 +59,10 @@ export function buildStudentConfirmationEmail(
                         <td style="padding:4px 0;font-size:14px;color:#18160F;">${listing.contact_phone}</td>
                       </tr>`
     : `<tr>
+                        <td style="padding:4px 0;font-size:14px;color:#6B6254;vertical-align:top;">Donor</td>
+                        <td style="padding:4px 0;font-size:14px;color:#18160F;font-weight:600;">${listing.contact_name}</td>
+                      </tr>
+                      <tr>
                         <td style="padding:4px 0;font-size:14px;color:#6B6254;vertical-align:top;">Email</td>
                         <td style="padding:4px 0;font-size:14px;"><a href="mailto:${listing.contact_email}" style="color:#2E5D3E;text-decoration:none;">${listing.contact_email}</a></td>
                       </tr>`;

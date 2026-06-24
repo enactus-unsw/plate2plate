@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, Mail, Loader2, Clock } from "lucide-react";
+import { CheckCircle2, Mail, Loader2, Clock, User } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -169,6 +169,10 @@ export function ClaimForm({ listing }: ClaimFormProps) {
             </p>
           )}
           <div className="w-full rounded-lg bg-p2p-surface-warm p-3">
+            <p className="flex items-center justify-center gap-2 text-sm text-p2p-text-secondary">
+              <User size={14} />
+              {listing.contact_name}
+            </p>
             <p className="flex items-center justify-center gap-2 text-sm text-p2p-text-secondary">
               <Mail size={14} />
               Need to reach them?{" "}

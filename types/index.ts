@@ -26,6 +26,7 @@ export interface Listing {
   allergens: string[];
   dietary_tags: string[];
   notes: string | null;
+  contact_name: string;
   contact_email: string;
   contact_phone: string | null;
   zid: string;

@@ -213,6 +213,7 @@ export function DonorForm() {
       dietary_tags: [],
       contact_email: "",
       contact_phone: "",
+      contact_name: "",
       zid: "",
       notes: "",
       safety_confirmed: false,
@@ -502,6 +503,21 @@ export function DonorForm() {
 
       {/* Section 4 — Your contact details */}
       <SectionCard title="Your contact details">
+        <div>
+          <Label htmlFor="contact_name">
+            Name
+            <RequiredMark />
+          </Label>
+          <Input
+            id="contact_name"
+            placeholder="e.g. CSESoc"
+            className="mt-1.5 bg-p2p-surface"
+            aria-invalid={!!errors.contact_name}
+            {...register("contact_name")}
+          />
+          <FieldError message={errors.contact_name?.message} />
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="contact_email">
@@ -888,6 +904,7 @@ export function DonorForm() {
           errors.quantity ||
           errors.pickup_location ||
           errors.expires_at ||
+          errors.contact_name ||
           errors.contact_email ||
           errors.zid ||
           errors.safety_confirmed ||
