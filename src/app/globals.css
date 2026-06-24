@@ -76,7 +76,7 @@
   --p2p-text-secondary: #6b6254;
   --p2p-text-disabled: #ada396;
   --p2p-primary: #2e5d3e;
-  --p2p-primary-active: #d0ecd4;
+  --p2p-primary-active: rgb(172, 194, 177);
   --p2p-primary-hover: #245031;
   --p2p-primary-light: #ebf2ec;
   --p2p-primary-mid: #4a7c5c;
