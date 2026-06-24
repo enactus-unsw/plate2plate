@@ -30,7 +30,7 @@ const variantStyles: Record<
   },
   secondary: {
     className: "text-p2p-text backdrop-blur-lg",
-    bg: "rgba(255,255,255,0.55)",
+    bg: "rgba(235,242,236)",
     circleStart: "var(--p2p-border)",
     circleEnd: "var(--p2p-primary-light)",
     insetShadow:
