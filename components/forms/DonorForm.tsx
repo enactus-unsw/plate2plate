@@ -180,6 +180,7 @@ export function DonorForm() {
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [termsOpen, setTermsOpen] = useState(false);
+  const [triedSubmit, setTriedSubmit] = useState(false);
 
   useEffect(() => {
     if (termsOpen) {
@@ -197,7 +198,7 @@ export function DonorForm() {
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, submitCount },
   } = useForm({
     resolver: zodResolver(listingSchema),
     defaultValues: {
@@ -224,6 +225,7 @@ export function DonorForm() {
   });
 
   function scrollToFirstError() {
+    setTriedSubmit(true);
     requestAnimationFrame(() => {
       const el = document.querySelector('[aria-invalid="true"]');
       el?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -234,6 +236,12 @@ export function DonorForm() {
     setServerError(null);
 
     setPhotoError(null);
+
+    if (photos.length === 0) {
+      setPhotoError("Please upload at least 1 photo.");
+      setTriedSubmit(true);
+      return;
+    }
 
     let photoUrls: string[] = [];
 
@@ -392,7 +400,7 @@ export function DonorForm() {
 
         <div id="photos-field">
           <Label>
-            Photos
+            Photo(s)
             <RequiredMark />
           </Label>
           <PhotoUpload
@@ -854,7 +862,7 @@ export function DonorForm() {
       <Button
         type="submit"
         size="lg"
-        disabled={isSubmitting || !safetyConfirmed}
+        disabled={isSubmitting}
         className={cn(
           "w-full h-12 text-base font-semibold",
           "bg-p2p-primary text-white hover:bg-p2p-primary-hover",
@@ -872,6 +880,22 @@ export function DonorForm() {
           "Post Food Listing"
         )}
       </Button>
+
+      {triedSubmit &&
+        (errors.title ||
+          errors.food_category ||
+          errors.food_condition ||
+          errors.quantity ||
+          errors.pickup_location ||
+          errors.expires_at ||
+          errors.contact_email ||
+          errors.zid ||
+          errors.safety_confirmed ||
+          photoError) && (
+          <p className="text-center text-sm text-p2p-red">
+            Please fill in all required fields above.
+          </p>
+        )}
 
       {serverError && (
         <div className="rounded-lg bg-p2p-red-light p-4">
