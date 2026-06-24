@@ -135,6 +135,16 @@ export default async function ListingDetailPage({
             <span>{listing.pickup_location}</span>
           </div>
 
+          {/* Additional notes */}
+          {listing.notes && (
+            <div className="mb-5">
+              <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-p2p-text-secondary">
+                Additional notes
+              </h3>
+              <p className="text-sm text-p2p-text">{listing.notes}</p>
+            </div>
+          )}
+
           {/* Allergens section */}
           <div className="mb-5">
             <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-p2p-text-secondary">
