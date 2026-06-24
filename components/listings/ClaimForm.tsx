@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, Mail, Loader2 } from "lucide-react";
+import { CheckCircle2, Mail, Loader2, Clock } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -29,38 +29,15 @@ interface ClaimFormProps {
   listing: Listing;
 }
 
-interface EtaOption {
-  value: string;
-  label: string;
+function toHHMM(date: Date): string {
+  return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
 }
 
-function generateEtaOptions(listing: Listing): EtaOption[] {
-  const now = Date.now();
-  const expiresAt = new Date(listing.expires_at).getTime();
-
-  const intervals =
-    listing.perishability === "<30 mins"
-      ? [5, 10, 15, 20, 25]
-      : [15, 30, 45, 60, 90, 120];
-
-  return intervals
-    .filter((mins) => now + mins * 60000 <= expiresAt)
-    .map((mins) => {
-      const arrivalTime = new Date(now + mins * 60000);
-      const timeStr = arrivalTime.toLocaleTimeString([], {
-        hour: "numeric",
-        minute: "2-digit",
-      });
-      const label =
-        mins >= 60
-          ? `${mins / 60} hr${mins > 60 ? "s" : ""} (arrives ~${timeStr})`
-          : `${mins} minutes (arrives ~${timeStr})`;
-
-      return {
-        value: new Date(now + mins * 60000).toISOString(),
-        label,
-      };
-    });
+function formatTime(iso: string): string {
+  return new Date(iso).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+  });
 }
 
 function RequiredMark() {
@@ -81,17 +58,24 @@ export function ClaimForm({ listing }: ClaimFormProps) {
   useEffect(() => {
     setMounted(true);
   }, []);
-  const etaOptions = useMemo(
-    () => (mounted ? generateEtaOptions(listing) : []),
-    [listing, mounted],
-  );
   const fullyReserved = listing.quantity_remaining <= 0;
+
+  const expiresAtDate = useMemo(
+    () => new Date(listing.expires_at),
+    [listing.expires_at],
+  );
+
+  const now = useMemo(() => (mounted ? new Date() : new Date(0)), [mounted]);
+  const minTime = mounted ? toHHMM(now) : undefined;
+  const maxTime = mounted ? toHHMM(expiresAtDate) : undefined;
+  const noValidTimes = mounted && minTime && maxTime && minTime >= maxTime;
 
   const {
     register,
     handleSubmit,
     control,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ClaimFormValues>({
     resolver: zodResolver(claimFormSchema),
@@ -105,6 +89,21 @@ export function ClaimForm({ listing }: ClaimFormProps) {
   });
 
   const acceptedTerms = watch("accepted_terms");
+
+  const handleTimeChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const timeValue = e.target.value;
+      if (timeValue) {
+        const [hours, minutes] = timeValue.split(":").map(Number);
+        const selectedDate = new Date();
+        selectedDate.setHours(hours, minutes, 0, 0);
+        setValue("student_eta", selectedDate.toISOString());
+      } else {
+        setValue("student_eta", "");
+      }
+    },
+    [setValue],
+  );
 
   function scrollToFirstError() {
     requestAnimationFrame(() => {
@@ -302,25 +301,37 @@ export function ClaimForm({ listing }: ClaimFormProps) {
         {/* ETA */}
         <div>
           <label
-            htmlFor="student_eta"
+            htmlFor="student_eta_time"
             className="mb-1.5 block text-sm font-medium text-p2p-text"
           >
             Estimated arrival time
             <RequiredMark />
           </label>
-          <select
-            id="student_eta"
-            className="w-full rounded-lg border border-p2p-border bg-white px-3.5 py-2.5 text-base text-p2p-text transition-shadow focus:outline-none focus:ring-2 focus:ring-p2p-primary focus:ring-offset-1 min-h-[44px]"
-            aria-invalid={!!errors.student_eta}
-            {...register("student_eta")}
-          >
-            <option value="">Select your ETA</option>
-            {etaOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          {mounted && !noValidTimes && (
+            <p className="mb-2 flex items-center gap-1.5 text-xs text-p2p-text-secondary">
+              <Clock size={12} className="shrink-0" />
+              Pickup by{" "}
+              <span className="font-medium text-p2p-text">
+                {formatTime(listing.expires_at)}
+              </span>
+            </p>
+          )}
+          {noValidTimes ? (
+            <p className="text-xs text-p2p-red">
+              This listing has already expired — no pickup times available.
+            </p>
+          ) : (
+            <input
+              id="student_eta_time"
+              type="time"
+              min={minTime}
+              max={maxTime}
+              step={60}
+              className="w-full rounded-lg border border-p2p-border bg-white px-3.5 py-2.5 text-base text-p2p-text transition-shadow focus:outline-none focus:ring-2 focus:ring-p2p-primary focus:ring-offset-1 min-h-[44px]"
+              aria-invalid={!!errors.student_eta}
+              onChange={handleTimeChange}
+            />
+          )}
           {errors.student_eta && (
             <p className="mt-1 text-xs text-p2p-red" role="alert">
               {errors.student_eta.message}
