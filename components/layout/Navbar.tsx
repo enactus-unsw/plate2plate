@@ -26,7 +26,7 @@ export function Navbar() {
     return pathname.startsWith(path);
   }
 
-  const linkActiveClasses = "bg-p2p-primary-light text-p2p-text";
+  const linkActiveClasses = "bg-p2p-primary-active text-p2p-text";
   const linkInactiveClasses =
     "text-p2p-text-secondary hover:bg-p2p-primary-light hover:text-p2p-text";
   const linkBaseClasses =

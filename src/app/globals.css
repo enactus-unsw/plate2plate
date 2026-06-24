@@ -44,6 +44,7 @@
   --color-p2p-text-secondary: var(--p2p-text-secondary);
   --color-p2p-text-disabled: var(--p2p-text-disabled);
   --color-p2p-primary: var(--p2p-primary);
+  --color-p2p-primary-active: var(--p2p-primary-active);
   --color-p2p-primary-hover: var(--p2p-primary-hover);
   --color-p2p-primary-light: var(--p2p-primary-light);
   --color-p2p-primary-mid: var(--p2p-primary-mid);
@@ -75,6 +76,7 @@
   --p2p-text-secondary: #6b6254;
   --p2p-text-disabled: #ada396;
   --p2p-primary: #2e5d3e;
+  --p2p-primary-active: #d0ecd4;
   --p2p-primary-hover: #245031;
   --p2p-primary-light: #ebf2ec;
   --p2p-primary-mid: #4a7c5c;
