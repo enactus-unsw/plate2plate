@@ -68,7 +68,7 @@ export function ClaimForm({ listing }: ClaimFormProps) {
   const now = useMemo(() => (mounted ? new Date() : new Date(0)), [mounted]);
   const minTime = mounted ? toHHMM(now) : undefined;
   const maxTime = mounted ? toHHMM(expiresAtDate) : undefined;
-  const noValidTimes = mounted && minTime && maxTime && minTime >= maxTime;
+  const noValidTimes = mounted && now.getTime() >= expiresAtDate.getTime();
 
   const {
     register,
