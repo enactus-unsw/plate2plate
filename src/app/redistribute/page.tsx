@@ -7,7 +7,7 @@ export default function RedistributePage() {
       <div className="max-w-2xl mx-auto">
         <div className="mb-8 md:mb-12">
           <h1 className="text-3xl md:text-4xl heading-tight text-p2p-text">
-            Post Surplus Food
+            Post Food
           </h1>
           <p className="text-base text-p2p-text-secondary mt-3 body-relaxed">
             Got food left over from your event? Post it here and students can

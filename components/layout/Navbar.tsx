@@ -100,7 +100,7 @@ export function Navbar() {
             )}
             onClick={() => router.push("/redistribute")}
           >
-            Post Surplus Food
+            Post Food
           </HoverButton>
         </div>
 
@@ -164,7 +164,7 @@ export function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className={`rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors duration-150 active:scale-[0.98] ${isActive("/redistribute") ? "border-p2p-primary bg-p2p-primary-light text-p2p-text" : "border-p2p-border bg-p2p-surface-warm text-p2p-text hover:bg-p2p-primary-light"} ${linkFocusClasses}`}
                 >
-                  Post Surplus Food
+                  Post Food
                 </Link>
               </nav>
             </SheetContent>

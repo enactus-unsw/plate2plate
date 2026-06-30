@@ -4,7 +4,7 @@ const FOOTER_LINKS = [
   { label: "Rubric Events", href: "/rubric-events" },
   { label: "Arc Events", href: "/arc-events" },
   { label: "Find Food", href: "/collect" },
-  { label: "Post Surplus Food", href: "/redistribute" },
+  { label: "Post Food", href: "/redistribute" },
 ] as const;
 
 function InstagramIcon({ className }: { className?: string }) {

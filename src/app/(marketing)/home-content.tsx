@@ -209,7 +209,7 @@ export default function HomeContent() {
     howMode === "donors" ? "For societies & clubs" : "For students";
   const howLead =
     howMode === "donors"
-      ? "Post surplus food, students do the rest."
+      ? "Post food, students do the rest."
       : "Find free food fast, claim it before it’s gone.";
 
   const howSteps = howMode === "donors" ? DONOR_STEPS : STUDENT_STEPS;
@@ -290,7 +290,7 @@ export default function HomeContent() {
                     style={{ backgroundColor: "rgba(255,255,255,0.82)" }}
                     onClick={() => router.push("/redistribute")}
                   >
-                    Post Surplus Food
+                    Post Food
                   </HoverButton>
                 </div>
               </div>
@@ -323,7 +323,7 @@ export default function HomeContent() {
               className="w-full px-8 py-3 text-sm sm:w-auto"
               onClick={() => router.push("/redistribute")}
             >
-              Post Surplus Food
+              Post Food
             </HoverButton>
           </div>
         </PageWrapper>
@@ -450,7 +450,7 @@ export default function HomeContent() {
                         className="w-full px-5 py-2.5 text-sm sm:w-auto"
                         onClick={() => router.push("/redistribute")}
                       >
-                        Post Surplus Food
+                        Post Food
                       </HoverButton>
                     </div>
                   </div>
@@ -499,7 +499,7 @@ export default function HomeContent() {
               href="/redistribute"
               className="mt-8 inline-flex h-12 items-center rounded-xl border-2 border-p2p-surface-warm bg-transparent px-8 text-base font-medium text-p2p-surface-warm transition-[background-color,transform] duration-150 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-p2p-surface-warm focus-visible:ring-offset-2 focus-visible:ring-offset-p2p-primary active:scale-[0.98]"
             >
-              Post Surplus Food
+              Post Food
             </Link>
           </FadeIn>
         </PageWrapper>
